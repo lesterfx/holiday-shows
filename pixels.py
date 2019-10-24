@@ -36,6 +36,7 @@ class Color (object):
         self.r = r
         self.g = g
         self.b = b
+        self.luma = 1
 
     def __len__(self):
         return LED_COUNT
@@ -46,23 +47,31 @@ class Color (object):
             gamma = library.gamma
         else:
             gamma = 1/2.2
-
-        return library.Color(
-            max(0, min(255, (self.r ** gamma) * 255)),
-            max(0, min(255, (self.g ** gamma) * 255)),
-            max(0, min(255, (self.b ** gamma) * 255))
+        
+        def mapper(x):
+            return max(0, min(255, ((x*self.luma) ** gamma) * 255))
+            
+        return library.Color(*map(mapper, self.tuple))
+        
+    @property
+    def tuple(self):
+        return (
+            self.r*self.luma,
+            self.g*self.luma,
+            self.b*self.luma
         )
 
     def __imul__(self, other):
         self.r *= other
         self.g *= other
         self.b *= other
+        return self
 
     def __mul__(self, other):
         return Color(
             self.r * other,
             self.g * other,
-            self.b*other
+            self.b * other
         )
 
     def __iadd__(self, other):
@@ -76,6 +85,11 @@ class Color (object):
             self.g + other.g,
             self.b + other.b
         )
+        
+    def __repr__(self):
+        color = self.tuple
+        return ','.join(map('{:.04f}'.format, color))
+        
 
 class Pixel(object):
     def __init__(self, position, color, strip):
@@ -85,8 +99,11 @@ class Pixel(object):
         self.deleted = False
 
     def draw(self):
-        if not self.deleted:
+        if not self.deleted and 0 <= self.position < len(self.strip):
             self.strip[self.position] = self.color
+            return 1
+        else:
+            return 0
 
     def delete(self):
         if hasattr(self, 'on_delete'):

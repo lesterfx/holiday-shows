@@ -63,6 +63,27 @@ class Modulo (Effect):
     def apply(self, particle, tdelta):
         particle.position = particle.position % self.maximum
 
+class Random_Speed (Effect):
+    def __init__(self, min, max):
+        self.min = min
+        self.max = max
+        
+    def apply(self, particle, tdelta):
+        particle.speed += random.uniform(self.min, self.max)*tdelta
+
+class Random_Intensity (Effect):
+    def __init__(self, add, limits):
+        self.add = add
+        self.limits = limit
+        
+    def apply(self, particle, tdelta):
+        print particle.color
+        particle.color.luma += random.uniform(*self.add)
+        print particle.color
+        if self.limits[0] <= particle.color.luma <= self.limits[1]:
+            particle.delete()
+        #raise StopIteration
+
 class System (object):
     def __init__(self):
         self.particles = set()
@@ -71,7 +92,7 @@ class System (object):
 
     def update_and_draw(self):
         self.update()
-        self.draw()
+        return self.draw()
 
     def update(self):
         now = time.time()
@@ -84,8 +105,10 @@ class System (object):
         self.last_update = now
 
     def draw(self):
+        ret = 0
         for particle in self.particles:
-            particle.draw()
+            ret += particle.draw()
+        return ret
 
 class Physics (Home):
     def main(self):

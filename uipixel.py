@@ -3,7 +3,7 @@ from __future__ import division
 import ui
 from random import random
 
-LED_COUNT = 53
+LED_COUNT = 106
 
 class Color(object):
     def __new__(self, r, g, b):

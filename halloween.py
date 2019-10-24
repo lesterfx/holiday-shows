@@ -7,6 +7,7 @@ from math import copysign
 import random
 import time
 
+from physics import System, Particle, Modulo, Wind, Gravity, Random_Speed, Random_Intensity
 from pixels import Home, Color, Pixel
 
 def sign(number):
@@ -15,7 +16,66 @@ def sign(number):
 def roundup(number, interval):
     return ((number + interval - 1) // interval) * interval
 
-class Halloween(Home):
+class Halloween (Home):
+    def main(self):
+        #self.blackhoke()
+        while self.keep_running():
+            self.random_walker()
+    
+    def random_walker(self):
+        self.system = System()
+        self.system.effects.add(Random_Speed(-3000, 3000))
+        self.system.effects.add(Random_Intensity((-.01, .007), (0, 1))
+        pos = random.randrange(len(self))
+        speed = random.uniform(-30, 30)
+        self.system.particles.add(Particle(speed, pos, Color(1), self))
+        while self.system.update_and_draw():
+            self.show()
+            self.clear()
+        
+    def blackhole(self):
+        self.every = 10
+        self.rounded = ((len(self) + self.every - 1) // self.every) * self.every
+
+        self.system = System()
+        self.make_blackhole_particles()
+        self.make_blackhole_effects()
+
+        start_time = time.time()+20
+        while self.keep_running():
+            self.clear()
+            now = time.time() - start_time
+            if now > 0:
+                self.gravity.strength = max(0, time.time() - start_time)*50000
+                self.wind.strength = 1
+            self.system.update_and_draw()
+            #print next(iter(self.system.particles)).speed
+            self.show()
+            time.sleep(.03)
+
+    def flash(self, pixel):
+        self[pixel.position] = pixel.color * 3
+
+    def make_blackhole_effects(self):
+        self.modulo = Modulo(self.rounded)
+        self.wind = Wind(speed=0, strength=0)
+        self.gravity = Gravity(len(self)/2, 0)
+
+        self.system.effects.add(self.modulo)
+        self.system.effects.add(self.wind)
+        self.system.effects.add(self.gravity)
+
+    def make_blackhole_particles(self):
+        for i in range(self.rounded):
+            if not i % self.every:
+                particle = Particle(20, i, Color(1, .4, 0), self)
+                particle.on_delete = self.flash
+                self.system.particles.add(particle)
+            elif not i % 2:
+                particle = Particle(20, i, Color(.1, 0, .4), self)
+                self.system.particles.add(particle)
+
+class Halloween2(Home):
     purple = Color(.1, 0, .4)
     orange = Color(1, .4, 0)
 
