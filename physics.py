@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 from __future__ import division
-import datetime
-from itertools import count
 from math import copysign
 import random
 import time
@@ -57,42 +55,47 @@ class Gravity (Effect):
             particle.delete()
 
 class Modulo (Effect):
-    def __init__(self, maximum):
-        self.maximum = maximum
+    def __init__(self, min, max):
+        self.min = min
+        self.max = max
 
     def apply(self, particle, tdelta):
-        particle.position = particle.position % self.maximum
+        particle.position = ((particle.position - self.min) % (self.max - self.min)) + self.min
 
 class Random_Speed (Effect):
     def __init__(self, min, max):
         self.min = min
         self.max = max
-        
+
     def apply(self, particle, tdelta):
-        particle.speed += random.uniform(self.min, self.max)*tdelta
+        particle.speed += random.uniform(self.min, self.max) * tdelta
 
 class Random_Intensity (Effect):
     def __init__(self, add, limits):
         self.add = add
-        self.limits = limit
-        
+        self.limits = limits
+
     def apply(self, particle, tdelta):
-        print particle.color
+        #print particle.color
         particle.color.luma += random.uniform(*self.add)
-        print particle.color
-        if self.limits[0] <= particle.color.luma <= self.limits[1]:
+        #particle.color.luma = min(particle.color.luma, self.limits[1])
+        #print particle.color
+        if particle.color.luma < self.limits[0]:
             particle.delete()
-        #raise StopIteration
 
 class System (object):
-    def __init__(self):
+    def __init__(self, strip):
         self.particles = set()
         self.effects = set()
         self.last_update = time.time()
+        self.strip = strip
 
     def update_and_draw(self):
+        self.strip.clear()
         self.update()
-        return self.draw()
+        anything_drawn = self.draw()
+        self.strip.show()
+        return anything_drawn
 
     def update(self):
         now = time.time()
@@ -109,49 +112,3 @@ class System (object):
         for particle in self.particles:
             ret += particle.draw()
         return ret
-
-class Physics (Home):
-    def main(self):
-        self.every = 10
-        self.rounded = ((len(self) + self.every - 1) // self.every) * self.every
-
-        self.system = System()
-        self.make_particles()
-        self.make_effects()
-
-        start_time = time.time()+20
-        while self.keep_running():
-            self.clear()
-            now = time.time() - start_time
-            if now > 0:
-                self.gravity.strength = max(0, time.time() - start_time)*50000
-                self.wind.strength = 1
-            self.system.update_and_draw()
-            #print next(iter(self.system.particles)).speed
-            self.show()
-            time.sleep(.03)
-
-    def flash(self, pixel):
-        self[pixel.position] = pixel.color * 3
-
-    def make_effects(self):
-        self.modulo = Modulo(self.rounded)
-        self.wind = Wind(speed=0, strength=0)
-        self.gravity = Gravity(len(self)/2, 0)
-
-        self.system.effects.add(self.modulo)
-        self.system.effects.add(self.wind)
-        self.system.effects.add(self.gravity)
-
-    def make_particles(self):
-        for i in range(self.rounded):
-            if not i % self.every:
-                particle = Particle(20, i, Color(1, .4, 0), self)
-                particle.on_delete = self.flash
-                self.system.particles.add(particle)
-            elif not i % 2:
-                particle = Particle(20, i, Color(.1, 0, .4), self)
-                self.system.particles.add(particle)
-
-if __name__ == '__main__':
-    Physics(1).main()

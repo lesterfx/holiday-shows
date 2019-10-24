@@ -1,5 +1,4 @@
 from __future__ import print_function
-import getpass
 import os
 import subprocess
 import sys
@@ -16,6 +15,7 @@ print ('Strip size:', LED_COUNT)
 print ('Top padding:', TOP_PADDING)
 
 def colorchar(pixel):
+    #print(pixel)
     chr = u'\u2585'
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
 
@@ -27,7 +27,7 @@ class Adafruit_NeoPixel(object):
         out = ' '
         for pixel in self.pixels:
             if pixel:
-                out += str(pixel)
+                out += colorchar(pixel)
             else:
                 out += ' '
         if ONE_LINE:

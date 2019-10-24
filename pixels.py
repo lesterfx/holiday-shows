@@ -2,7 +2,6 @@
 
 import datetime
 import getpass
-import sys
 import time
 
 # LED strip configuration:
@@ -47,12 +46,12 @@ class Color (object):
             gamma = library.gamma
         else:
             gamma = 1/2.2
-        
+
         def mapper(x):
             return max(0, min(255, ((x*self.luma) ** gamma) * 255))
-            
+
         return library.Color(*map(mapper, self.tuple))
-        
+
     @property
     def tuple(self):
         return (
@@ -85,11 +84,11 @@ class Color (object):
             self.g + other.g,
             self.b + other.b
         )
-        
+
     def __repr__(self):
         color = self.tuple
         return ','.join(map('{:.04f}'.format, color))
-        
+
 
 class Pixel(object):
     def __init__(self, position, color, strip):
@@ -112,9 +111,11 @@ class Pixel(object):
 
 class Home(object):
     def __init__(self, minutes=0):
-        self.stop_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+        self.cache = [0] * len(self)
+        self.previous = [0] * len(self)
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
+        self.stop_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
 
     @staticmethod
     def run_every(seconds, function):
@@ -137,17 +138,25 @@ class Home(object):
 
     def clear(self, show=False):
         for i in range(LED_COUNT):
-            self[i] = Color(0, 0, 0)
+            self[i] = None
         if show:
             self.show()
 
     def show(self):
-        self.strip.show()
+        if self.previous != self.cache:
+            for i, color in enumerate(self.cache):
+                self.strip.setPixelColor(i, color)
+            self.strip.show()
+            self.previous = self.cache
+            self.cache = [0] * len(self)
 
     def __setitem__(self, key, value):
         key = int(key)
         if key in self:
-            self.strip.setPixelColor(int(key), value.color)
+            if value:
+                self.cache[key] = value.color
+            else:
+                self.cache[key] = 0
 
     def __contains__(self, key):
         key = int(key)
