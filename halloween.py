@@ -22,18 +22,19 @@ class Halloween (Home):
 
     def random_walker(self):
         self.system = System(self)
-        self.system.effects.add(Random_Speed(-3000, 3000))
-        self.system.effects.add(Random_Intensity((-.01, .007), (0, 1)))
+        self.system.effects.append(Random_Speed(-3000, 3000))
+        self.system.effects.append(Random_Intensity((-.01, .007), (0, 1)))
+
         pos = random.randrange(len(self))
         speed = random.uniform(-30, 30)
         color = Color(random.random())
-        self.system.particles.add(Particle(speed, pos, color, self))
+        self.system.particles.add(Particle(speed=speed, position=pos, color=color, strip=self))
+
         while self.system.update_and_draw():
             pass
 
     def blackhole(self):
         self.every = 12
-        self.rounded = ((len(self) + self.every - 1) // self.every) * self.every
 
         self.system = System(self)
         self._make_blackhole_particles()
@@ -51,22 +52,21 @@ class Halloween (Home):
         self[pixel.position] = pixel.color * 3
 
     def _make_blackhole_effects(self):
-        self.modulo = Modulo(-self.every, self.rounded)
+        self.modulo = Modulo(-self.every, self.round_up)
         self.wind = Wind(speed=0, strength=0)
         self.gravity = Gravity(len(self)/2, 0)
 
-        self.system.effects.add(self.modulo)
-        self.system.effects.add(self.wind)
-        self.system.effects.add(self.gravity)
+        self.system.effects.append(self.modulo)
+        self.system.effects.append(self.wind)
+        self.system.effects.append(self.gravity)
 
     def _make_blackhole_particles(self):
-        for i in range(-self.every, self.rounded):
-            if not i % self.every:
-                particle = Particle(2, i, Color(1, .4, 0), self)
-                particle.on_delete = self.flash
+        for x in range(-self.every, self.round_up):
+            if not x % self.every:
+                particle = Particle(speed=2, position=x, color=Color(1, .4, 0), strip=self, on_delete=self.flash)
                 self.system.particles.add(particle)
-            elif not i % 3:
-                particle = Particle(2, i, Color(.1, 0, .4), self)
+            elif not x % 3:
+                particle = Particle(speed=2, position=x, color=Color(.1, 0, .4), strip=self)
                 self.system.particles.add(particle)
 
     def blinky_eyes(self):
@@ -93,4 +93,4 @@ if __name__ == '__main__':
     try:
         Halloween(1).main()
     except KeyboardInterrupt:
-        pass
+        print()

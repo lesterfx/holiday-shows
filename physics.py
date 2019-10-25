@@ -8,10 +8,11 @@ import time
 from pixels import Home, Color, Pixel
 
 class Particle (Pixel):
-    def __init__(self, speed=0, *args):
-        super(Particle, self).__init__(*args)
-        self.effects = set()
+    def __init__(self, mass=1, speed=0, on_delete=None, *args, **kwargs):
+        super(Particle, self).__init__(*args, **kwargs)
+        self.mass = mass
         self.speed = speed
+        self.on_delete = on_delete
 
     def __iadd__(self, effect):
         self.effects.add(effect)
@@ -29,7 +30,7 @@ class Wind(Effect):
         self.strength = strength
 
     def apply(self, particle, tdelta):
-        particle.speed = (particle.speed - self.speed) * (1-self.strength*tdelta) + self.speed
+        particle.speed = (particle.speed - self.speed) * (1 - self.strength * (1/particle.mass) * tdelta) + self.speed
 
 class Gravity (Effect):
     def __init__(self, center, strength):
@@ -47,11 +48,24 @@ class Gravity (Effect):
         if abs(add) > abs(distance):
             add = copysign(distance, add)
         particle.speed += add
-        next_position = particle.position + particle.speed*tdelta
+        next_position = particle.position + particle.speed * tdelta
         bounds = [particle.position, next_position]
         bounds.sort()
         if bounds[0] <= self.center <= bounds[1]:
             particle.position = self.center
+            particle.delete()
+
+class Collide(Effect):
+    def __init__(self, center):
+        self.center = center
+
+    def apply(self, particle, tdelta):
+        next_position = particle.position + particle.speed * tdelta
+        bounds = [particle.position, next_position]
+        bounds.sort()
+        if bounds[0] <= self.center <= bounds[1]:
+            particle.position = self.center
+            #print('deleted!')
             particle.delete()
 
 class Modulo (Effect):
@@ -77,8 +91,8 @@ class Random_Intensity (Effect):
 
     def apply(self, particle, tdelta):
         #print particle.color
-        particle.color.luma += random.uniform(*self.add)
-        #particle.color.luma = min(particle.color.luma, self.limits[1])
+        particle.color.luma += random.uniform(*self.add)*tdelta
+        particle.color.luma = min(particle.color.luma, self.limits[1])
         #print particle.color
         if particle.color.luma < self.limits[0]:
             particle.delete()
@@ -86,15 +100,17 @@ class Random_Intensity (Effect):
 class System (object):
     def __init__(self, strip):
         self.particles = set()
-        self.effects = set()
+        self.effects = []
         self.last_update = time.time()
         self.strip = strip
 
-    def update_and_draw(self):
-        self.strip.clear()
+    def update_and_draw(self, clear=True, show=True):
+        if clear:
+            self.strip.clear()
         self.update()
         anything_drawn = self.draw()
-        self.strip.show()
+        if show:
+            self.strip.show()
         return anything_drawn
 
     def update(self):

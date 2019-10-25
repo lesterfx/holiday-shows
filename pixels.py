@@ -73,10 +73,21 @@ class Color (object):
             self.b * other
         )
 
+    def __idiv__(self, other):
+        self *= 1 / other
+        return self
+
+    def __div__(self, other):
+        return self * (1 / other)
+
+    __floordiv__ = __div__
+    __truediv__ = __div__
+
     def __iadd__(self, other):
         self.r += other.r
         self.g += other.g
         self.b += other.b
+        return self
 
     def __add__(self, other):
         return Color(
@@ -105,7 +116,7 @@ class Pixel(object):
             return 0
 
     def delete(self):
-        if hasattr(self, 'on_delete'):
+        if self.on_delete:
             self.on_delete(self)
         self.deleted = True
 
@@ -132,6 +143,10 @@ class Home(object):
         end = time.time() + seconds
         while time.time() < end:
             function(*args, **kwargs)
+
+    @property
+    def round_up(self):
+        return ((len(self) + self.every - 1) // self.every) * self.every
 
     def keep_running(self):
         return datetime.datetime.now() < self.stop_time
