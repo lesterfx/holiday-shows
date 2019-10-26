@@ -4,19 +4,20 @@ import subprocess
 import sys
 
 ONE_LINE = True
-#ONE_LINE = False
+ONE_LINE = False
 
 gamma = 1/2.2
 
 TOP_PADDING, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
 LED_COUNT -= 2
-TOP_PADDING //= 2
+TOP_PADDING //= 4
 print ('Strip size:', LED_COUNT)
 print ('Top padding:', TOP_PADDING)
 
 def colorchar(pixel):
     #print(pixel)
     chr = u'\u2585'
+    chr = u'\u2b24'
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
 
 class Adafruit_NeoPixel(object):

@@ -4,7 +4,8 @@ from __future__ import division
 import random
 import time
 
-from physics import System, Particle, Modulo, Wind, Gravity, Random_Speed, Random_Intensity
+#from physics import System, Particle, Modulo, Wind, Gravity, Random_Speed, Random_Intensity
+import physics
 from pixels import Home, Color, Pixel
 
 class Halloween (Home):
@@ -21,14 +22,14 @@ class Halloween (Home):
                 time.sleep(1)
 
     def random_walker(self):
-        self.system = System(self)
-        self.system.effects.append(Random_Speed(-3000, 3000))
-        self.system.effects.append(Random_Intensity((-.01, .007), (0, 1)))
+        self.system = physics.System(self)
+        self.system.effects.append(physics.Random_Speed(-3000, 3000))
+        self.system.effects.append(physics.Random_Intensity((-.01, .007), (0, 1)))
 
         pos = random.randrange(len(self))
         speed = random.uniform(-30, 30)
         color = Color(random.random())
-        self.system.particles.add(Particle(speed=speed, position=pos, color=color, strip=self))
+        self.system.particles.add(physics.Particle(speed=speed, position=pos, color=color, strip=self))
 
         while self.system.update_and_draw():
             pass
@@ -36,7 +37,7 @@ class Halloween (Home):
     def blackhole(self):
         self.every = 12
 
-        self.system = System(self)
+        self.system = physics.System(self)
         self._make_blackhole_particles()
         self._make_blackhole_effects()
 
@@ -52,9 +53,9 @@ class Halloween (Home):
         self[pixel.position] = pixel.color * 3
 
     def _make_blackhole_effects(self):
-        self.modulo = Modulo(-self.every, self.round_up)
-        self.wind = Wind(speed=0, strength=0)
-        self.gravity = Gravity(len(self)/2, 0)
+        self.modulo = physics.Modulo(-self.every, self.round_up)
+        self.wind = physics.Wind(speed=0, strength=0)
+        self.gravity = physics.Gravity(len(self)/2, 0)
 
         self.system.effects.append(self.modulo)
         self.system.effects.append(self.wind)
@@ -63,10 +64,10 @@ class Halloween (Home):
     def _make_blackhole_particles(self):
         for x in range(-self.every, self.round_up):
             if not x % self.every:
-                particle = Particle(speed=2, position=x, color=Color(1, .4, 0), strip=self, on_delete=self.flash)
+                particle = physics.Particle(speed=2, position=x, color=Color(1, .4, 0), strip=self, on_delete=self.flash)
                 self.system.particles.add(particle)
             elif not x % 3:
-                particle = Particle(speed=2, position=x, color=Color(.1, 0, .4), strip=self)
+                particle = physics.Particle(speed=2, position=x, color=Color(.1, 0, .4), strip=self)
                 self.system.particles.add(particle)
 
     def blinky_eyes(self):

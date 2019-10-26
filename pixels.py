@@ -29,13 +29,14 @@ except AttributeError:
     pass
 
 class Color (object):
-    def __init__(self, r, g=None, b=None):
+    def __init__(self, r, g=None, b=None, luma=1, mode='over'):
         if g is None: g = r
         if b is None: b = r
         self.r = r
         self.g = g
         self.b = b
-        self.luma = 1
+        self.luma = luma
+        self.mode = mode
 
     def __len__(self):
         return LED_COUNT
@@ -68,9 +69,11 @@ class Color (object):
 
     def __mul__(self, other):
         return Color(
-            self.r * other,
-            self.g * other,
-            self.b * other
+            r=self.r * other,
+            g=self.g * other,
+            b=self.b * other,
+            luma=self.luma,
+            mode=self.mode
         )
 
     def __idiv__(self, other):
@@ -91,9 +94,20 @@ class Color (object):
 
     def __add__(self, other):
         return Color(
-            self.r + other.r,
-            self.g + other.g,
-            self.b + other.b
+            r=self.r + other.r,
+            g=self.g + other.g,
+            b=self.b + other.b,
+            mode=self.mode,
+            luma=self.luma
+        )
+
+    def __or__(self, other):
+        return Color(
+            r=max(self.r, other.r),
+            g=max(self.g, other.g),
+            b=max(self.b, other.b),
+            mode=self.mode,
+            luma=self.luma
         )
 
     def __repr__(self):
@@ -160,7 +174,7 @@ class Home(object):
     def show(self):
         if self.previous != self.cache:
             for i, color in enumerate(self.cache):
-                self.strip.setPixelColor(i, color)
+                self.strip.setPixelColor(i, color.color)
             self.strip.show()
             self.previous = self.cache
             self.cache = [0] * len(self)
@@ -169,9 +183,14 @@ class Home(object):
         key = int(key)
         if key in self:
             if value:
-                self.cache[key] = value.color
+                if value.mode == 'over':
+                    self.cache[key] = value
+                elif value.mode == 'add':
+                    self.cache[key] += value
+                elif value.mode == 'max':
+                    self.cache[key] |= value
             else:
-                self.cache[key] = 0
+                self.cache[key] = Color(0, 0, 0)
 
     def __contains__(self, key):
         key = int(key)

@@ -13,22 +13,39 @@ class Adafruit_NeoPixel (object):
     def __init__(self, LED_COUNT, *args):
         self.view = ui.View()
         self.view.background_color = 0
-        width, height = ui.get_screen_size()
-        self.pixel_size = width // LED_COUNT
-        if not self.pixel_size:
-            self.pixel_size = width / LED_COUNT
-        width = self.pixel_size * LED_COUNT
-        self.view.width = width
-        self.view.height = 15 + self.pixel_size
+        self.view.present('sheet')
+        width = self.view.width
+        height = self.view.height
+        if width >= height:
+            self.pixel_size = width // LED_COUNT
+            if not self.pixel_size:
+                self.pixel_size = width / LED_COUNT
+            width = self.pixel_size * LED_COUNT
+            self.view.width = width
+            self.view.height = 15 + self.pixel_size
+            self.orientation = 'landscape'
+        else:
+            self.pixel_size = height // LED_COUNT
+            if not self.pixel_size:
+                self.pixel_size = height / LED_COUNT
+            height = self.pixel_size * LED_COUNT
+            self.view.height = height
+            self.view.width = 15 + self.pixel_size
+            self.orientation = 'portrait'
         self.pixels = [self.makeLabel(i) for i in range(LED_COUNT)]
+        
 
     def makeLabel(self, i):
         label = ui.Label()
-        label.background_color = 0
+        label.background_color = 1
         label.width = self.pixel_size
         label.height = self.pixel_size
-        label.x = i * self.pixel_size
-        label.y = 5
+        if self.orientation == 'landscape':
+            label.x = i * self.pixel_size
+            label.y = 5
+        else:
+            label.y = i * self.pixel_size
+            label.x = 5
         label.target_color = None
         self.view.add_subview(label)
         return label
@@ -44,5 +61,8 @@ class Adafruit_NeoPixel (object):
         self.pixels[key].target_color = value
 
     def begin(self):
-        self.view.present('sheet')
+        pass
+        #self.view.present('sheet')
 
+if __name__ == '__main__':
+    Adafruit_NeoPixel(LED_COUNT).begin()
