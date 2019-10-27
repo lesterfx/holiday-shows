@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import division
+from __future__ import division, print_function
 import math
 import random
 import time
@@ -19,7 +19,8 @@ class Particle (Pixel):
         return self
 
     def update(self, tdelta):
-        self.position += (self.speed * tdelta)
+        if not self.deleted:
+            self.position += (self.speed * tdelta)
 
 class Effect (object):
     pass
@@ -94,6 +95,7 @@ class Collide(Effect):
         self.min = center - radius
         self.max = center + radius
         self.on_collide = on_collide
+        print(self.min, self.max)
 
     def grow(self, edge, plus_one=False):
         if plus_one:
@@ -102,6 +104,7 @@ class Collide(Effect):
         else:
             self.min = min(self.min, edge)
             self.max = max(self.max, edge)
+        print(edge, ':', (self.min, self.max))
 
     def apply(self, particle, tdelta):
         next_position = particle.position + particle.speed * tdelta

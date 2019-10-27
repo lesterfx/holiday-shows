@@ -9,13 +9,20 @@ from pixels import Home, Color, Pixel
 
 class Fall (Home):
     leaf_colors = []
-    leaf_colors.append(Color((217/255)**2.2, ( 55/255)**2.2, ( 55/255)**2.2))
-    leaf_colors.append(Color((217/255)**2.2, (212/255)**2.2, ( 39/255)**2.2))
-    leaf_colors.append(Color((181/255)**2.2, (174/255)**2.2, (139/255)**2.2))
-    leaf_colors.append(Color((142/255)**2.2, (179/255)**2.2, ( 77/255)**2.2))
+    leaf_colors.append(Color(.85**3, .2**3, .2**3))
+    leaf_colors.append(Color(.85**3, .85**3, .0**3))
+    leaf_colors.append(Color(.7**3, .3**3, .1**3))
+    leaf_colors.append(Color(.55**3, .7**3, .3**3))
 
     def main(self):
         while self.keep_running():
+            #for i, color in enumerate(self.leaf_colors):
+            #    self[i] = color
+            #self[4] = Color(1, .1, 0)
+            #self[5] = Color(.006, 0, .01)
+            #self.show()
+            #time.sleep(2)
+            #return
             for _ in range(0):
                 self.crawl()
                 time.sleep(1)
@@ -33,7 +40,8 @@ class Fall (Home):
             self.turbulence.regenerate()
         update_wind = self.run_every(1, do_update_wind)
         make_leaf = self.run_every(2, self._make_leaf)
-        while True:
+        try:
+          while True:
             self._make_leaf()
             while self.system.update_and_draw(show=False):
                 make_leaf()
@@ -43,17 +51,19 @@ class Fall (Home):
                         self[leaf.position] = leaf.color
                 self.show()
                 time.sleep(0.01)
+        except:
+            for leaf in self.old_particles:
+                print(leaf.position)
+            raise
 
     def on_collide(self, particle, effect, edge):
         particle.delete()
         self.old_particles.append(particle)
         particle.color.luma = 1
-        particle.color.r = 0
-        particle.color.g = .1
-        particle.color.b = 0
         effect.grow(edge, True)
+        #print(particle.position, 'becomes', edge)
         particle.position = edge
-        particle.color.mode = 'add'
+        #particle.color.mode = 'add'
         #print()
 
     def _make_leaf(self):
@@ -68,7 +78,7 @@ class Fall (Home):
         self.wind = Wind(speed=20, strength=0.6)
         self.turbulence = Turbulence(speed=(-200, 200), strength=0.2, length=len(self))
         self.pile_left = Collide(center=self.min, radius=0, on_collide=self.on_collide)
-        self.pile_center = Collide(center=len(self)/2, radius=0, on_collide=self.on_collide)
+        self.pile_center = Collide(center=len(self)//2, radius=0, on_collide=self.on_collide)
         self.pile_right = Collide(center=self.max, radius=0, on_collide=self.on_collide)
         self.fade_in = Random_Intensity((1, 1), (0, 1))
 

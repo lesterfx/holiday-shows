@@ -18,6 +18,8 @@ def colorchar(pixel):
     #print(pixel)
     chr = u'\u2585'
     chr = u'\u2b24'
+    r, g, b = pixel
+    pixel = g, r, b
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
 
 class Adafruit_NeoPixel(object):

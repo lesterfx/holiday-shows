@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function, division
+
 import datetime
 import getpass
 import time
@@ -46,18 +48,21 @@ class Color (object):
         if hasattr(library, 'gamma'):
             gamma = library.gamma
         else:
-            gamma = 1/2.2
+            gamma = 1
 
         def mapper(x):
-            return max(0, min(255, ((x*self.luma) ** gamma) * 255))
+            return int(max(0, min(255, ((x*self.luma) ** gamma) * 255)))
 
-        return library.Color(*map(mapper, self.tuple))
+        args = map(mapper, self.tuple)
+        print(args)
+        return library.Color(*args)
 
     @property
     def tuple(self):
+        # grb
         return (
-            self.r*self.luma,
             self.g*self.luma,
+            self.r*self.luma,
             self.b*self.luma
         )
 
@@ -136,11 +141,13 @@ class Pixel(object):
 
 class Home(object):
     def __init__(self, minutes=0):
-        self.cache = [0] * len(self)
-        self.previous = [0] * len(self)
+        self.cache = [None] * len(self)
+        self.previous = None
+        self.clear()
         self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
         self.stop_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+        self.show()
 
     @staticmethod
     def run_every(seconds, function):
@@ -173,11 +180,21 @@ class Home(object):
 
     def show(self):
         if self.previous != self.cache:
-            for i, color in enumerate(self.cache):
-                self.strip.setPixelColor(i, color.color)
+            try:
+                for i, pixel in enumerate(self.cache):
+                    color = pixel.color
+                    #print('setting {i} to {color}'.format(i=i, color=color))
+                    self.strip.setPixelColor(i+1, color)
+            except:
+                #print(self)
+                raise
             self.strip.show()
+            #print()
             self.previous = self.cache
-            self.cache = [0] * len(self)
+            self.cache = [Color(0) for _ in range(len(self))]
+
+    def __str__(self):
+        return ' '.join(map(str, self.cache))
 
     def __setitem__(self, key, value):
         key = int(key)
@@ -191,6 +208,7 @@ class Home(object):
                     self.cache[key] |= value
             else:
                 self.cache[key] = Color(0, 0, 0)
+        #print('>', self.cache[key])
 
     def __contains__(self, key):
         key = int(key)
@@ -204,3 +222,9 @@ class Home(object):
             self.clear(True)
         except:
             pass
+
+if __name__ == '__main__':
+        strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+        strip.setPixelColor(0, library.Color(255, 0, 0))
+        strop.show()
+        time.sleep(2)

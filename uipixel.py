@@ -13,7 +13,7 @@ class Adafruit_NeoPixel (object):
     def __init__(self, LED_COUNT, *args):
         self.view = ui.View()
         self.view.background_color = 0
-        self.view.present('sheet')
+        self.view.present('modal')
         width = self.view.width
         height = self.view.height
         if width >= height:

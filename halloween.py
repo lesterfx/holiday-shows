@@ -64,14 +64,14 @@ class Halloween (Home):
     def _make_blackhole_particles(self):
         for x in range(-self.every, self.round_up):
             if not x % self.every:
-                particle = physics.Particle(speed=2, position=x, color=Color(1, .4, 0), strip=self, on_delete=self.flash)
+                particle = physics.Particle(speed=2, position=x, color=Color(1, .1, 0), strip=self, on_delete=self.flash)
                 self.system.particles.add(particle)
             elif not x % 3:
-                particle = physics.Particle(speed=2, position=x, color=Color(.1, 0, .4), strip=self)
+                particle = physics.Particle(speed=2, position=x, color=Color(.006, 0, .01), strip=self)
                 self.system.particles.add(particle)
 
     def blinky_eyes(self):
-        color1 = Color(1, 1, .8)
+        color1 = Color(1, 0, .8)
         color2 = Color(1, .1, 0)
         fade = random.random()
         color = color1 * fade + color2 * (1-fade)
@@ -82,6 +82,7 @@ class Halloween (Home):
 
     def _show_eyes_once(self, center, distance, color):
         for i in range(20):
+            #print(color)
             self[center+distance] = color * (i/20)
             self[center-distance] = color * (i/20)
             self.show()
