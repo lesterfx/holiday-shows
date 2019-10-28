@@ -8,8 +8,10 @@ import time
 
 # LED strip configuration:
 LED_COUNT      = 450     # Number of LED pixels.
-LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
-#LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+#LED_PIN        = 18      # default, but i may have shorted it
+#LED_PIN        = 10      # requires spi
+LED_PIN        = 12      # no errors...
+#LED_PIN        = 21      # no errors...
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
@@ -54,7 +56,7 @@ class Color (object):
             return int(max(0, min(255, ((x*self.luma) ** gamma) * 255)))
 
         args = map(mapper, self.tuple)
-        print(args)
+        #print(args)
         return library.Color(*args)
 
     @property
