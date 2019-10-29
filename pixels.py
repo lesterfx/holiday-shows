@@ -1,36 +1,27 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from __future__ import print_function, division
 
+import copy
 import datetime
+import json
 import getpass
+import os
 import time
-
-# LED strip configuration:
-LED_COUNT      = 450     # Number of LED pixels.
-#LED_PIN        = 18      # default, but i may have shorted it
-#LED_PIN        = 10      # requires spi
-LED_PIN        = 12      # no errors...
-#LED_PIN        = 21      # no errors...
-LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
-LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
-LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
-LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+import traceback
 
 user = getpass.getuser()
 if user == 'root':
-    import neopixel as library
+    import board
+    import neopixel
+    GAMMA = 1
 elif user == 'mobile':
-    import uipixel as library
-else: # user == 'pi':
-    import consolepixel as library
-
-Adafruit_NeoPixel = library.Adafruit_NeoPixel
-try:
-    LED_COUNT = library.LED_COUNT
-except AttributeError:
-    pass
+    import uipixel as neopixel
+    GAMMA = .3
+else:
+    import consolepixel as neopixel
+    GAMMA = .3
+    SCALE = 255
 
 class Color (object):
     def __init__(self, r, g=None, b=None, luma=1, mode='over'):
@@ -42,29 +33,20 @@ class Color (object):
         self.luma = luma
         self.mode = mode
 
-    def __len__(self):
-        return LED_COUNT
-
     @property
     def color(self):
-        if hasattr(library, 'gamma'):
-            gamma = library.gamma
-        else:
-            gamma = 1
+        return tuple(map(self.channelmap, self.tuple))
 
-        def mapper(x):
-            return int(max(0, min(255, ((x*self.luma) ** gamma) * 255)))
-
-        args = map(mapper, self.tuple)
-        #print(args)
-        return library.Color(*args)
+    def channelmap(self, x):
+        scaled = int(x ** GAMMA * 255)
+        clamped = min(255, max(0, scaled))
+        return clamped
 
     @property
     def tuple(self):
-        # grb
         return (
-            self.g*self.luma,
             self.r*self.luma,
+            self.g*self.luma,
             self.b*self.luma
         )
 
@@ -94,32 +76,35 @@ class Color (object):
     __truediv__ = __div__
 
     def __iadd__(self, other):
-        self.r += other.r
-        self.g += other.g
-        self.b += other.b
+        self.r += other.r*other.luma
+        self.g += other.g*other.luma
+        self.b += other.b*other.luma
         return self
 
     def __add__(self, other):
         return Color(
-            r=self.r + other.r,
-            g=self.g + other.g,
-            b=self.b + other.b,
+            r=self.r + other.r*other.luma,
+            g=self.g + other.g*other.luma,
+            b=self.b + other.b*other.luma,
             mode=self.mode,
             luma=self.luma
         )
 
     def __or__(self, other):
         return Color(
-            r=max(self.r, other.r),
-            g=max(self.g, other.g),
-            b=max(self.b, other.b),
+            r=max(self.r, other.r*other.luma),
+            g=max(self.g, other.g*other.luma),
+            b=max(self.b, other.b*other.luma),
             mode=self.mode,
             luma=self.luma
         )
 
+    def __eq__(self, other):
+        return self.tuple == other.tuple
+
     def __repr__(self):
         color = self.tuple
-        return ','.join(map('{:.04f}'.format, color))
+        return f'{color[0]:.04f},{color[1]:.04f},{color[2]:.04f} ({self.luma:.04f})'
 
 
 class Pixel(object):
@@ -143,13 +128,59 @@ class Pixel(object):
 
 class Home(object):
     def __init__(self, minutes=0):
+        print('Loading')
+        self.load_config()
+        pin = self.config['pin']
+        pixel_order = self.config['pixel_order']
+        if neopixel.__name__ == 'neopixel':
+            pin = getattr(board, f'D{pin}')
+            pixel_order = getattr(neopixel, pixel_order)
+        num = self.config['range'][-1]
+        print('Initializing Strip')
+        self.strip = neopixel.NeoPixel(pin=pin, n=num, brightness=1, auto_write=False, pixel_order=pixel_order)
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
-        self.strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-        self.strip.begin()
         self.stop_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+        print('Running', self.__class__.__name__)
         self.show()
+        try:
+            self.main()
+        except KeyboardInterrupt:
+            pass
+        except:
+            raise
+        finally:
+            self.clear()
+            print('\n')
+            print('Exiting')
+            del self.strip
+
+    def load_config(self):
+        config_file = os.path.join(os.path.expanduser('~'), '.holiday-pixels', 'config.json')
+        if not os.path.exists(config_file):
+            print(f'Config file does not exist. Creating a sample in {config_file}')
+            neopixel.CLEAR = False
+            neopixel.ONE_LINE = True
+            self.save_sample_config(config_file)
+
+        with open(config_file) as p:
+            self.config = json.load(p)
+
+        if hasattr(neopixel, 'config'):
+            self.config.update(neopixel.config)
+
+    def save_sample_config(self, config_file):
+        config_dir = os.path.dirname(config_file)
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)
+        config = {}
+        config['pin'] = 18
+        config['corners'] = [130, 190]
+        config['pixel_order'] = 'GRB'
+        config['range'] = 0, 440
+        with open(config_file, 'w') as p:
+            json.dump(config, p, indent=4, sort_keys=True)
 
     @staticmethod
     def run_every(seconds, function):
@@ -157,8 +188,8 @@ class Home(object):
         def maybe_run(*args, **kwargs):
             now = time.time()
             if now - last_run[0] >= seconds:
-                function(*args, **kwargs)
                 last_run[0] = now
+                return function(*args, **kwargs)
         return maybe_run
 
     @staticmethod
@@ -175,23 +206,20 @@ class Home(object):
         return datetime.datetime.now() < self.stop_time
 
     def clear(self, show=False):
-        for i in range(LED_COUNT):
+        for i in range(len(self)):
             self[i] = None
         if show:
             self.show()
 
     def show(self):
         if self.previous != self.cache:
-            try:
-                for i, pixel in enumerate(self.cache):
+            for i, pixel in enumerate(self.cache):
+                try:
                     color = pixel.color
-                    #print('setting {i} to {color}'.format(i=i, color=color))
-                    self.strip.setPixelColor(i+1, color)
-            except:
-                #print(self)
-                raise
+                    self.strip[i] = color
+                except:
+                    raise
             self.strip.show()
-            #print()
             self.previous = self.cache
             self.cache = [Color(0) for _ in range(len(self))]
 
@@ -210,14 +238,13 @@ class Home(object):
                     self.cache[key] |= value
             else:
                 self.cache[key] = Color(0, 0, 0)
-        #print('>', self.cache[key])
 
     def __contains__(self, key):
         key = int(key)
         return 0 <= key < len(self)
 
     def __len__(self):
-        return LED_COUNT
+        return self.config['range'][-1]
 
     def __del__(self):
         try:
@@ -226,7 +253,10 @@ class Home(object):
             pass
 
 if __name__ == '__main__':
-        strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-        strip.setPixelColor(0, library.Color(255, 0, 0))
-        strop.show()
-        time.sleep(2)
+        class Test(Home):
+            def main(self):
+                for i in range(len(self)):
+                    self[i] = Color(1, 1, 1)
+                    self.show()
+                    time.sleep(1)
+        Test()

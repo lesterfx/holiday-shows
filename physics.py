@@ -62,9 +62,7 @@ class Turbulence(Wind):
         position = int(particle.position)
         position = min(self.length-1, (max(0, position)))
         sample = self.noise[position]  # should we interpolate sub-pixel?
-        # sample is in the range 0 to 1??
         speed = self.min * (1-sample) + self.max * (sample)
-        #print speed
         self._apply_wind(particle, tdelta, speed)
 
 class Gravity (Effect):
@@ -95,27 +93,25 @@ class Collide(Effect):
         self.min = center - radius
         self.max = center + radius
         self.on_collide = on_collide
-        print(self.min, self.max)
 
-    def grow(self, edge, plus_one=False):
-        if plus_one:
-            self.min = min(self.min, edge-1)
-            self.max = max(self.max, edge+1)
-        else:
-            self.min = min(self.min, edge)
-            self.max = max(self.max, edge)
-        print(edge, ':', (self.min, self.max))
+    def grow(self, edge, plus=0):
+        self.min = min(self.min, edge-plus)
+        self.max = max(self.max, edge+plus)
 
     def apply(self, particle, tdelta):
-        next_position = particle.position + particle.speed * tdelta
-        particle_min, particle_max = sorted((particle.position, next_position))
-        if (particle_min <= self.max) and (particle_max >= self.min):
+        if (particle, tdelta) in self:
             if self.on_collide:
                 if particle.position > (self.min + self.max)/2:
                     edge = self.max
                 else:
                     edge = self.min
                 self.on_collide(particle, self, edge)
+
+    def __contains__(self, other_tdelta):
+        other, tdelta = other_tdelta
+        next_position = other.position + other.speed * tdelta
+        particle_min, particle_max = sorted((other.position, next_position))
+        return (particle_min <= self.max) and (particle_max >= self.min)
 
 class Modulo (Effect):
     def __init__(self, min, max):
@@ -139,10 +135,8 @@ class Random_Intensity (Effect):
         self.limits = limits
 
     def apply(self, particle, tdelta):
-        #print particle.color
         particle.color.luma += random.uniform(*self.add)*tdelta
         particle.color.luma = min(particle.color.luma, self.limits[1])
-        #print particle.color
         if particle.color.luma < self.limits[0]:
             particle.delete()
 

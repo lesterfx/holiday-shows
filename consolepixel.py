@@ -4,48 +4,47 @@ import subprocess
 import sys
 
 ONE_LINE = True
-ONE_LINE = False
+#ONE_LINE = False
+CLEAR = False
+#CLEAR = True
 
 gamma = 1/2.2
 
 TOP_PADDING, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
 LED_COUNT -= 2
 TOP_PADDING //= 4
-print ('Strip size:', LED_COUNT)
-print ('Top padding:', TOP_PADDING)
+
+config = {'range': [0, LED_COUNT], 'order': 'rgb'}
+print('Config overrides:', config)
 
 def colorchar(pixel):
-    #print(pixel)
     chr = u'\u2585'
     chr = u'\u2b24'
     r, g, b = pixel
-    pixel = g, r, b
+    pixel = r, g, b
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
 
-class Adafruit_NeoPixel(object):
-    def __init__(self, LED_COUNT, *args):
-        self.pixels = [Color(10, 10, 10) for _ in range(LED_COUNT)]
+class NeoPixel(object):
+    def __init__(self, pin, n, *args, **kwargs):
+        self.pixels = [Color(10, 10, 10) for _ in range(n)]
+        if CLEAR:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print('\n' * TOP_PADDING)
 
     def show(self):
-        out = ' '
+        out = '\r '
         for pixel in self.pixels:
             if pixel:
                 out += colorchar(pixel)
             else:
                 out += ' '
         if ONE_LINE:
-            print(out, end='\r')
+            print(out, end='', flush=True)
         else:
             print(out)
-        sys.stdout.flush()
 
-    def setPixelColor(self, key, value):
+    def __setitem__(self, key, value):
         self.pixels[key] = value
-
-    def begin(self):
-        os.system('clear')
-        print('\n' * TOP_PADDING)
-        self.show()
 
 class Color (object):
     def __new__(self, r, g, b):
