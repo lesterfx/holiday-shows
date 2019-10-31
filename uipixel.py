@@ -3,6 +3,9 @@ from __future__ import division
 import ui
 from random import random
 
+config = {}
+config['range'] = [0, 100]
+
 class NeoPixel (object):
     def __init__(self, pin, n, *args, **kwargs):
         self.view = ui.View()

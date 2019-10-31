@@ -10,16 +10,15 @@ from pixels import Home, Color, Pixel
 
 class Halloween (Home):
     def main(self):
-        while self.keep_running():
-            for _ in range(1):
-                self.blackhole()
-                time.sleep(1)
-            for _ in range(3):
-                self.random_walker()
-                time.sleep(1)
-            for _ in range(3):
-                self.blinky_eyes()
-                time.sleep(1)
+        for _ in range(1):
+            self.blackhole()
+            time.sleep(1)
+        for _ in range(3):
+            self.random_walker()
+            time.sleep(1)
+        for _ in range(3):
+            self.blinky_eyes()
+            time.sleep(1)
 
     def random_walker(self):
         self.system = physics.System(self)

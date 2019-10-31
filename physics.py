@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from __future__ import division, print_function
 import math
 import random
 import time
+import weakref
 
 from pixels import Home, Color, Pixel
 
@@ -37,16 +37,21 @@ class Wind(Effect):
         particle.speed = (particle.speed - windspeed) * (1 - self.strength * (1/particle.mass) * tdelta) + windspeed
 
 class Turbulence(Wind):
-    def __init__(self, speed=(-10,10), strength=.6, length=150):
+    def __init__(self, speed=(-10,10), strength=.6, length=150, size=150, octaves=-1):
         self.min, self.max = speed
         self.strength = strength
         self.length = length
-        self.loglength = int(math.ceil(math.log(self.length, 2)))
+        self.loglength = int(math.ceil(math.log(size, 2)))
+        self.octaves = octaves
         self.regenerate()
 
     def regenerate(self):
         self.noise = [0] * self.length
-        for logby in range(self.loglength):
+        if self.octaves == -1:
+            r = range(self.loglength)
+        else:
+            r = range(self.octaves, self.loglength)
+        for logby in r:
             power = 2 ** (logby - self.loglength + 1)
             by = 2**logby
             nextval = random.uniform(0, .5) * power
@@ -66,16 +71,16 @@ class Turbulence(Wind):
         self._apply_wind(particle, tdelta, speed)
 
 class Gravity (Effect):
-    def __init__(self, center, strength):
+    def __init__(self, center, strength, on_collide=None):
         self.center = center
         self.strength = strength
+        self.on_collide = on_collide
 
     def apply(self, particle, tdelta):
         if not self.strength: return
         distance = self.center - particle.position
         if not distance:
-            particle.delete()
-            return
+            return self.collide(particle)
         add = self.strength / math.copysign(distance*distance, distance)
         add *= tdelta
         if abs(add) > abs(distance):
@@ -85,7 +90,13 @@ class Gravity (Effect):
         bounds = [particle.position, next_position]
         bounds.sort()
         if bounds[0] <= self.center <= bounds[1]:
-            particle.position = self.center
+            return self.collide(particle)
+
+    def collide(self, particle):
+        particle.position = self.center
+        if self.on_collide:
+            self.on_collide(particle)
+        else:
             particle.delete()
 
 class Collide(Effect):
@@ -140,6 +151,39 @@ class Random_Intensity (Effect):
         if particle.color.luma < self.limits[0]:
             particle.delete()
 
+class Repel (Effect):
+    def __init__(self, strength, radius, particles, loop=None):
+        self.strength = strength
+        self.radius = radius
+        self.particles = weakref.ref(particles)
+        self.loop = loop
+
+    def apply(self, particle, tdelta):
+        for effector in self.particles():
+            if effector is particle:
+                continue
+            dist = effector.position - particle.position
+            if self.loop is not None:
+                #dist = min(dist % 100, (-dist) % 100)
+                dist = dist % math.copysign(100, dist)
+                #print(dist)
+            if abs(dist) > self.radius:
+                continue
+            if abs(dist) < 1:
+                power = math.copysign(dist, 1)
+            else:
+                power = -self.strength/dist
+            #print(effector.position, 'repels', particle.position, 'by', power)
+            #raise StopIteration
+            particle.speed += power * tdelta
+
+class SpeedLimit (Effect):
+    def __init__(self, limit):
+        self.limit = limit
+
+    def apply(self, particle, tdelta):
+        particle.speed = max(-self.limit, min(self.limit, particle.speed))
+
 class System (object):
     def __init__(self, strip):
         self.particles = set()
@@ -169,5 +213,13 @@ class System (object):
     def draw(self):
         ret = 0
         for particle in self.particles:
+            """
+            if particle.speed < 0:
+                particle.color = Color(0, 0, 1)
+            elif particle.speed > 0:
+                particle.color = Color(1, 0, 0)
+            else:
+                particle.color = Color(0, 1, 0)
+            """
             ret += particle.draw()
         return ret

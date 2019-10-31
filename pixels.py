@@ -38,9 +38,9 @@ class Color (object):
         return tuple(map(self.channelmap, self.tuple))
 
     def channelmap(self, x):
-        scaled = int(x ** GAMMA * 255)
-        clamped = min(255, max(0, scaled))
-        return clamped
+        clamped = min(1, max(0, x))
+        scaled = int(clamped ** GAMMA * 255)
+        return scaled
 
     @property
     def tuple(self):
@@ -90,6 +90,12 @@ class Color (object):
             luma=self.luma
         )
 
+    def __isub__(self, other):
+        self.r -= other.r*other.luma
+        self.g -= other.g*other.luma
+        self.b -= other.b*other.luma
+        return self
+
     def __or__(self, other):
         return Color(
             r=max(self.r, other.r*other.luma),
@@ -126,6 +132,9 @@ class Pixel(object):
             self.on_delete(self)
         self.deleted = True
 
+    def __lt__(self, other):
+        return self.position < other.position
+
 class Home(object):
     def __init__(self, minutes=0):
         print('Loading')
@@ -141,11 +150,13 @@ class Home(object):
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
-        self.stop_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
+        stop_time = time.time() + minutes * 60
         print('Running', self.__class__.__name__)
         self.show()
         try:
-            self.main()
+            while True:
+                self.main()
+                if time.time() >= stop_time: break
         except KeyboardInterrupt:
             pass
         except:
@@ -202,9 +213,6 @@ class Home(object):
     def round_up(self):
         return ((len(self) + self.every - 1) // self.every) * self.every
 
-    def keep_running(self):
-        return datetime.datetime.now() < self.stop_time
-
     def clear(self, show=False):
         for i in range(len(self)):
             self[i] = None
@@ -221,7 +229,7 @@ class Home(object):
                     raise
             self.strip.show()
             self.previous = self.cache
-            self.cache = [Color(0) for _ in range(len(self))]
+            self.cache = copy.deepcopy(self.previous)
 
     def __str__(self):
         return ' '.join(map(str, self.cache))
@@ -251,6 +259,16 @@ class Home(object):
             self.clear(True)
         except:
             pass
+
+    def __imul__(self, other):
+        for pixel in self.cache:
+            pixel *= other
+        return self
+
+    def __isub__(self, other):
+        for pixel in self.cache:
+            pixel -= other
+        return self
 
 if __name__ == '__main__':
         class Test(Home):
