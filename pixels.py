@@ -163,6 +163,7 @@ class Home(object):
             raise
         finally:
             self.clear()
+            self.show()
             print('\n')
             print('Exiting')
             del self.strip
@@ -175,6 +176,7 @@ class Home(object):
             neopixel.ONE_LINE = True
             self.save_sample_config(config_file)
 
+        print('Loading config', config_file)
         with open(config_file) as p:
             self.config = json.load(p)
 
@@ -221,13 +223,18 @@ class Home(object):
 
     def show(self):
         if self.previous != self.cache:
+            start = time.time()
             for i, pixel in enumerate(self.cache):
                 try:
                     color = pixel.color
                     self.strip[i] = color
                 except:
                     raise
+            last = time.time()
+            delta = last-start
+            #print(f'{delta:<.9f}', end=' ')
             self.strip.show()
+            #print(time.time() - last)
             self.previous = self.cache
             self.cache = copy.deepcopy(self.previous)
 
@@ -275,6 +282,8 @@ if __name__ == '__main__':
             def main(self):
                 for i in range(len(self)):
                     self[i] = Color(1, 1, 1)
+                    # start = time.time()
                     self.show()
-                    time.sleep(1)
+                    # print(time.time() - start)
+                    # time.sleep(1)
         Test()

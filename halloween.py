@@ -43,7 +43,7 @@ class Halloween (Home):
         start_time = time.time()+20
         while self.system.update_and_draw():
             now = time.time() - start_time
-            if now > 0:
+            if False: #now > 0:
                 self.gravity.strength = max(0, time.time() - start_time)*50000
                 self.wind.strength = 1
             time.sleep(.03)
@@ -61,12 +61,14 @@ class Halloween (Home):
         self.system.effects.append(self.gravity)
 
     def _make_blackhole_particles(self):
+        speed = 5
+        speed = 1
         for x in range(-self.every, self.round_up):
             if not x % self.every:
-                particle = physics.Particle(speed=5, position=x, color=Color(1, .1, 0), strip=self, on_delete=self.flash)
+                particle = physics.Particle(speed=speed, position=x, color=Color(1, .1, 0), strip=self, on_delete=self.flash)
                 self.system.particles.add(particle)
             elif not x % 3:
-                particle = physics.Particle(speed=5, position=x, color=Color(.007, 0, .01), strip=self)
+                particle = physics.Particle(speed=speed, position=x, color=Color(.007, 0, .01), strip=self)
                 self.system.particles.add(particle)
 
     def blinky_eyes(self):

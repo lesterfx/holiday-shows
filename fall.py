@@ -14,8 +14,8 @@ class Fall (Home):
     leaf_colors.append(Color(.35**3, .7**3, .3**3))
 
     def main(self):
-        for _ in range(1):
-            #self.crawl()
+        for _ in range(0):
+            self.crawl()
             time.sleep(1)
         for _ in range(1):
             self.leaf_piles()
