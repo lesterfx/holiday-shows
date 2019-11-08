@@ -11,7 +11,7 @@ class Fall (Home):
     leaf_colors.append(Color(.85**3, .2**3, .2**3))
     leaf_colors.append(Color(.85**3, .85**3, .0**3))
     leaf_colors.append(Color(.7**3, .3**3, .1**3))
-    leaf_colors.append(Color(.35**3, .7**3, .3**3))
+    leaf_colors.append(Color(.35**3, .7**3, .2**3))
 
     def main(self):
         for _ in range(0):
@@ -39,16 +39,20 @@ class Fall (Home):
                     self[leaf.position] = leaf.color
                 self.show()
                 time.sleep(0.01)
+
+        print('Done making leaves. Blowing away.')
         for pile in self.piles:
             self.system.effects.remove(pile)
+
+        for x in self.config['range']:
+            self.piles.append(physics.Collide(center=x, radius=0, on_collide=self.leave))
+
         random.shuffle(self.old_particles)
         def do_unlock_leaf():
             if not self.old_particles:
                 return False
             self.old_particles.pop().deleted = False
-            print('particle unlocked')
             return True
-        print('loosening leaves')
         unlock_leaf = self.run_every(1, do_unlock_leaf)
         while do_unlock_leaf():
             while self.system.update_and_draw(show=False):
@@ -56,13 +60,18 @@ class Fall (Home):
                 update_wind()
                 for leaf in self.old_particles:
                     self[leaf.position] = leaf.color
+                self.show()
                 time.sleep(0.01)
 
-    def on_collide(self, particle, effect, edge):
+    def leave(self, particle, effect, edge):
+        print('particle collided')
+        particle.delete()
+
+    def land(self, particle, effect, edge):
         particle.delete()
         self.old_particles.append(particle)
         particle.color.luma = 1
-        effect.grow(edge, 1)
+        effect.grow(edge, 3)
         particle.position = edge
 
     def _make_leaf(self):
@@ -92,7 +101,7 @@ class Fall (Home):
         self.turbulence = physics.Turbulence(speed=(-200, 200), strength=0.2, length=len(self), size=len(self))
         self.piles = []
         for x in self.config['range'] + self.config['corners']:  # range top end puts it 1 too far
-            self.piles.append(physics.Collide(center=x, radius=0, on_collide=self.on_collide))
+            self.piles.append(physics.Collide(center=x, radius=0, on_collide=self.land))
         self.fade_in = physics.Random_Intensity((1, 1), (0, 1))
 
         self.system.effects.append(self.wind)

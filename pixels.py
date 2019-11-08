@@ -11,7 +11,7 @@ import time
 import traceback
 
 user = getpass.getuser()
-if user == 'root':
+if True: #user == 'root':
     import board
     import neopixel
     GAMMA = 1
@@ -112,6 +112,8 @@ class Color (object):
         color = self.tuple
         return f'{color[0]:.04f},{color[1]:.04f},{color[2]:.04f} ({self.luma:.04f})'
 
+    def copy(self):
+        return Color(*self.tuple)
 
 class Pixel(object):
     def __init__(self, position, color, strip):
@@ -150,6 +152,10 @@ class Home(object):
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
+        self.start_time = time.time()
+        self.frames_drawn = 0
+        self.fps_count = 0
+        self.fps_timer = self.start_time
         stop_time = time.time() + minutes * 60
         print('Running', self.__class__.__name__)
         self.show()
@@ -222,21 +228,24 @@ class Home(object):
             self.show()
 
     def show(self):
+        now = time.time()
+        if now - self.fps_timer >= 1:
+            elapsed = now - self.start_time
+            print(f'\r{self.fps_count} fps. {self.frames_drawn} frames in {elapsed:.03f} seconds.', end='')
+            self.fps_count = 0
+            self.fps_timer = now
+        self.fps_count += 1
+        self.frames_drawn += 1
         if self.previous != self.cache:
-            start = time.time()
             for i, pixel in enumerate(self.cache):
                 try:
                     color = pixel.color
                     self.strip[i] = color
                 except:
                     raise
-            last = time.time()
-            delta = last-start
-            #print(f'{delta:<.9f}', end=' ')
             self.strip.show()
-            #print(time.time() - last)
             self.previous = self.cache
-            self.cache = copy.deepcopy(self.previous)
+            self.cache = [color.copy() for color in self.previous]
 
     def __str__(self):
         return ' '.join(map(str, self.cache))
