@@ -1,0 +1,67 @@
+{
+    "globals": {
+        "corners": [160, 214],
+        "pin": 18,
+        "pixel_order": "GRB",
+        "ranges": [[10, 450]],
+        "brightness": 255,
+        "relay": 10
+    },
+    "schedule": {
+        "location": [
+            37.8,
+            -122.4
+        ],
+        "start_time": "sunset",
+        "end_time": "22:00",
+        "dusk_brightness": 255,
+        "dusk_duration": "00:30"
+    },
+    "calendar": {
+        "eye_blink": [
+            [
+                "October 15",
+                "October 31"
+            ]
+        ],
+        "black_hole": [
+            [
+                "October 15",
+                "October 31"
+            ]
+        ],
+        "fairy": [
+            [
+                "October 15",
+                "October 31"
+            ]
+        ],
+        "flag": [
+            [
+                "May 25",
+                "May 31"
+            ],
+            "June 14",
+            "July 4",
+            "November 11"
+        ]
+    },
+    "animations": {
+        "fall": {
+            "pile_density": 3,
+            "emit_seconds": 4
+        },
+        "flag": {
+            "center": 332,
+            "blue_width": 70
+        },
+        "eye_blink": {
+            "distance_range": [2, 6]
+        },
+        "black_hole": {
+            "center": 332,
+            "delay_seconds": 20,
+            "intensity_multiplier": 50000
+        }
+    }
+}
