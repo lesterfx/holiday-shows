@@ -5,7 +5,7 @@ import random
 import time
 import weakref
 
-from pixels import Home, Color, Pixel
+from .home import Home, Color, Pixel
 
 class Particle (Pixel):
     def __init__(self, mass=1, speed=0, on_delete=None, *args, **kwargs):
@@ -123,6 +123,12 @@ class Collide(Effect):
         next_position = other.position + other.speed * tdelta
         particle_min, particle_max = sorted((other.position, next_position))
         return (particle_min <= self.max) and (particle_max >= self.min)
+    
+    def __repr__(self):
+        return f'Collide({self.min}-{self.max})'
+    
+    def __lt__(self, other):
+        return self.min < other.min  # max should be redundant
 
 class Modulo (Effect):
     def __init__(self, min, max):

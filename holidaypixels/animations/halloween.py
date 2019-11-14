@@ -4,9 +4,8 @@ from __future__ import division
 import random
 import time
 
-#from physics import System, Particle, Modulo, Wind, Gravity, Random_Speed, Random_Intensity
-import physics
-from pixels import Home, Color, Pixel
+from ..utilities import physics
+from ..utilities.home import Home, Color, Pixel
 
 class Halloween (Home):
     def main(self):
@@ -19,6 +18,9 @@ class Halloween (Home):
         for _ in range(3):
             self.blinky_eyes()
             time.sleep(1)
+
+    def __str__(self):
+        return 'Halloween'
 
     def random_walker(self):
         self.system = physics.System(self)

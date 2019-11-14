@@ -3,22 +3,19 @@ import subprocess
 import sys
 
 ONE_LINE = True
-#ONE_LINE = False
+ONE_LINE = False
 CLEAR = False
 #CLEAR = True
 
 gamma = 1/2.2
 
-TOP_PADDING, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
+_, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
 LED_COUNT -= 2
-TOP_PADDING //= 4
-
-config = {'range': [0, LED_COUNT], 'order': 'rgb'}
-print('Config overrides:', config)
 
 def colorchar(pixel):
-    chr = u'\u2585'
-    chr = u'\u2b24'
+    #chr = u'\u2585'
+    #chr = u'\u2b24'
+    chr = '.'
     r, g, b = pixel
     pixel = r, g, b
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
@@ -31,7 +28,10 @@ class NeoPixel(object):
             print('\n' * TOP_PADDING)
 
     def show(self):
-        out = '\r '
+        if ONE_LINE:
+            out = '\r '
+        else:
+            out = ''
         for pixel in self.pixels:
             if pixel:
                 out += colorchar(pixel)

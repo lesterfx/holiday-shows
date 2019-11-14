@@ -10,18 +10,12 @@ import os
 import time
 import traceback
 
-user = getpass.getuser()
-if True: #user == 'root':
-    import board
-    import neopixel
-    GAMMA = 1
-elif user == 'mobile':
-    import uipixel as neopixel
-    GAMMA = .3
-else:
-    import consolepixel as neopixel
-    GAMMA = .3
-    SCALE = 255
+import board
+import neopixel
+GAMMA = 1
+
+from . import consolepixel
+#GAMMA = .3
 
 class Color (object):
     def __init__(self, r, g=None, b=None, luma=1, mode='over'):
@@ -138,17 +132,16 @@ class Pixel(object):
         return self.position < other.position
 
 class Home(object):
-    def __init__(self, minutes=0):
-        print('Loading')
-        self.load_config()
-        pin = self.config['pin']
-        pixel_order = self.config['pixel_order']
-        if neopixel.__name__ == 'neopixel':
-            pin = getattr(board, f'D{pin}')
-            pixel_order = getattr(neopixel, pixel_order)
-        num = self.config['range'][-1]
+    def __init__(self, globals_, console=False):
+        pin = globals_.pin
+        pixel_order = globals_.pixel_order
+        self.num = globals_.ranges[-1][-1]  # need to accommodate multiple strips
         print('Initializing Strip')
-        self.strip = neopixel.NeoPixel(pin=pin, n=num, brightness=1, auto_write=False, pixel_order=pixel_order)
+        if not console:
+            self.strip = neopixel.NeoPixel(pin=pin, n=self.num, brightness=1, auto_write=False, pixel_order=pixel_order)
+        else:
+            self.num = consolepixel.LED_COUNT
+            self.strip = consolepixel.NeoPixel(pin=pin, n=self.num, brightness=1, auto_write=False, pixel_order=pixel_order)
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
@@ -156,50 +149,15 @@ class Home(object):
         self.frames_drawn = 0
         self.fps_count = 0
         self.fps_timer = self.start_time
-        stop_time = time.time() + minutes * 60
-        print('Running', self.__class__.__name__)
         self.show()
-        try:
-            while True:
-                self.main()
-                if time.time() >= stop_time: break
-        except KeyboardInterrupt:
-            pass
-        except:
-            raise
-        finally:
-            self.clear()
-            self.show()
-            print('\n')
-            print('Exiting')
-            del self.strip
 
-    def load_config(self):
-        config_file = os.path.join(os.path.expanduser('~'), '.holiday-pixels', 'config.json')
-        if not os.path.exists(config_file):
-            print(f'Config file does not exist. Creating a sample in {config_file}')
-            neopixel.CLEAR = False
-            neopixel.ONE_LINE = True
-            self.save_sample_config(config_file)
+    def __enter__(self):
+        return self
 
-        print('Loading config', config_file)
-        with open(config_file) as p:
-            self.config = json.load(p)
-
-        if hasattr(neopixel, 'config'):
-            self.config.update(neopixel.config)
-
-    def save_sample_config(self, config_file):
-        config_dir = os.path.dirname(config_file)
-        if not os.path.exists(config_dir):
-            os.makedirs(config_dir)
-        config = {}
-        config['pin'] = 18
-        config['corners'] = [130, 190]
-        config['pixel_order'] = 'GRB'
-        config['range'] = 0, 440
-        with open(config_file, 'w') as p:
-            json.dump(config, p, indent=4, sort_keys=True)
+    def __exit__(self, *args, **kwargs):
+        self.clear()
+        self.show()
+        del self.strip
 
     @staticmethod
     def run_every(seconds, function):
@@ -217,9 +175,8 @@ class Home(object):
         while time.time() < end:
             function(*args, **kwargs)
 
-    @property
-    def round_up(self):
-        return ((len(self) + self.every - 1) // self.every) * self.every
+    def round_up(self, every):
+        return ((len(self) + every - 1) // every) * every
 
     def clear(self, show=False):
         for i in range(len(self)):
@@ -227,7 +184,7 @@ class Home(object):
         if show:
             self.show()
 
-    def show(self):
+    def print_fps(self):
         now = time.time()
         if now - self.fps_timer >= 1:
             elapsed = now - self.start_time
@@ -236,6 +193,9 @@ class Home(object):
             self.fps_timer = now
         self.fps_count += 1
         self.frames_drawn += 1
+
+    def show(self):
+        # self.print_fps()
         if self.previous != self.cache:
             for i, pixel in enumerate(self.cache):
                 try:
@@ -268,7 +228,7 @@ class Home(object):
         return 0 <= key < len(self)
 
     def __len__(self):
-        return self.config['range'][-1]
+        return self.num
 
     def __del__(self):
         try:

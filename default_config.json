@@ -3,7 +3,7 @@
         "corners": [160, 214],
         "pin": 18,
         "pixel_order": "GRB",
-        "ranges": [[10, 450]],
+        "ranges": [[15, 450]],
         "brightness": 255,
         "relay": 10
     },
@@ -13,55 +13,109 @@
             -122.4
         ],
         "start_time": "sunset",
+        "sunset_offset": "-00:10",
         "end_time": "22:00",
         "dusk_brightness": 255,
         "dusk_duration": "00:30"
     },
-    "calendar": {
-        "eye_blink": [
-            [
-                "October 15",
-                "October 31"
+    "calendar": [
+        {
+            "start": "October 15",
+            "end": "October 31",
+            "name": "Halloween",
+            "animation": [
+                "eye_blink",
+                "black_hole",
+                "fairy"
             ]
-        ],
-        "black_hole": [
-            [
-                "October 15",
-                "October 31"
+        },
+        {
+            "start": "May 25",
+            "end": "May 31",
+            "days": ["Monday"],
+            "name": "Memorial Day",
+            "animation": [
+                "flag"
             ]
-        ],
-        "fairy": [
-            [
-                "October 15",
-                "October 31"
+        },
+        {
+            "start": "July 01",
+            "end": "July 04",
+            "name": "Independence Day",
+            "animation": [
+                "flag"
             ]
-        ],
-        "flag": [
-            [
-                "May 25",
-                "May 31"
-            ],
-            "June 14",
-            "July 4",
-            "November 11"
-        ]
-    },
+        },
+        {
+            "start": "November 11",
+            "end": "November 11",
+            "name": "Veterans Day",
+            "animation": [
+                "flag"
+            ]
+        },
+        {
+            "start": "June 14",
+            "end": "June 14",
+            "name": "Flag Day",
+            "animation": [
+                "flag"
+            ]
+        },
+        {
+            "start": "November 01",
+            "end": "November 10",
+            "name": "Fall",
+            "animation": [
+                "fall"
+            ]
+        },
+        {
+            "start": "November 12",
+            "end": "November 28",
+            "name": "Fall",
+            "animation": [
+                "fall"
+            ]
+        },
+        {
+            "start": "November 29",
+            "end": "December 31",
+            "name": "Christmas",
+            "animation": [
+                "winter"
+            ]
+        }
+    ],
     "animations": {
         "fall": {
-            "pile_density": 3,
-            "emit_seconds": 4
+            "pile_density": 2,
+            "emit_seconds": 4,
+            "fade": 0
         },
         "flag": {
             "center": 332,
-            "blue_width": 70
+            "blue_range": [264, 400],
+            "every": 20,
+            "fade": 0.5
         },
         "eye_blink": {
-            "distance_range": [2, 6]
+            "distance_range": [2, 6],
+            "blinks_range": [1, 5],
+            "open_time_range": [1, 2],
+            "closed_time_range": [0.1, 0.4],
+            "fade_in_frames": 20
         },
         "black_hole": {
             "center": 332,
             "delay_seconds": 20,
-            "intensity_multiplier": 50000
+            "intensity_multiplier": 50000,
+            "crawl_speed": 5
+        },
+        "random_walker": {
+            "spawn_speed_max": 30,
+            "speed_effect_max": 3000,
+            "intensity_effect_range": [-0.01, 0.007]
         }
     }
 }
