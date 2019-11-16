@@ -135,13 +135,14 @@ class Home(object):
     def __init__(self, globals_, console=False):
         pin = globals_.pin
         pixel_order = globals_.pixel_order
-        self.num = globals_.ranges[-1][-1]  # need to accommodate multiple strips
+        self.globals = globals_
+        self.max = self.globals.ranges[-1][-1]
         print('Initializing Strip')
         if not console:
-            self.strip = neopixel.NeoPixel(pin=pin, n=self.num, brightness=1, auto_write=False, pixel_order=pixel_order)
+            self.strip = neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
         else:
-            self.num = consolepixel.LED_COUNT
-            self.strip = consolepixel.NeoPixel(pin=pin, n=self.num, brightness=1, auto_write=False, pixel_order=pixel_order)
+            self.max = consolepixel.LED_COUNT
+            self.strip = consolepixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
@@ -198,14 +199,17 @@ class Home(object):
         # self.print_fps()
         if self.previous != self.cache:
             for i, pixel in enumerate(self.cache):
-                try:
-                    color = pixel.color
-                    self.strip[i] = color
-                except:
-                    raise
+                if pixel:
+                    try:
+                        color = pixel.color
+                        self.strip[i] = color
+                    except:
+                        raise
+                else:
+                    self.strip[i] = 0
             self.strip.show()
             self.previous = self.cache
-            self.cache = [color.copy() for color in self.previous]
+            self.cache = [color and color.copy() for color in self.previous]
 
     def __str__(self):
         return ' '.join(map(str, self.cache))
@@ -225,10 +229,13 @@ class Home(object):
 
     def __contains__(self, key):
         key = int(key)
-        return 0 <= key < len(self)
+        for range_ in self.globals.ranges:
+            if range_[0] <= key <= range_[1]:
+                return True
+        return False
 
     def __len__(self):
-        return self.num
+        return self.max+1
 
     def __del__(self):
         try:
@@ -238,7 +245,8 @@ class Home(object):
 
     def __imul__(self, other):
         for pixel in self.cache:
-            pixel *= other
+            if pixel:
+                pixel *= other
         return self
 
     def __isub__(self, other):

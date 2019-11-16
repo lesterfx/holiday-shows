@@ -28,7 +28,7 @@ class Animation(object):
             self.home *= fade
             offset = (offset + 1) % every
             end = max(center-self.globals.ranges[0][0], self.globals.ranges[0][1]-center)
-            for i in range(offset-every, end, every//2):
+            for i in range(offset-every, end+1, every//2):
                 if i < 0: continue
                 for sign in (-1, 1):
                     x = center + i*sign

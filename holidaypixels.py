@@ -81,7 +81,7 @@ class Holiday_Pixels(object):
             self.run(event_end, *event.animation)
 
     def demo(self, *animation):
-        self.run(datetime.datetime.now() + datetime.timedelta(minutes=1), *animation)
+        self.run(datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes), *animation)
 
     def run(self, until, *animation_names):
         animations = []
@@ -95,7 +95,7 @@ class Holiday_Pixels(object):
         with strip as h:
             for animation in animation_names:
                 module = importlib.import_module('.' + animation, 'holidaypixels.animations')
-                settings = self.animations[animation]
+                settings = self.animations.get(animation, {})
                 animation = module.Animation(h, self.globals, settings)
                 animations.append(animation)
             while datetime.datetime.now() < until:
@@ -220,6 +220,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--reset', const=True, choices=['force'], nargs='?', default=False, help='Create a sample config file if one does not exist')
         parser.add_argument('--config', default=self.config_path, help='Path to config file')
         parser.add_argument('--demo', help='Run named animation immediately')
+        parser.add_argument('--minutes', default=1, type=int, help='How many minutes to run demo')
         parser.add_argument('--display', choices=['gpio', 'console'], default='gpio', help='Where to render the animation')
         self.args = parser.parse_args()
         print(self.args)

@@ -3,7 +3,7 @@
         "corners": [160, 214],
         "pin": 18,
         "pixel_order": "GRB",
-        "ranges": [[15, 450]],
+        "ranges": [[17, 447]],
         "brightness": 255,
         "relay": 10
     },
