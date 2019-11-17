@@ -13,9 +13,9 @@ _, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
 LED_COUNT -= 2
 
 def colorchar(pixel):
-    #chr = u'\u2585'
+    chr = u'\u2585'
     #chr = u'\u2b24'
-    chr = '.'
+    #chr = '.'
     r, g, b = pixel
     pixel = r, g, b
     return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)

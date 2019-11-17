@@ -116,6 +116,11 @@
             "spawn_speed_max": 30,
             "speed_effect_max": 3000,
             "intensity_effect_range": [-0.01, 0.007]
+        },
+        "xmas1": {
+            "module": "image",
+            "path": "/home/pi/holiday-pixels/xmas1.png",
+            "fps": 20
         }
     }
 }

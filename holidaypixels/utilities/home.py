@@ -146,10 +146,8 @@ class Home(object):
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
-        self.start_time = time.time()
-        self.frames_drawn = 0
         self.fps_count = 0
-        self.fps_timer = self.start_time
+        self.fps_timer = time.time()
         self.show()
 
     def __enter__(self):
@@ -188,12 +186,10 @@ class Home(object):
     def print_fps(self):
         now = time.time()
         if now - self.fps_timer >= 1:
-            elapsed = now - self.start_time
-            print(f'\r{self.fps_count} fps. {self.frames_drawn} frames in {elapsed:.03f} seconds.', end='')
+            print(f'\r{self.fps_count} fps', end='')
             self.fps_count = 0
             self.fps_timer = now
         self.fps_count += 1
-        self.frames_drawn += 1
 
     def show(self):
         # self.print_fps()

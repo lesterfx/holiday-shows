@@ -94,8 +94,10 @@ class Holiday_Pixels(object):
             return
         with strip as h:
             for animation in animation_names:
-                module = importlib.import_module('.' + animation, 'holidaypixels.animations')
                 settings = self.animations.get(animation, {})
+                if 'module' in settings:
+                    animation = settings.get('module', animation)
+                module = importlib.import_module('.' + animation, 'holidaypixels.animations')
                 animation = module.Animation(h, self.globals, settings)
                 animations.append(animation)
             while datetime.datetime.now() < until:
