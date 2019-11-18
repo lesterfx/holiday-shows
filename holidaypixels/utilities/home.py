@@ -12,10 +12,10 @@ import traceback
 
 import board
 import neopixel
-GAMMA = 1
 
-from . import consolepixel
-#GAMMA = .3
+from . import consolepixel, imagepixel
+
+GAMMA = 1
 
 class Color (object):
     def __init__(self, r, g=None, b=None, luma=1, mode='over'):
@@ -132,17 +132,20 @@ class Pixel(object):
         return self.position < other.position
 
 class Home(object):
-    def __init__(self, globals_, console=False):
+    def __init__(self, globals_, display='gpio', outfile=None):
         pin = globals_.pin
         pixel_order = globals_.pixel_order
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
         print('Initializing Strip')
-        if not console:
+        if display == 'gpio':
             self.strip = neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
-        else:
+        elif display == 'console':
             self.max = consolepixel.LED_COUNT
-            self.strip = consolepixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
+            self.strip = consolepixel.ConsolePixel(n=self.max+1)
+        else:
+            assert display == 'image'
+            self.strip = imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
@@ -158,13 +161,22 @@ class Home(object):
         self.show()
         del self.strip
 
-    @staticmethod
-    def run_every(seconds, function):
+    def run_every(self, seconds, function):
         last_run = [time.time()]
+        run_tries = [0]
         def maybe_run(*args, **kwargs):
             now = time.time()
-            if now - last_run[0] >= seconds:
-                last_run[0] = now
+            run_tries[0] += 1
+            run = False
+            if hasattr(self, 'fps'):
+                if run_tries[0] == self.fps * seconds:
+                    run = True
+                    run_tries[0] = 0
+            else:
+                if now - last_run[0] >= seconds:
+                    run = True
+                    last_run[0] = now
+            if run:
                 return function(*args, **kwargs)
         return maybe_run
 

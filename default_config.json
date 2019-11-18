@@ -119,7 +119,7 @@
         },
         "xmas1": {
             "module": "image",
-            "path": "/home/pi/holiday-pixels/xmas1.png",
+            "image": "/home/pi/holiday-pixels/xmas1.png",
             "fps": 20
         }
     }

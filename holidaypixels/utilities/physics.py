@@ -208,7 +208,10 @@ class System (object):
 
     def update(self):
         now = time.time()
-        tdelta = (now - self.last_update)
+        if hasattr(self.strip, 'fps'):
+            tdelta = 1 / self.strip.fps
+        else:
+            tdelta = (now - self.last_update)
         for particle in self.particles:
             if particle.deleted: continue
             for effect in self.effects:

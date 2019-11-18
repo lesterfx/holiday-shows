@@ -17,7 +17,7 @@ class Animation(object):
         return 'Image'
 
     def main(self, end_by):
-        path = self.settings['path']
+        path = self.settings['image']
         fps = self.settings['fps']
         path = os.path.expanduser(path)
         image = Image.open(path)

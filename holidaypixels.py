@@ -81,17 +81,20 @@ class Holiday_Pixels(object):
             self.run(event_end, *event.animation)
 
     def demo(self, *animation):
-        self.run(datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes), *animation)
+        if not self.args.minutes and not self.args.seconds:
+            self.args.minutes = 1
+        self.run(datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes, seconds=self.args.seconds), *animation)
 
     def run(self, until, *animation_names):
         animations = []
         try:
-            console = (self.args.display == 'console')
-            strip = home.Home(self.globals, console=console)
+            strip = home.Home(self.globals, display=self.args.display, outfile=self.args.save)
         except RuntimeError as err:
             print(err)
             print('To preview in console, run with flag "--display console"')
             return
+        if self.args.fps:
+            strip.fps = self.args.fps
         with strip as h:
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
@@ -222,8 +225,11 @@ class Holiday_Pixels(object):
         parser.add_argument('--reset', const=True, choices=['force'], nargs='?', default=False, help='Create a sample config file if one does not exist')
         parser.add_argument('--config', default=self.config_path, help='Path to config file')
         parser.add_argument('--demo', help='Run named animation immediately')
-        parser.add_argument('--minutes', default=1, type=int, help='How many minutes to run demo')
-        parser.add_argument('--display', choices=['gpio', 'console'], default='gpio', help='Where to render the animation')
+        parser.add_argument('--minutes', default=0, type=int, help='How many minutes to run demo')
+        parser.add_argument('--seconds', default=0, type=int, help='How many seconds to run demo')
+        parser.add_argument('--display', choices=['gpio', 'console', 'image'], default='gpio', help='Where to render the animation')
+        parser.add_argument('--save', help='Where to save the rendered image')
+        parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
         self.args = parser.parse_args()
         print(self.args)
 
