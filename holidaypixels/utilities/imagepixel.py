@@ -21,7 +21,7 @@ class ImagePixel(object):
                 row.append((0, 0, 0))
         self.data += row
         self.rows += 1
-        print(self.rows)
+        print('\r', self.rows, end='')
 
     def __setitem__(self, key, value):
         self.pixels[key] = value

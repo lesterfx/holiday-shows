@@ -5,8 +5,9 @@ from __future__ import print_function, division
 import copy
 import datetime
 import json
-import getpass
+import gc
 import os
+import sys
 import time
 import traceback
 
@@ -159,7 +160,19 @@ class Home(object):
     def __exit__(self, *args, **kwargs):
         self.clear()
         self.show()
+        refs = sys.getrefcount(self.strip)
+        print(f'Deleting strip from self, with {refs} references.')
+        print(gc.get_referrers(self.strip))
         del self.strip
+
+    def sleep(self, seconds):
+        if hasattr(self, 'fps'):
+            frames = int(seconds * self.fps)
+            print(f'sleep for {frames} frames')
+            for x in range(frames):
+                self.strip.show()
+        else:
+            time.sleep(seconds)
 
     def run_every(self, seconds, function):
         last_run = [time.time()]
@@ -218,9 +231,6 @@ class Home(object):
             self.strip.show()
             self.previous = self.cache
             self.cache = [color and color.copy() for color in self.previous]
-
-    def __str__(self):
-        return ' '.join(map(str, self.cache))
 
     def __setitem__(self, key, value):
         key = int(key)

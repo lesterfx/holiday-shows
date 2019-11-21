@@ -49,5 +49,5 @@ class Animation(object):
                 particle = physics.Particle(speed=speed, position=x, color=Color(1, .1, 0), strip=self.home, on_delete=self.flash)
                 self.system.particles.add(particle)
             elif not x % 3:
-                particle = physics.Particle(speed=speed, position=x, color=Color(.007, 0, .01), strip=self.home)
+                particle = physics.Particle(speed=speed, position=x, color=Color(.03, 0, .04), strip=self.home)
                 self.system.particles.add(particle)

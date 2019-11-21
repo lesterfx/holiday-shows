@@ -61,10 +61,10 @@ class Animation(object):
         unlock_leaf = self.home.run_every(.1, do_unlock_leaf)
         while do_unlock_leaf():
             while self.system.update_and_draw(show=False):
-                unlock_leaf()
-                update_wind()
                 for leaf in self.old_particles:
                     self.home[leaf.position] = leaf.color
+                unlock_leaf()
+                update_wind()
                 self.home.show()
 
     def leave(self, particle, effect, edge):
