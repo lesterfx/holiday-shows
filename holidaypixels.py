@@ -65,11 +65,22 @@ class Holiday_Pixels(object):
         self.load_args()
         config = self.load_config()
         self.process_config(config)
+        self.init_strip()
         if self.args.demo:
             self.demo(self.args.demo)
         else:
             self.main()
 
+    def init_strip(self):
+        try:
+            self.strip = home.Home(self.globals, display=self.args.display, outfile=self.args.save)
+        except RuntimeError as err:
+            print(err)
+            print('To preview in console, run with flag "--display console"')
+            return
+        if self.args.fps:
+            strip.fps = self.args.fps
+            
     def main(self):
         for event_start, event in self.iter():
             print()
@@ -87,15 +98,7 @@ class Holiday_Pixels(object):
 
     def run(self, until, *animation_names):
         animations = []
-        try:
-            strip = home.Home(self.globals, display=self.args.display, outfile=self.args.save)
-        except RuntimeError as err:
-            print(err)
-            print('To preview in console, run with flag "--display console"')
-            return
-        if self.args.fps:
-            strip.fps = self.args.fps
-        with strip as h:
+        with self.strip as h:
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
                 if 'module' in settings:
@@ -113,7 +116,10 @@ class Holiday_Pixels(object):
                     except:
                         print(traceback.format_exc())
                         print('Continuing in 10 seconds...')
-                        time.sleep(10)
+                        try:
+                            time.sleep(10)
+                        except KeyboardInterrupt:
+                            sys.exit()
 
     def sleep_until(self, event):
         while True:

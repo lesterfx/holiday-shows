@@ -3,7 +3,7 @@
         "corners": [160, 214],
         "pin": 18,
         "pixel_order": "GRB",
-        "ranges": [[17, 447]],
+        "ranges": [[17, 446]],
         "brightness": 255,
         "relay": 10
     },
@@ -13,7 +13,7 @@
             -122.4
         ],
         "start_time": "sunset",
-        "sunset_offset": "-00:10",
+        "sunset_offset": "-01:00",
         "end_time": "22:00",
         "dusk_brightness": 255,
         "dusk_duration": "00:30"
@@ -83,11 +83,17 @@
             "end": "December 31",
             "name": "Christmas",
             "animation": [
-                "winter"
+                "snow_blow"
             ]
         }
     ],
     "animations": {
+        "snow_blow": {
+            "emit_range": [0.1, 4],
+            "life_range": [1, 5],
+            "fade": 0.6,
+            "wind_range": [5, 15]
+        },
         "fall": {
             "pile_density": 2,
             "emit_seconds": 4,

@@ -8,11 +8,14 @@ import weakref
 from .home import Home, Color, Pixel
 
 class Particle (Pixel):
-    def __init__(self, mass=1, speed=0, on_delete=None, *args, **kwargs):
+    def __init__(self, mass=1, speed=0, on_delete=None, life=None, lifecycle=None, *args, **kwargs):
         super(Particle, self).__init__(*args, **kwargs)
         self.mass = mass
         self.speed = speed
         self.on_delete = on_delete
+        self.life = life
+        self.age = 0
+        self.lifecycle = lifecycle
 
     def __iadd__(self, effect):
         self.effects.add(effect)
@@ -20,7 +23,15 @@ class Particle (Pixel):
 
     def update(self, tdelta):
         if not self.deleted:
+            if self.life:
+                self.age += tdelta
+                if self.life and self.age > self.life:
+                    self.deleted = True
+                    self.on_delete and self.on_delete()
+                else:
+                    self.lifecycle and self.lifecycle(self, self.age, self.age/self.life)
             self.position += (self.speed * tdelta)
+
 
 class Effect (object):
     pass
@@ -184,11 +195,15 @@ class Repel (Effect):
             particle.speed += power * tdelta
 
 class SpeedLimit (Effect):
-    def __init__(self, limit):
+    def __init__(self, limit, absolute=False):
         self.limit = limit
+        self.absolute = absolute
 
     def apply(self, particle, tdelta):
-        particle.speed = max(-self.limit, min(self.limit, particle.speed))
+        if self.absolute:
+            particle.speed = max(-self.limit, min(self.limit, particle.speed))
+        else:
+            particle.speed = max(-self.limit, min(self.limit, particle.speed * tdelta))
 
 class System (object):
     def __init__(self, strip):
@@ -197,14 +212,21 @@ class System (object):
         self.last_update = time.time()
         self.strip = strip
 
-    def update_and_draw(self, clear=True, show=True):
+    def update_and_draw(self, clear=True, show=True, remove_deleted=False):
         if clear:
             self.strip.clear()
+        if remove_deleted:
+            self.remove_deleted()
         self.update()
         anything_drawn = self.draw()
         if show:
             self.strip.show()
         return anything_drawn
+
+    def remove_deleted(self):
+        for particle in list(self.particles):
+            if particle.deleted:
+                self.particles.remove(particle)
 
     def update(self):
         now = time.time()

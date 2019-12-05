@@ -27,7 +27,7 @@ class ImagePixel(object):
         self.pixels[key] = value
 
     def __del__(self):
-        print('Save Image!')
+        print('Saving image')
         size = (len(self.pixels), self.rows)
         print(size)
         image = Image.new('RGB', size)

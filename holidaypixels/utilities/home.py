@@ -160,10 +160,6 @@ class Home(object):
     def __exit__(self, *args, **kwargs):
         self.clear()
         self.show()
-        refs = sys.getrefcount(self.strip)
-        print(f'Deleting strip from self, with {refs} references.')
-        print(gc.get_referrers(self.strip))
-        del self.strip
 
     def sleep(self, seconds):
         if hasattr(self, 'fps'):
@@ -175,23 +171,25 @@ class Home(object):
             time.sleep(seconds)
 
     def run_every(self, seconds, function):
-        last_run = [time.time()]
-        run_tries = [0]
-        def maybe_run(*args, **kwargs):
+        def func(*args, **kwargs):
             now = time.time()
-            run_tries[0] += 1
+            func.run_tries += 1
             run = False
             if hasattr(self, 'fps'):
-                if run_tries[0] == self.fps * seconds:
+                if func.run_tries == self.fps * func.seconds:
                     run = True
-                    run_tries[0] = 0
+                    func.run_tries = 0
             else:
-                if now - last_run[0] >= seconds:
+                if now - func.last_run >= func.seconds:
                     run = True
-                    last_run[0] = now
+                    func.last_run = now
             if run:
                 return function(*args, **kwargs)
-        return maybe_run
+        func.last_run = time.time()
+        func.run_tries = 0
+        func.seconds = seconds
+
+        return func
 
     @staticmethod
     def run_for(seconds, function, *args, **kwargs):

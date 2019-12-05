@@ -13,12 +13,15 @@ _, LED_COUNT = map(int, subprocess.check_output(['stty', 'size']).split())
 LED_COUNT -= 2
 
 def colorchar(pixel):
-    chr = u'\u2585'
+    #chr = u'\u2585'
     #chr = u'\u2b24'
-    #chr = '.'
-    return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
+    chr = '.'
+    if any(pixel):
+        return u'\033[38;2;{0:.0f};{1:.0f};{2:.0f}m{chr}\033[00m'.format(*pixel, chr=chr)
+    else:
+        return ' '
 
-class NeoPixel(object):
+class ConsolePixel(object):
     def __init__(self, n):
         self.pixels = [Color(10, 10, 10) for _ in range(n)]
         if CLEAR:
