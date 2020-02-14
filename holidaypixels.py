@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
-
 import argparse
 import datetime
 from collections import namedtuple
@@ -84,11 +82,9 @@ class Holiday_Pixels(object):
     def main(self):
         for event_start, event in self.iter():
             print()
-            print(f'Next event: {event}')
             event_end = datetime.datetime.combine(event_start.date(), self.schedule.end_time)
-            print(f'Starts at {event_start}')
-            self.sleep_until(event_start)
-            print(f'Running {event} until {event_end}')
+            print(f'{event_start} starts {event}')
+            self.run(event_start, 'blank')
             self.run(event_end, *event.animation)
 
     def demo(self, *animation):
@@ -108,7 +104,7 @@ class Holiday_Pixels(object):
                 animations.append(animation)
             while datetime.datetime.now() < until:
                 for animation in animations:
-                    print(f'Running {animation}')
+                    print(f'{until} ends {animation}')
                     try:
                         animation.main(until)
                     except KeyboardInterrupt:
@@ -120,16 +116,6 @@ class Holiday_Pixels(object):
                             time.sleep(10)
                         except KeyboardInterrupt:
                             sys.exit()
-
-    def sleep_until(self, event):
-        while True:
-            now = datetime.datetime.now()
-            if now > event:
-                return
-            duration = event - now
-            sleep = duration.total_seconds() * .75
-            print(f'Sleeping for {sleep:.0f} seconds')
-            time.sleep(sleep)
 
     def get_start_time(self, date):
         if self.schedule.start_time:
