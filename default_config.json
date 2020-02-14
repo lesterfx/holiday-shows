@@ -105,6 +105,11 @@
             "every": 20,
             "fade": 0.5
         },
+        "49ers": {
+            "center": 332,
+            "every": 20,
+            "fade": 0.5
+        },
         "eye_blink": {
             "distance_range": [2, 6],
             "blinks_range": [1, 5],
