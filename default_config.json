@@ -20,6 +20,14 @@
     },
     "calendar": [
         {
+            "start": "February 14",
+            "end": "February 14",
+            "name": "Valentine's",
+            "animation": [
+                "valentines"
+            ]
+        },
+        {
             "start": "October 15",
             "end": "October 31",
             "name": "Halloween",
@@ -109,6 +117,12 @@
             "center": 332,
             "every": 20,
             "fade": 0.5
+        },
+        "valentines": {
+            "emit_range": [0.1, 4],
+            "life_range": [1, 5],
+            "fade": 0.6,
+            "wind_range": [5, 15]
         },
         "eye_blink": {
             "distance_range": [2, 6],
