@@ -55,6 +55,14 @@
             ]
         },
         {
+            "start": "September 11",
+            "end": "September 11",
+            "name": "9/11",
+            "animation": [
+                "flag"
+            ]
+        },
+        {
             "start": "November 11",
             "end": "November 11",
             "name": "Veterans Day",

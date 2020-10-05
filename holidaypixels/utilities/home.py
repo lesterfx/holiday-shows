@@ -214,9 +214,9 @@ class Home(object):
             self.fps_timer = now
         self.fps_count += 1
 
-    def show(self):
+    def show(self, force=False):
         # self.print_fps()
-        if self.previous != self.cache:
+        if force or self.previous != self.cache:
             for i, pixel in enumerate(self.cache):
                 if pixel:
                     try:
