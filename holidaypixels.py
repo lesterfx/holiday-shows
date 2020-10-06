@@ -169,7 +169,7 @@ class Holiday_Pixels(object):
         pixel_order = getattr(neopixel, globals_['pixel_order'])
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         brightness = max(0, min(int(globals_['brightness']), 255))
-        relays = [getattr(board, 'D{}'.format(int(relay))) for relay in globals_['relay']]
+        relays = [getattr(board, 'D{}'.format(int(relay))) for relay in globals_['relays']]
         self.globals = GlobalPrefs(corners, pin, pixel_order, ranges, brightness, relays)
 
     def process_schedule(self, schedule):
