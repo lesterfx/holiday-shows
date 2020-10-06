@@ -12,11 +12,13 @@ import time
 import traceback
 
 import board
+import digitalio
 import neopixel
 
 from . import consolepixel, imagepixel
 
 GAMMA = 1
+
 
 class Color (object):
     def __init__(self, r, g=None, b=None, luma=1, mode='over'):
@@ -132,27 +134,42 @@ class Pixel(object):
     def __lt__(self, other):
         return self.position < other.position
 
+class Relay(object):
+    def __init__(self, pin):
+        self.pin = digitalio.DigitalInOut(pin)
+        self.pin.direction = digitalio.Direction.OUTPUT
+
+    def set(self, value):
+        self.pin.value = value
+
 class Home(object):
     def __init__(self, globals_, display='gpio', outfile=None):
-        pin = globals_.pin
-        pixel_order = globals_.pixel_order
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
-        print('Initializing Strip')
-        if display == 'gpio':
-            self.strip = neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
-        elif display == 'console':
-            self.max = consolepixel.LED_COUNT
-            self.strip = consolepixel.ConsolePixel(n=self.max+1)
-        else:
-            assert display == 'image'
-            self.strip = imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
+        self.strip = self.init_strip(display, outfile)
+        self.relays = self.init_relays()
         self.cache = [None] * len(self)
         self.previous = None
         self.clear()
         self.fps_count = 0
         self.fps_timer = time.time()
         self.show()
+
+    def init_strip(self, display, outfile):
+        print('Initializing Strip')
+        if display == 'gpio':
+            pin = self.globals.pin
+            pixel_order = self.globals.pixel_order
+            return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
+        elif display == 'console':
+            self.max = consolepixel.LED_COUNT
+            return consolepixel.ConsolePixel(n=self.max+1)
+        else:
+            assert display == 'image'
+            return imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
+
+    def init_relays(self):
+        self.relays = [Relay(pin) for pin in self.globals.relays]
 
     def __enter__(self):
         return self
@@ -165,7 +182,7 @@ class Home(object):
         if hasattr(self, 'fps'):
             frames = int(seconds * self.fps)
             print(f'sleep for {frames} frames')
-            for x in range(frames):
+            for _ in range(frames):
                 self.strip.show()
         else:
             time.sleep(seconds)
@@ -269,14 +286,3 @@ class Home(object):
         for pixel in self.cache:
             pixel -= other
         return self
-
-if __name__ == '__main__':
-        class Test(Home):
-            def main(self):
-                for i in range(len(self)):
-                    self[i] = Color(1, 1, 1)
-                    # start = time.time()
-                    self.show()
-                    # print(time.time() - start)
-                    # time.sleep(1)
-        Test()

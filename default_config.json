@@ -5,7 +5,10 @@
         "pixel_order": "GRB",
         "ranges": [[17, 446]],
         "brightness": 255,
-        "relay": 10
+        "relays": [
+            10,
+            11
+        ]
     },
     "schedule": {
         "location": [
@@ -153,7 +156,8 @@
         "xmas1": {
             "module": "image",
             "image": "/home/pi/holiday-pixels/xmas1.png",
-            "fps": 20
+            "fps": 20,
+            "relays": 2
         }
     }
 }

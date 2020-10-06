@@ -18,7 +18,7 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'pin', 'pixel_order', 'ranges', 'brightness', 'relay'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'pin', 'pixel_order', 'ranges', 'brightness', 'relays'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 
 class CalendarEntry(object):
@@ -94,13 +94,12 @@ class Holiday_Pixels(object):
 
     def run(self, until, *animation_names):
         animations = []
-        with self.strip as h:
+        with self.strip as home:
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
-                if 'module' in settings:
-                    animation = settings.get('module', animation)
+                animation = settings.get('module', animation)
                 module = importlib.import_module('.' + animation, 'holidaypixels.animations')
-                animation = module.Animation(h, self.globals, settings)
+                animation = module.Animation(home, self.globals, settings)
                 animations.append(animation)
             while datetime.datetime.now() < until:
                 for animation in animations:
@@ -150,7 +149,6 @@ class Holiday_Pixels(object):
         cals = [[None, entry.iter(), entry] for entry in self.calendar]
         for cal in cals:
             cal[0] = next(cal[1])
-        date = None
         while True:
             cals.sort(key=itemgetter(0))
             event = cals[0]
@@ -171,8 +169,8 @@ class Holiday_Pixels(object):
         pixel_order = getattr(neopixel, globals_['pixel_order'])
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         brightness = max(0, min(int(globals_['brightness']), 255))
-        relay = getattr(board, 'D{}'.format(int(globals_['relay'])))
-        self.globals = GlobalPrefs(corners, pin, pixel_order, ranges, brightness, relay)
+        relays = [getattr(board, 'D{}'.format(int(relay))) for relay in globals_['relay']]
+        self.globals = GlobalPrefs(corners, pin, pixel_order, ranges, brightness, relays)
 
     def process_schedule(self, schedule):
         lat, lon = schedule['location']
