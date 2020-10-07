@@ -169,7 +169,7 @@ class Home(object):
             return imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
 
     def init_relays(self):
-        self.relays = [Relay(pin) for pin in self.globals.relays]
+        return [Relay(pin) for pin in self.globals.relays]
 
     def __enter__(self):
         return self

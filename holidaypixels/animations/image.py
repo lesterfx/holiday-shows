@@ -26,7 +26,7 @@ class Animation(object):
         y = 0
         width = min(image.width - num_relays, self.home.max)
         while y < image.height:
-            for x, relay in enumerate(self.globals.relays):
+            for x, relay in enumerate(self.home.relays):
                 color = data[image.width * y + x]
                 assert color[0] == color[1] == color[2]
                 assert color[0] in (0, 255)
