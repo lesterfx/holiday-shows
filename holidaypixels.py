@@ -111,10 +111,7 @@ class Holiday_Pixels(object):
                     except:
                         print(traceback.format_exc())
                         print('Continuing in 10 seconds...')
-                        try:
-                            time.sleep(10)
-                        except KeyboardInterrupt:
-                            sys.exit()
+                        time.sleep(10)
 
     def get_start_time(self, date):
         if self.schedule.start_time:

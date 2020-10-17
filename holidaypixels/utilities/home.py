@@ -176,6 +176,7 @@ class Home(object):
 
     def __exit__(self, *args, **kwargs):
         self.clear()
+        self.clear_relays()
         self.show()
 
     def sleep(self, seconds):
@@ -222,6 +223,10 @@ class Home(object):
             self[i] = None
         if show:
             self.show()
+    
+    def clear_relays(self):
+        for relay in self.relays:
+            relay.set(False)
 
     def print_fps(self):
         now = time.time()

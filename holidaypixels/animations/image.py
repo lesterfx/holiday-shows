@@ -43,9 +43,7 @@ class Animation(object):
         while y < image.height:
             for x, relay in enumerate(self.home.relays):
                 color = data[image.width * y + x]
-                assert color[0] == color[1] == color[2]
-                assert color[0] in (0, 255)
-                relay.set(color[0] > 0)
+                relay.set(bool(color[0]))
             for x in range(num_relays, width - num_relays):
                 color = data[image.width * y + x]
                 self.home.strip[x] = color[0], color[1], color[2]
