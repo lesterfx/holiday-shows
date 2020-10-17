@@ -22,14 +22,23 @@ class Animation(object):
         path = os.path.expanduser(path)
         image = Image.open(path)
         data = image.getdata()
-        y = 0
         width = min(image.width - num_relays, self.home.max)
+
+        try:
+            for y in range(image.height):
+                for x, relay in enumerate(self.home.relays)
+                    color = data[image.width * y + x]
+                    assert color[0] == color[1] == color[2]
+                    assert color[0] in (0, 255)
+        except AssertionError:
+            raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
         for i in range(5):
             print(5-i)
             time.sleep(1)
         print('go!')
 
+        y = 0
         epoch = time.time()
         while y < image.height:
             for x, relay in enumerate(self.home.relays):
