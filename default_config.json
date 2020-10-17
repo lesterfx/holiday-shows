@@ -6,9 +6,9 @@
         "ranges": [[17, 446]],
         "brightness": 255,
         "relays": [
-            10,
             11,
-            12
+            14,
+            15
         ]
     },
     "schedule": {

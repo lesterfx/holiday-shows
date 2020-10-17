@@ -22,9 +22,15 @@ class Animation(object):
         path = os.path.expanduser(path)
         image = Image.open(path)
         data = image.getdata()
-        epoch = time.time()
         y = 0
         width = min(image.width - num_relays, self.home.max)
+
+        for i in range(5):
+            print(5-i)
+            time.sleep(1)
+        print('go!')
+
+        epoch = time.time()
         while y < image.height:
             for x, relay in enumerate(self.home.relays):
                 color = data[image.width * y + x]
@@ -37,3 +43,4 @@ class Animation(object):
             self.home.strip.show()
             self.home.print_fps()
             y = int((time.time() - epoch) * fps)
+        print('image complete')
