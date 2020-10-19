@@ -7,7 +7,7 @@ import time
 from ..utilities import physics
 from ..utilities.home import Home, Color, Pixel
 
-class Halloween (Home):
+class Animation(Home):
     def main(self):
         self.system = physics.System(self)
         self.system.effects.append(physics.Random_Speed(-3000, 3000))
