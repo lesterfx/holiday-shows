@@ -141,16 +141,19 @@
         },
         "eye_blink": {
             "distance_range": [2, 6],
-            "blinks_range": [1, 5],
+            "blinks_range": [2, 5],
             "open_time_range": [1, 2],
             "closed_time_range": [0.1, 0.4],
-            "fade_in_frames": 20
+            "fade_in_frames": 10,
+            "repeat": 4
         },
         "black_hole": {
-            "center": 332,
+            "center": 214,
             "delay_seconds": 20,
             "intensity_multiplier": 50000,
-            "crawl_speed": 5
+            "crawl_speed": 7,
+            "every": 24,
+            "single": 6
         },
         "random_walker": {
             "spawn_speed_max": 30,

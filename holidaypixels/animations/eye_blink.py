@@ -19,12 +19,14 @@ class Animation(object):
     def main(self, end_by):
         color1 = Color(1, 1, .8)
         color2 = Color(1, .1, 0)
-        fade = random.random()
-        color = color1 * fade + color2 * (1-fade)
-        distance = random.randrange(*self.settings['distance_range'])
-        center = random.randrange(self.globals.ranges[0][0] + distance, self.globals.ranges[0][1]-distance)
-        for _ in range(random.randrange(*self.settings['blinks_range'])):
-            self._show_eyes_once(center, distance, color)
+
+        for repeat in range(self.settings['repeat']):
+            fade = random.random()
+            color = color1 * fade + color2 * (1-fade)
+            distance = random.randrange(*self.settings['distance_range'])
+            center = random.randrange(self.globals.ranges[0][0] + distance, self.globals.ranges[0][1]-distance)
+            for _ in range(random.randrange(*self.settings['blinks_range'])):
+                self._show_eyes_once(center, distance, color)
 
     def _show_eyes_once(self, center, distance, color):
         fade_in_frames = self.settings['fade_in_frames']

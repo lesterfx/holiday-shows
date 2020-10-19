@@ -14,6 +14,7 @@ class Animation(object):
         self.settings = settings
 
     def main(self, end_by):
+        time.sleep(4)
         self.system = physics.System(self.home)
         self.system.effects.append(physics.Random_Speed(-3000, 3000))
         self.system.effects.append(physics.Random_Intensity((-.01, .007), (0, 1)))
@@ -25,6 +26,7 @@ class Animation(object):
 
         while self.system.update_and_draw():
             pass
+        time.sleep(4)
     
     def __str__(self):
         return 'fairy'

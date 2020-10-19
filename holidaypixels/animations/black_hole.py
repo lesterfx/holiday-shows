@@ -16,7 +16,8 @@ class Animation(object):
         return 'Black Hole'
 
     def main(self, end_by):
-        self.every = 12
+        self.every = self.settings['every']
+        self.single = self.settings['single']
         self.rounded_up = self.home.round_up(12)
 
         self.system = physics.System(self.home)
@@ -48,6 +49,6 @@ class Animation(object):
             if not x % self.every:
                 particle = physics.Particle(speed=speed, position=x, color=Color(1, .1, 0), strip=self.home, on_delete=self.flash)
                 self.system.particles.add(particle)
-            elif not x % 3:
+            elif not x % self.single:
                 particle = physics.Particle(speed=speed, position=x, color=Color(.03, 0, .04), strip=self.home)
                 self.system.particles.add(particle)
