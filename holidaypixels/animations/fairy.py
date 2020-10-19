@@ -21,7 +21,7 @@ class Animation(object):
         pos = random.randrange(len(self.home))
         speed = random.uniform(-30, 30)
         color = Color(random.random())
-        self.system.particles.add(physics.Particle(speed=speed, position=pos, color=color, strip=self.strip))
+        self.system.particles.add(physics.Particle(speed=speed, position=pos, color=color, strip=self.home))
 
         while self.system.update_and_draw():
             pass
