@@ -14,11 +14,11 @@ class Animation(object):
         self.settings = settings
 
     def main(self, end_by):
-        self.system = physics.System(self)
+        self.system = physics.System(self.home)
         self.system.effects.append(physics.Random_Speed(-3000, 3000))
         self.system.effects.append(physics.Random_Intensity((-.01, .007), (0, 1)))
 
-        pos = random.randrange(len(self))
+        pos = random.randrange(len(self.home))
         speed = random.uniform(-30, 30)
         color = Color(random.random())
         self.system.particles.add(physics.Particle(speed=speed, position=pos, color=color, strip=self))
