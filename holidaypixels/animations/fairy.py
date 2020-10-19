@@ -8,7 +8,12 @@ from ..utilities import physics
 from ..utilities.home import Home, Color, Pixel
 
 class Animation(object):
-    def main(self):
+    def __init__(self, home, globals_, settings):
+        self.home = home
+        self.globals = globals_
+        self.settings = settings
+
+    def main(self, end_by):
         self.system = physics.System(self)
         self.system.effects.append(physics.Random_Speed(-3000, 3000))
         self.system.effects.append(physics.Random_Intensity((-.01, .007), (0, 1)))
