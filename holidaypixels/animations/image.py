@@ -33,7 +33,7 @@ class Animation(object):
         except AssertionError:
             raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
-        for i in range(5):
+        for i in range(10):
             print(5-i)
             time.sleep(1)
         print('go!')
@@ -44,9 +44,9 @@ class Animation(object):
             for x, relay in enumerate(self.home.relays):
                 color = data[image.width * y + x]
                 relay.set(bool(color[0]))
-            for x in range(num_relays, width - num_relays):
+            for x in range(num_relays, width):
                 color = data[image.width * y + x]
-                self.home.strip[x] = color[0], color[1], color[2]
+                self.home.strip[x-num_relays] = color[0], color[1], color[2]
             self.home.strip.show()
             self.home.print_fps()
             y = int((time.time() - epoch) * fps)
