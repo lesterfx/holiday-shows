@@ -23,7 +23,7 @@
         "sunset_offset": "-01:00",
         "end_time": "22:00",
         "dusk_brightness": 255,
-        "dusk_duration": "00:30"
+        "dusk_duration": "02:00"
     },
     "calendar": [
         {

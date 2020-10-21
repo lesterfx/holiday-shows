@@ -30,12 +30,10 @@ class Animation(object):
 
     def _show_eyes_once(self, center, distance, color):
         fade_in_frames = self.settings['fade_in_frames']
-        print('open')
         for i in range(fade_in_frames):
             self.home[center+distance] = color * (i/fade_in_frames)
             self.home[center-distance] = color * (i/fade_in_frames)
             self.home.show()
         self.home.sleep(random.uniform(*self.settings['open_time_range']))
         self.home.clear(True)
-        print('close')
         self.home.sleep(random.uniform(*self.settings['closed_time_range']))

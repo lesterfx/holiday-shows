@@ -34,10 +34,11 @@ class Animation(object):
             raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
         for i in range(10):
-            print(5-i)
+            print(10-i)
             time.sleep(1)
         print('go!')
 
+        previous_y = None
         y = 0
         epoch = time.time()
         while y < image.height:
@@ -49,5 +50,9 @@ class Animation(object):
                 self.home.strip[x-num_relays] = color[0], color[1], color[2]
             self.home.strip.show()
             self.home.print_fps()
-            y = int((time.time() - epoch) * fps)
+            while True:
+                previous_y = y
+                y = int((time.time() - epoch) * fps)
+                if y != previous_y:
+                    break
         print('image complete')
