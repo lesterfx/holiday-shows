@@ -162,7 +162,7 @@
         },
         "xmas1": {
             "module": "image",
-            "image": "/home/pi/pixels/holidaypixels/images/work/xmas/nuke/xmas.png",
+            "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
             "fps": 24,
             "relays": 3
         }
