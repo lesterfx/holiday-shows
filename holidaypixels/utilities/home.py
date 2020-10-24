@@ -175,6 +175,7 @@ class Home(object):
         return self
 
     def __exit__(self, *args, **kwargs):
+        print('Complete')
         self.clear()
         self.clear_relays()
         self.show()

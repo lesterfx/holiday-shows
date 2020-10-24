@@ -106,6 +106,7 @@ class Holiday_Pixels(object):
                     print(f'{until} ends {animation}')
                     try:
                         animation.main(until)
+                        print()
                     except KeyboardInterrupt:
                         raise
                     except:
