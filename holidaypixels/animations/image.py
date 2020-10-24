@@ -26,7 +26,7 @@ class Animation(object):
 
         try:
             for y in range(image.height):
-                for x, relay in enumerate(self.home.relays):
+                for x, relay in zip(range(num_relays, self.home.relays):
                     color = data[image.width * y + x]
                     assert color[0] == color[1] == color[2]
                     assert color[0] in (0, 255)
@@ -42,7 +42,7 @@ class Animation(object):
         y = 0
         epoch = time.time()
         while y < image.height:
-            for x, relay in enumerate(self.home.relays):
+            for x, relay in zip(range(num_relays), self.home.relays):
                 color = data[image.width * y + x]
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
