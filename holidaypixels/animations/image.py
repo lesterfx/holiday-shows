@@ -49,7 +49,7 @@ class Animation(object):
                 color = data[image.width * y + x]
                 self.home.strip[x-num_relays] = color[0], color[1], color[2]
             self.home.strip.show()
-            self.home.print_fps()
+            # self.home.print_fps()
             while True:
                 previous_y = y
                 y = int((time.time() - epoch) * fps)
