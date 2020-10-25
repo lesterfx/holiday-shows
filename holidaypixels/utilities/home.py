@@ -55,6 +55,9 @@ class Color (object):
 
     def __mul__(self, other):
         print('multiplying a', self.__class__, 'by', other.__class__)
+        print(self.r, other)
+        print(self.g, other)
+        print(self.b, other)
         return Color(
             r=self.r * other,
             g=self.g * other,
