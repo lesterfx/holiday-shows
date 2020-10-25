@@ -252,20 +252,19 @@ class Home(object):
         self.strip.show()
 
     def __setitem__(self, key, value):
-        key = int(key)
-        if key in self:
-            if value:
-                if value.mode == 'over':
-                    self.strip[key] = value.color
-                    # self.cache[key] = value
-                elif value.mode == 'add':
-                    # self.cache[key] += value
-                    raise NotImplemented
-                elif value.mode == 'max':
-                    # self.cache[key] |= value
-                    self.strip[key] = (value.color | Color(self.strip[key])).color
-            else:
-                self.strip[key] = 0
+        # if key in self:
+        if value:
+            if value.mode == 'over':
+                self.strip[key] = value.color
+                # self.cache[key] = value
+            elif value.mode == 'add':
+                # self.cache[key] += value
+                raise NotImplemented
+            elif value.mode == 'max':
+                # self.cache[key] |= value
+                self.strip[key] = (value.color | Color(self.strip[key])).color
+        else:
+            self.strip[key] = 0
 
     def __contains__(self, key):
         key = int(key)
