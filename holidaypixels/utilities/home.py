@@ -248,7 +248,8 @@ class Home(object):
         self.strip.show()
 
     def __setitem__(self, key, value):
-        # if key in self:
+        key = int(key)
+        if key not in self: return
         if isinstance(value, Color):
             if value.mode == 'over':
                 self.strip[key] = value.color
