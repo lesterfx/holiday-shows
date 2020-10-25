@@ -23,6 +23,10 @@ class ImagePixel(object):
         self.rows += 1
         print('\r', self.rows, end='')
 
+    def __iter__(self):
+        for pixel in self.pixels:
+            yield pixel
+
     def __setitem__(self, key, value):
         self.pixels[key] = value
 
