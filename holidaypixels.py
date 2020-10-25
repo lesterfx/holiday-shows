@@ -162,6 +162,8 @@ class Holiday_Pixels(object):
         self.process_animations(config['animations'])
 
     def process_globals(self, globals_):
+        if self.args['no-relays']:
+            globals_['relays'] = []
         corners = [int(corner) for corner in globals_['corners']]
         pin = getattr(board, 'D{}'.format(int(globals_['pin'])))
         pixel_order = getattr(neopixel, globals_['pixel_order'])
@@ -218,6 +220,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--display', choices=['gpio', 'console', 'image'], default='gpio', help='Where to render the animation')
         parser.add_argument('--save', help='Where to save the rendered image')
         parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
+        parser.add_argument('--no-relays', const=True, default=False, help="Don't turn on relays")
         self.args = parser.parse_args()
         print(self.args)
 

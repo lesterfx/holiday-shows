@@ -2,8 +2,10 @@
 
 import datetime
 import os
-from PIL import Image
+from random import randint
 import time
+
+from PIL import Image
 
 from ..utilities.home import Color
 
@@ -22,6 +24,8 @@ class Animation(object):
         path = self.settings['image']
         fps = self.settings['fps']
         path = os.path.expanduser(path)
+        if 'variations' in self.settings:
+            path = path.format(randint(1, self.settings['variations']))
         image = Image.open(path)
         data = image.getdata()
         width = min(image.width - num_relays, self.home.max)
@@ -50,7 +54,7 @@ class Animation(object):
             for x in range(num_relays, width):
                 color = data[image.width * y + x]
                 self.home[x-num_relays] = Color(color[0], color[1], color[2])
-            self.home.show()
+            self.home.show(force=True)
             # self.home.print_fps()
             while True:
                 previous_y = y

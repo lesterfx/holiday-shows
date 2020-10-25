@@ -1,0 +1,182 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.%1d.png" format:"450 96 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="434"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.nk
+ frame 4
+ last_frame 4
+ format "450 96 0 0 450 96 1 fairy"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ xpos 99
+ ypos -242
+}
+Rectangle {
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ area {{"fBm((frame+time_offset)/100, seed/100, .2, 4, 2, .5)*600+225"} {frame} {area.x+1} {area.y+1}}
+ name Rectangle3
+ xpos 99
+ ypos -170
+ addUserKnob {20 User}
+ addUserKnob {3 seed}
+ seed 103
+ addUserKnob {3 time_offset l "time offset"}
+ time_offset 65
+}
+Rectangle {
+ output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+ area {{"fBm((frame+time_offset)/100, seed/100, .2, 4, 2, .5)*600+225"} {frame} {area.x+1} {area.y+1}}
+ name Rectangle2
+ xpos 99
+ ypos -146
+ addUserKnob {20 User}
+ addUserKnob {3 seed}
+ seed 52
+ addUserKnob {3 time_offset l "time offset"}
+ time_offset -180
+}
+Rectangle {
+ output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+ area {{"fBm((frame+time_offset)/100, seed/100, .2, 4, 2, .5)*600+225"} {frame} {area.x+1} {area.y+1}}
+ name Rectangle4
+ xpos 99
+ ypos -122
+ addUserKnob {20 User}
+ addUserKnob {3 seed}
+ seed 64
+ addUserKnob {3 time_offset l "time offset"}
+ time_offset -851
+}
+Rectangle {
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ area {{"fBm((frame+time_offset)/100, seed/100, .2, 4, 2, .5)*600+224"} {frame} {area.x+1} {area.y+1}}
+ name Rectangle1
+ xpos 99
+ ypos -98
+ addUserKnob {20 User}
+ addUserKnob {3 seed}
+ seed 178
+ addUserKnob {3 time_offset l "time offset"}
+ time_offset 1066
+}
+FrameBlend {
+ numframes 96
+ startframe 1
+ endframe 96
+ userange true
+ name FrameBlend1
+ xpos 99
+ ypos -44
+}
+Multiply {
+ value 96
+ name Multiply1
+ xpos 99
+ ypos -12
+}
+set N61723400 [stack 0]
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle4
+ xpos 426
+ ypos 20
+}
+push $N61723400
+Shuffle {
+ red blue
+ green blue
+ alpha blue
+ name Shuffle3
+ xpos 309
+ ypos 20
+}
+push $N61723400
+Shuffle {
+ red green
+ blue green
+ alpha green
+ name Shuffle2
+ xpos 195
+ ypos 20
+}
+push $N61723400
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ xpos 99
+ ypos 20
+}
+Switch {
+ inputs 4
+ which {{frame-1}}
+ name Switch1
+ xpos 99
+ ypos 69
+}
+set N6b2eff80 [stack 0]
+Viewer {
+ frame 4
+ frame_range 1-4
+ frame_range_lock true
+ name Viewer1
+ xpos -40
+ ypos -9
+}
+push $N6b2eff80
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.%1d.png
+ file_type png
+ create_directories true
+ checkHashOnRead false
+ version 1
+ name Write1
+ xpos 99
+ ypos 93
+}

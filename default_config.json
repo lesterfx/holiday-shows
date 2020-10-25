@@ -156,6 +156,10 @@
             "single": 6
         },
         "random_walker": {
+            "module": "image",
+            "image": "/home/pi/pixels/holidaypixels/images/fairy/nuke/fairy.{}.png",
+            "variations": 4,
+            "fps": 24,
             "spawn_speed_max": 30,
             "speed_effect_max": 3000,
             "intensity_effect_range": [-0.01, 0.007]
