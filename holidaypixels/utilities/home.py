@@ -101,9 +101,9 @@ class Color (object):
                 other.b * other.luma
             )
         return Color(
-            r=max(self.r, other_tuple[0]),
-            g=max(self.g, other_tuple[1]),
-            b=max(self.b, other_tuple[2]),
+            r=max(self.r, other[0]),
+            g=max(self.g, other[1]),
+            b=max(self.b, other[2]),
             mode=self.mode,
             luma=self.luma
         )
