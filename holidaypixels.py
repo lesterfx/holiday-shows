@@ -220,7 +220,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--display', choices=['gpio', 'console', 'image'], default='gpio', help='Where to render the animation')
         parser.add_argument('--save', help='Where to save the rendered image')
         parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
-        parser.add_argument('--no-relays', const=True, default=False, help="Don't turn on relays")
+        parser.add_argument('--no-relays', action='store_true', help="Don't turn on relays")
         self.args = parser.parse_args()
         print(self.args)
 
