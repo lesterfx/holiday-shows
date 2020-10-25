@@ -101,6 +101,9 @@ class Color (object):
             mode=self.mode,
             luma=self.luma
         )
+    
+    def __ror__(self, other):
+        return self | other
 
     def __eq__(self, other):
         return self.tuple == other.tuple
