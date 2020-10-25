@@ -5,6 +5,8 @@ import os
 from PIL import Image
 import time
 
+from ..utilities.home import Color
+
 class Animation(object):
     def __init__(self, home, globals_, settings):
         self.home = home
@@ -47,7 +49,7 @@ class Animation(object):
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
                 color = data[image.width * y + x]
-                self.home[x-num_relays] = color[0], color[1], color[2]
+                self.home[x-num_relays] = Color(color[0], color[1], color[2])
             self.home.show()
             # self.home.print_fps()
             while True:
