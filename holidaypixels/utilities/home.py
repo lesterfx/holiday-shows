@@ -95,7 +95,7 @@ class Color (object):
 
     def __or__(self, other):
         if isinstance(other, Color):
-            other_tuple = (
+            other = (
                 other.r * other.luma,
                 other.g * other.luma,
                 other.b * other.luma
