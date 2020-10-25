@@ -156,7 +156,6 @@
             "single": 6
         },
         "random_walker": {
-            "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/fairy/nuke/fairy.{}.png",
             "variations": 4,
             "fps": 24,
