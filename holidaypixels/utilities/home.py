@@ -149,7 +149,7 @@ class Home(object):
         self.strip = self.init_strip(display, outfile)
         self.relays = self.init_relays()
         self.cache = [None] * len(self)
-        self.previous = None
+        # self.previous = None
         self.clear()
         self.fps_count = 0
         self.fps_timer = time.time()
@@ -239,19 +239,13 @@ class Home(object):
 
     def show(self, force=True):
         self.print_fps()
-        if force or self.previous != self.cache:
-            for i, pixel in enumerate(self.cache):
-                if pixel:
-                    try:
-                        color = pixel.color
-                        self.strip[i] = color
-                    except:
-                        raise
-                else:
-                    self.strip[i] = 0
-            self.strip.show()
-            self.previous = self.cache
-            self.cache = [color and color.copy() for color in self.previous]
+        for i, pixel in enumerate(self.cache):
+            if pixel:
+                color = pixel.color
+                self.strip[i] = color
+            else:
+                self.strip[i] = 0
+        self.strip.show()
 
     def __setitem__(self, key, value):
         key = int(key)
