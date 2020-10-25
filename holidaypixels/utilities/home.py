@@ -248,12 +248,6 @@ class Home(object):
 
     def show(self, force=True):
         self.print_fps()
-        # for i, pixel in enumerate(self.cache):
-            # if pixel:
-                # color = pixel.color
-                # self.strip[i] = color
-            # else:
-                # self.strip[i] = 0
         self.strip.show()
 
     def __setitem__(self, key, value):
@@ -262,12 +256,11 @@ class Home(object):
         if isinstance(value, Color):
             if value.mode == 'over':
                 self.strip[key] = value.color
-                # self.cache[key] = value
             elif value.mode == 'add':
-                self.strip[key] += value
                 raise NotImplemented
+                self.strip[key] += value
             elif value.mode == 'max':
-                self.strip[key] |= value
+                self.strip[key] |= value.color
         elif value:
             self.strip[key] = value
         else:
