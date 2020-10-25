@@ -148,7 +148,7 @@ class Home(object):
         self.max = self.globals.ranges[-1][-1]
         self.strip = self.init_strip(display, outfile)
         self.relays = self.init_relays()
-        self.cache = [None] * len(self)
+        # self.cache = [None] * len(self)
         # self.previous = None
         self.clear()
         self.fps_count = 0
@@ -239,12 +239,12 @@ class Home(object):
 
     def show(self, force=True):
         self.print_fps()
-        for i, pixel in enumerate(self.cache):
-            if pixel:
-                color = pixel.color
-                self.strip[i] = color
-            else:
-                self.strip[i] = 0
+        # for i, pixel in enumerate(self.cache):
+            # if pixel:
+                # color = pixel.color
+                # self.strip[i] = color
+            # else:
+                # self.strip[i] = 0
         self.strip.show()
 
     def __setitem__(self, key, value):
@@ -252,13 +252,16 @@ class Home(object):
         if key in self:
             if value:
                 if value.mode == 'over':
-                    self.cache[key] = value
+                    self.strip[key] = value.color
+                    # self.cache[key] = value
                 elif value.mode == 'add':
-                    self.cache[key] += value
+                    # self.cache[key] += value
+                    raise NotImplemented
                 elif value.mode == 'max':
-                    self.cache[key] |= value
+                    # self.cache[key] |= value
+                    self.strip[key] = (value.color | Color(self.strip[key])).color
             else:
-                self.cache[key] = Color(0, 0, 0)
+                self.strip[key] = 0
 
     def __contains__(self, key):
         key = int(key)
@@ -277,12 +280,12 @@ class Home(object):
             pass
 
     def __imul__(self, other):
-        for pixel in self.cache:
+        for pixel in self.strip:
             if pixel:
                 pixel *= other
         return self
 
     def __isub__(self, other):
-        for pixel in self.cache:
+        for pixel in self.strip:
             pixel -= other
         return self
