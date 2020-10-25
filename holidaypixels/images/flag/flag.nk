@@ -1,0 +1,827 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png" format:"450 48 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 48" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="434"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="DAG.2"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.nk
+ frame 25
+ last_frame 48
+ format "450 48 0 0 450 48 1 flag"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0 0 1 0}
+ name Constant1
+ xpos -15
+ ypos -382
+}
+NoOp {
+ name NoOp2
+ xpos -15
+ ypos -310
+ addUserKnob {20 User}
+ addUserKnob {12 offset l "initial offset"}
+ offset {-30 0}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression26
+ label "\[value col]"
+ xpos -15
+ ypos -286
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression30
+ label "\[value col]"
+ xpos -15
+ ypos -254
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression31
+ label "\[value col]"
+ xpos -15
+ ypos -222
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression32
+ label "\[value col]"
+ xpos -15
+ ypos -190
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression33
+ label "\[value col]"
+ xpos -15
+ ypos -158
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression34
+ label "\[value col]"
+ xpos -15
+ ypos -126
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression35
+ label "\[value col]"
+ xpos -15
+ ypos -94
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression36
+ label "\[value col]"
+ xpos -15
+ ypos -62
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression37
+ label "\[value col]"
+ xpos -15
+ ypos -30
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression1
+ label "\[value col]"
+ xpos -15
+ ypos 2
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression2
+ label "\[value col]"
+ xpos -15
+ ypos 34
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression3
+ label "\[value col]"
+ xpos -15
+ ypos 66
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression4
+ label "\[value col]"
+ xpos -15
+ ypos 98
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 1
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression10
+ label "\[value col]"
+ xpos -15
+ ypos 160
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression12
+ label "\[value col]"
+ xpos -15
+ ypos 192
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression11
+ label "\[value col]"
+ xpos -15
+ ypos 224
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression13
+ label "\[value col]"
+ xpos -15
+ ypos 256
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression14
+ label "\[value col]"
+ xpos -15
+ ypos 288
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression15
+ label "\[value col]"
+ xpos -15
+ ypos 320
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression16
+ label "\[value col]"
+ xpos -15
+ ypos 352
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression17
+ label "\[value col]"
+ xpos -15
+ ypos 384
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression18
+ label "\[value col]"
+ xpos -15
+ ypos 416
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression19
+ label "\[value col]"
+ xpos -15
+ ypos 448
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression20
+ label "\[value col]"
+ xpos -15
+ ypos 480
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression21
+ label "\[value col]"
+ xpos -15
+ ypos 512
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression22
+ label "\[value col]"
+ xpos -15
+ ypos 544
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression23
+ label "\[value col]"
+ xpos -15
+ ypos 576
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 0 0}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression24
+ label "\[value col]"
+ xpos -15
+ ypos 608
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Expression {
+ temp_name0 pos
+ temp_expr0 cos((y-offset.y)/height*pi*2)*strength+offset.x
+ temp_name1 repl
+ temp_expr1 "x > pos && x <= pos+wid"
+ channel0 {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ expr0 "repl ? col.r : r"
+ expr1 "repl ? col.g : g"
+ expr2 "repl ? col.b : b"
+ name Expression25
+ label "\[value col]"
+ xpos -15
+ ypos 640
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {{"NoOp1.offset + input.offset"} {"NoOp1.offset + input.offset"}}
+ addUserKnob {7 strength}
+ strength {{NoOp1.strength}}
+ addUserKnob {7 wid}
+ wid 50
+ addUserKnob {18 col}
+ col {1 1 1}
+ addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
+ file_type png
+ checkHashOnRead false
+ version 1
+ name Write1
+ xpos -15
+ ypos 715
+}
+Viewer {
+ frame 25
+ frame_range 1-48
+ roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
+ colour_sample_bbox {-0.6222222447 0.03999999911 -0.6177777648 0.04444444552}
+ samplepoints {{-0.6222222447 0.03999999911}
+   }
+ input_process false
+ name Viewer1
+ xpos -190
+ ypos 9
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 265
+ ypos 165
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Rectangle {
+  invert true
+  area {0 {height-1} {width} {height}}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 161
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+end_group
+NoOp {
+ inputs 0
+ name NoOp1
+ xpos -169
+ ypos -260
+ addUserKnob {20 User}
+ addUserKnob {7 strength}
+ strength 10
+ addUserKnob {12 offset}
+ offset {16 -5}
+}

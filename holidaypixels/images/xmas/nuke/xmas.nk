@@ -1,18 +1,22 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/work/xmas/nuke/xmas.png" format:"453 4650 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png" format:"453 4650 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
     <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
         <splitter orientation="1">
-            <split size="1173" stretch="1"/>
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="804"/>
-                <dock id="" activePageId="Viewer.1">
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="246"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <split size="434"/>
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -29,7 +33,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 }
 Root {
  inputs 0
- name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/work/xmas/nuke/xmas.nk
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.nk
  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
@@ -44,14 +48,15 @@ Root {
 Read {
  inputs 0
  file_type exr
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/work/xmas/blender/xmas.exr
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/blender/xmas.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 14
+ version 18
  name Read2
  xpos 650
  ypos -209
 }
+set N2008dc00 [stack 0]
 Crop {
  box {0 2010 {width} 2350}
  reformat true
@@ -61,7 +66,79 @@ Crop {
  ypos -129
  disable true
 }
-set Nbe01400 [stack 0]
+set N20088800 [stack 0]
+Expression {
+ expr0 "r > threshold"
+ expr1 "g > threshold"
+ expr2 "b > threshold"
+ expr3 "a > threshold"
+ name Expression1
+ xpos 750
+ ypos -53
+ addUserKnob {20 User}
+ addUserKnob {7 threshold l "" +STARTLINE}
+ threshold 0.55
+}
+set N2008e000 [stack 0]
+push $N2008e000
+Crop {
+ box {10 0 {box.x+1} {input.height}}
+ name Crop10
+ xpos 966
+ ypos 4
+}
+set N2008f000 [stack 0]
+push $N2008e000
+Crop {
+ box {6 0 {box.x+1} {input.height}}
+ name Crop9
+ xpos 856
+ ypos 4
+}
+set N2008fc00 [stack 0]
+push $N2008dc00
+Viewer {
+ inputs 4
+ frame_range 1-100
+ colour_sample_bbox {-0.9955849648 3.390728474 -0.9911699891 3.395143509}
+ samplepoints {{-0.9955849648 3.390728474}
+   }
+ name Viewer1
+ xpos 869
+ ypos 485
+}
+push $N2008f000
+Transform {
+ translate {{-input.bbox.x+1} 0}
+ center {0.5 2325}
+ name Transform5
+ xpos 966
+ ypos 362
+}
+push $N2008fc00
+Transform {
+ translate {{-input.bbox.x} 0}
+ center {0.5 2325}
+ name Transform4
+ xpos 856
+ ypos 362
+}
+push 0
+push $N2008e000
+Crop {
+ box {2 0 {box.x+1} {input.height}}
+ name Crop7
+ xpos 750
+ ypos 4
+}
+Transform {
+ translate {{-input.bbox.x-1} 0}
+ center {0.5 2325}
+ name Transform3
+ xpos 750
+ ypos 362
+}
+push $N20088800
 Rectangle {
  opacity 0.335
  area {160 0 214 {height}}
@@ -76,15 +153,15 @@ Crop {
  xpos 650
  ypos 4
 }
-set N5087dc00 [stack 0]
+set N5dbe8800 [stack 0]
 Rectangle {
  replace true
- area {0 3863 450 4650}
+ area {0 3862 450 4650}
  name Rectangle2
  xpos 698
  ypos 169
 }
-push $N5087dc00
+push $N5dbe8800
 Grid {
  replace true
  number {{(width-size)/every} 0}
@@ -106,7 +183,7 @@ Roto {
   {n
    {layer Root
     {f 2097664}
-    {t x41600000 x45115000 0 x41400000 0 0 0 0 0 x40000000}
+    {t x41600000 x45115000 0 x43cc8000 0 0 0 0 0 xc0000000}
     {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
     {curvegroup Bezier3 512 bezier
      {{cc
@@ -199,13 +276,10 @@ Roto {
  xpos 437
  ypos 135
 }
-push $N5087dc00
+push $N5dbe8800
 Grid {
  replace true
- opacity {1}
  number {{(width-size)/every} 0}
- size {1}
- translate {0 0}
  color {1 0 0 1}
  name Grid1
  xpos 552
@@ -222,8 +296,8 @@ Roto {
   {f 0}
   {n
    {layer Root
-    {f 2097152}
-    {t x43610000 x45115000}
+    {f 2097664}
+    {t x43610000 x45115000 0 0 0 0 0 0 0 xbf800000}
     {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
     {curvegroup Bezier1 512 bezier
      {{cc
@@ -272,6 +346,8 @@ Roto {
  toolbar_source_transform_center {225 2325}
  colorOverlay {0 0 0 0}
  lifetime_type "all frames"
+ view {}
+ motionblur_on true
  motionblur_shutter_offset_type centred
  source_black_outside true
  name Roto1
@@ -288,85 +364,20 @@ Merge2 {
 Ramp {
  p0 {100 3942}
  p1 {100 3863}
+ type smooth
  color 0
  name Ramp1
  xpos 552
  ypos 180
+ disable true
 }
-push $N5087dc00
+push $N5dbe8800
 Keymix {
  inputs 3
  name Keymix1
  xpos 650
  ypos 217
 }
-set N64cd8c00 [stack 0]
-Viewer {
- frame_range 1-100
- colour_sample_bbox {-0.9466666579 9.417778015 -0.9422222376 9.422222137}
- samplepoints {{-1.088300228 6.410595894}
-   }
- name Viewer1
- xpos 869
- ypos 485
-}
-push $Nbe01400
-Expression {
- expr0 "r > threshold"
- expr1 "g > threshold"
- expr2 "b > threshold"
- expr3 "a > threshold"
- name Expression1
- xpos 750
- ypos -53
- addUserKnob {20 User}
- addUserKnob {7 threshold l "" +STARTLINE}
- threshold 0.55
-}
-set Nbe00000 [stack 0]
-Crop {
- box {10 0 {box.x+1} {input.height}}
- name Crop10
- xpos 966
- ypos 4
-}
-Transform {
- translate {{-input.bbox.x+1} 0}
- center {0.5 2325}
- name Transform5
- xpos 966
- ypos 362
-}
-push $Nbe00000
-Crop {
- box {6 0 {box.x+1} {input.height}}
- name Crop9
- xpos 856
- ypos 4
-}
-Transform {
- translate {{-input.bbox.x} 0}
- center {0.5 2325}
- name Transform4
- xpos 856
- ypos 362
-}
-push 0
-push $Nbe00000
-Crop {
- box {2 0 {box.x+1} {input.height}}
- name Crop7
- xpos 750
- ypos 4
-}
-Transform {
- translate {{-input.bbox.x-1} 0}
- center {0.5 2325}
- name Transform3
- xpos 750
- ypos 362
-}
-push $N64cd8c00
 Crop {
  box {-3 0 {width} {input.height}}
  reformat true
@@ -388,11 +399,12 @@ Grade {
  ypos 461
 }
 Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/work/xmas/nuke/xmas.png
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
  file_type png
  checkHashOnRead false
- version 12
+ version 17
  name Write1
+ selected true
  xpos 650
  ypos 537
 }

@@ -123,6 +123,9 @@
             "fade": 0
         },
         "flag": {
+            "module": "image",
+            "image": "/home/pi/pixels/holidaypixels/images/flag/flag.png",
+            "fps": 24,
             "center": 332,
             "blue_range": [264, 400],
             "every": 20,
