@@ -41,20 +41,24 @@ class Animation(object):
         except AssertionError:
             raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
+        previous_y = None
+        y = 0
+        width = image.width
+        height = image.height
+
         for i in range(10):
             print(10-i)
             time.sleep(1)
         print('go!')
 
-        previous_y = None
-        y = 0
         epoch = time.time()
-        while not repeat or (y < image.height * repeat):
+        while not repeat or (y < height * repeat):
+            im_y = y % height
             for x, relay in zip(range(num_relays), self.home.relays):
-                color = data[image.width * y % image.height + x]
+                color = data[width * im_y + x]
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
-                color = data[image.width * y % image.height + x]
+                color = data[width * im_y + x]
                 self.home[x-num_relays] = color[0], color[1], color[2]
             self.home.show()
             while True:
