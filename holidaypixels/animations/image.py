@@ -24,6 +24,7 @@ class Animation(object):
         path = self.settings['image']
         fps = self.settings['fps']
         path = os.path.expanduser(path)
+        repeat = self.settings.get('repeat', 1)
         if 'variations' in self.settings:
             path = path.format(randint(1, self.settings['variations']))
         print('Opening', path)
@@ -48,15 +49,14 @@ class Animation(object):
         previous_y = None
         y = 0
         epoch = time.time()
-        while y < image.height:
+        while not repeat or (y < image.height * repeat):
             for x, relay in zip(range(num_relays), self.home.relays):
-                color = data[image.width * y + x]
+                color = data[image.width * y % image.height + x]
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
-                color = data[image.width * y + x]
+                color = data[image.width * y % image.height + x]
                 self.home[x-num_relays] = color[0], color[1], color[2]
             self.home.show()
-            # self.home.print_fps()
             while True:
                 previous_y = y
                 y = int((time.time() - epoch) * fps)
