@@ -21,7 +21,7 @@ GAMMA = 1
 
 
 class Color (object):
-    def __init__(self, r, g=None, b=None, luma=1, mode='over', raw=False):
+    def __init__(self, r, g=None, b=None, luma=1, mode='over'):
         if g is None: g = r
         if b is None: b = r
         self.r = r
@@ -29,14 +29,10 @@ class Color (object):
         self.b = b
         self.luma = luma
         self.mode = mode
-        self.raw = raw
 
     @property
     def color(self):
-        if self.raw:
-            return self.r, self.g, self.b
-        else:
-            return tuple(map(self.channelmap, self.tuple))
+        return tuple(map(self.channelmap, self.tuple))
 
     def channelmap(self, x):
         clamped = min(1, max(0, x))
@@ -253,16 +249,17 @@ class Home(object):
 
     def __setitem__(self, key, value):
         # if key in self:
-        if value:
+        if isinstance(value, Color):
             if value.mode == 'over':
                 self.strip[key] = value.color
                 # self.cache[key] = value
             elif value.mode == 'add':
-                # self.cache[key] += value
+                self.strip[key] += value
                 raise NotImplemented
             elif value.mode == 'max':
-                # self.cache[key] |= value
-                self.strip[key] = (value.color | Color(self.strip[key])).color
+                self.strip[key] |= value
+        elif value:
+            self.strip[key] = value
         else:
             self.strip[key] = 0
 
