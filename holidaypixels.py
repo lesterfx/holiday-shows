@@ -162,7 +162,7 @@ class Holiday_Pixels(object):
         self.process_animations(config['animations'])
 
     def process_globals(self, globals_):
-        if self.args['no-relays']:
+        if self.args.vars()['no-relays']:
             globals_['relays'] = []
         corners = [int(corner) for corner in globals_['corners']]
         pin = getattr(board, 'D{}'.format(int(globals_['pin'])))
