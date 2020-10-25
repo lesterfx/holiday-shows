@@ -26,6 +26,7 @@ class Animation(object):
         path = os.path.expanduser(path)
         if 'variations' in self.settings:
             path = path.format(randint(1, self.settings['variations']))
+        print('Opening', path)
         image = Image.open(path)
         data = image.getdata()
         width = min(image.width - num_relays, self.home.max)
