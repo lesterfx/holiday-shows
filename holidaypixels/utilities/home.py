@@ -287,7 +287,7 @@ class Home(object):
     def __imul__(self, other):
         for i, pixel in enumerate(self.strip):
             if pixel:
-                self.strip[i] = Color(pixel) * other
+                self.strip[i] = Color(*pixel) * other
                 # pixel *= other
         return self
 
