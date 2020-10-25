@@ -20,7 +20,7 @@ class Animation(object):
 
     def main(self, end_by):
         num_relays = self.settings.get('relays', 0)
-        assert num_relays <= len(self.globals.relays)
+        # assert num_relays <= len(self.globals.relays)
         path = self.settings['image']
         fps = self.settings['fps']
         path = os.path.expanduser(path)
