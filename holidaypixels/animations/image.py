@@ -46,10 +46,12 @@ class Animation(object):
         width = image.width
         height = image.height
 
-        for i in range(10):
-            print(10-i)
-            time.sleep(1)
-        print('go!')
+        countdown = self.settings.get('countdown', 10)
+        if countdown:
+            for i in range(countdown):
+                print(countdown-i)
+                time.sleep(1)
+            print('go!')
 
         epoch = time.time()
         while not repeat or (y < height * repeat):

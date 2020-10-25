@@ -29,6 +29,9 @@ class ImagePixel(object):
 
     def __setitem__(self, key, value):
         self.pixels[key] = value
+    
+    def __getitem__(self, key):
+        return self.pixels[key]
 
     def __del__(self):
         print('Saving image to', self.outfile)
