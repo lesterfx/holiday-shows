@@ -21,7 +21,7 @@ GAMMA = 1
 
 
 class Color (object):
-    def __init__(self, r, g=None, b=None, luma=1, mode='over'):
+    def __init__(self, r, g=None, b=None, luma=1, mode='over', raw=False):
         if g is None: g = r
         if b is None: b = r
         self.r = r
@@ -29,10 +29,14 @@ class Color (object):
         self.b = b
         self.luma = luma
         self.mode = mode
+        self.raw = raw
 
     @property
     def color(self):
-        return tuple(map(self.channelmap, self.tuple))
+        if self.raw:
+            return self.r, self.g, self.b
+        else:
+            return tuple(map(self.channelmap, self.tuple))
 
     def channelmap(self, x):
         clamped = min(1, max(0, x))

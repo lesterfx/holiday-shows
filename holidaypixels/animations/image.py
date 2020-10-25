@@ -53,7 +53,7 @@ class Animation(object):
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
                 color = data[image.width * y + x]
-                self.home[x-num_relays] = Color(color[0], color[1], color[2])
+                self.home[x-num_relays] = Color(color[0], color[1], color[2], raw=True)
             self.home.show(force=True)
             # self.home.print_fps()
             while True:
