@@ -94,10 +94,16 @@ class Color (object):
         return self
 
     def __or__(self, other):
+        if isinstance(other, Color):
+            other_tuple = (
+                other.r * other.luma,
+                other.g * other.luma,
+                other.b * other.luma
+            )
         return Color(
-            r=max(self.r, other.r*other.luma),
-            g=max(self.g, other.g*other.luma),
-            b=max(self.b, other.b*other.luma),
+            r=max(self.r, other_tuple[0]),
+            g=max(self.g, other_tuple[1]),
+            b=max(self.b, other_tuple[2]),
             mode=self.mode,
             luma=self.luma
         )
