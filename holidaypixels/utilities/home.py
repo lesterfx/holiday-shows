@@ -281,9 +281,10 @@ class Home(object):
             pass
 
     def __imul__(self, other):
-        for pixel in self.strip:
+        for i, pixel in enumerate(self.strip):
             if pixel:
-                pixel *= other
+                self.strip[i] = Color(pixel) * other
+                # pixel *= other
         return self
 
     def __isub__(self, other):
