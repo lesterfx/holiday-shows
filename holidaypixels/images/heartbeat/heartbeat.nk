@@ -1,4 +1,5 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png" format:"450 200 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 200" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
@@ -11,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="616"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1">
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -91,7 +92,7 @@ Constant {
 set N5c395800 [stack 0]
 Ramp {
  p0 {{parent.Rectangle1.area.r} 200}
- p1 {130 0}
+ p1 {336 0}
  name Ramp1
  xpos 60
  ypos -69
@@ -109,7 +110,8 @@ ColorLookup {
 set N5c395c00 [stack 0]
 Rectangle {
  replace true
- area {0 0 141 {height}}
+ invert true
+ area {0 0 330 {height}}
  name Rectangle1
  xpos 182
  ypos -45
@@ -209,11 +211,28 @@ Grade {
  xpos -101
  ypos 115
 }
+Grade {
+ gamma 0.5
+ name Grade4
+ xpos -101
+ ypos 139
+}
+set N663ae000 [stack 0]
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png
+ file_type png
+ checkHashOnRead false
+ version 1
+ name Write1
+ xpos -101
+ ypos 194
+}
+push $N663ae000
 Viewer {
  frame 24
  frame_range 1-200
+ input_process false
  name Viewer1
- selected true
  xpos 221
  ypos 54
 }
