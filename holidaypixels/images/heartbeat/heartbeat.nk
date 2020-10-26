@@ -1,0 +1,219 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="434"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="DAG.2"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
+ frame 24
+ last_frame 200
+ format "450 200 0 0 450 200 1 bloodbeat"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 324
+ ypos 151
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 96
+ }
+ Transform {
+  translate {0 {frame-1-int(height/2)}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Rectangle {
+  invert true
+  area {0 {int(height/2)-1} {width} {int(height/2)}}
+  color 0
+  name Rectangle1
+  selected true
+  xpos 237
+  ypos 161
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+end_group
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ xpos -27
+ ypos -175
+}
+set N5c395800 [stack 0]
+Ramp {
+ p0 {{parent.Rectangle1.area.r} 200}
+ p1 {130 0}
+ name Ramp1
+ xpos 60
+ ypos -69
+}
+ColorLookup {
+ lut {master {curve C k 0 s0 L x0.05000000075 1 s0 K 0 s0 L 1 s0 C k 0 s0 x0.5006564856 0 s0 L x0.5506564975 1 s0 K x0.6006564498 0 s0 L x0.6506564617 1 s0 C k 0 s0}
+   red {}
+   green {}
+   blue {}
+   alpha {}}
+ name ColorLookup1
+ xpos 60
+ ypos -45
+}
+set N5c395c00 [stack 0]
+Rectangle {
+ replace true
+ area {0 0 141 {height}}
+ name Rectangle1
+ xpos 182
+ ypos -45
+}
+push $N5c395c00
+TransformMasked {
+ inputs 1+1
+ scale {-1 1}
+ center {{parent.Rectangle1.area.r} 100}
+ name Transform1
+ xpos 60
+ ypos -21
+}
+Ramp {
+ invert true
+ p0 {0 200}
+ p1 {{parent.Rectangle1.area.r} 200}
+ color 0
+ name Ramp2
+ xpos 60
+ ypos 11
+}
+Ramp {
+ invert true
+ p0 {{width} 200}
+ p1 {{parent.Rectangle1.area.r} 200}
+ color 0
+ name Ramp3
+ xpos 60
+ ypos 35
+}
+push $N5c395800
+Noise {
+ size {{parent.Noise1.size} {parent.Noise1.size}}
+ gamma 1
+ translate {-340 {height}}
+ center {225 100}
+ name Noise2
+ xpos -211
+ ypos -69
+}
+set N66382c00 [stack 0]
+Ramp {
+ replace true
+ p0 {100 0}
+ p1 {100 {height}}
+ name Ramp4
+ xpos -211
+ ypos -15
+}
+set N66383800 [stack 0]
+push $N66383800
+push $N66382c00
+push $N5c395800
+Noise {
+ size {30 20}
+ gamma 1
+ translate {-340 0}
+ center {225 100}
+ name Noise1
+ xpos -101
+ ypos -69
+}
+Keymix {
+ inputs 3
+ name Keymix1
+ xpos -101
+ ypos -19
+}
+Grade {
+ inputs 1+1
+ blackpoint 0.2
+ whitepoint 0.8
+ fringe true
+ name Grade3
+ xpos -101
+ ypos 13
+}
+Grade {
+ gamma 0.5
+ name Grade2
+ xpos -101
+ ypos 43
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ mix 0.94
+ name Merge1
+ xpos -101
+ ypos 78
+}
+Grade {
+ white {1 0.5 {white.g} 1}
+ gamma {1 0.4 {gamma.g} 1}
+ name Grade1
+ xpos -101
+ ypos 115
+}
+Viewer {
+ frame 24
+ frame_range 1-200
+ name Viewer1
+ selected true
+ xpos 221
+ ypos 54
+}

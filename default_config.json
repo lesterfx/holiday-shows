@@ -173,6 +173,12 @@
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
             "fps": 24,
             "relays": 3
+        },
+        "heartbeat": {
+            "module": "image",
+            "image": "/home/pi/pixels/holidaypixels/images/heartbeat/heartbeat.png",
+            "fps": 24,
+            "repeat": 0
         }
     }
 }

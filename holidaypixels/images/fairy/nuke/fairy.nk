@@ -1,5 +1,5 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.%1d.png" format:"450 96 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.%1d.png" format:"450 96 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 96" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
@@ -12,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="616"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -34,8 +34,8 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.nk
- frame 4
- last_frame 4
+ frame 30
+ last_frame 96
  format "450 96 0 0 450 96 1 fairy"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
@@ -117,7 +117,7 @@ Multiply {
  xpos 99
  ypos -12
 }
-set N61723400 [stack 0]
+set Nfd11c00 [stack 0]
 Shuffle {
  red alpha
  green alpha
@@ -126,7 +126,7 @@ Shuffle {
  xpos 426
  ypos 20
 }
-push $N61723400
+push $Nfd11c00
 Shuffle {
  red blue
  green blue
@@ -135,7 +135,7 @@ Shuffle {
  xpos 309
  ypos 20
 }
-push $N61723400
+push $Nfd11c00
 Shuffle {
  red green
  blue green
@@ -144,7 +144,7 @@ Shuffle {
  xpos 195
  ypos 20
 }
-push $N61723400
+push $Nfd11c00
 Shuffle {
  green red
  blue red
@@ -160,16 +160,6 @@ Switch {
  xpos 99
  ypos 69
 }
-set N6b2eff80 [stack 0]
-Viewer {
- frame 4
- frame_range 1-4
- frame_range_lock true
- name Viewer1
- xpos -40
- ypos -9
-}
-push $N6b2eff80
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/fairy/nuke/fairy.%1d.png
  file_type png
@@ -179,4 +169,48 @@ Write {
  name Write1
  xpos 99
  ypos 93
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ selected true
+ xpos 356
+ ypos -114
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Rectangle {
+  invert true
+  area {0 {height-1} {width} {height}}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 161
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+end_group
+push $Nfd11c00
+Viewer {
+ frame 30
+ frame_range 1-96
+ frame_range_lock true
+ input_process false
+ name Viewer1
+ xpos -40
+ ypos -9
 }

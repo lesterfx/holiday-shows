@@ -257,7 +257,7 @@ class Home(object):
             if value.mode == 'over':
                 self.strip[key] = value.color
             elif value.mode == 'add':
-                raise NotImplemented
+                raise NotImplementedError
                 self.strip[key] += value
             elif value.mode == 'max':
                 self.strip[key] = (self.strip[key] | value).color
