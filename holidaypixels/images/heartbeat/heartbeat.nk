@@ -205,9 +205,10 @@ Merge2 {
  ypos 78
 }
 Grade {
- white {1 1 {white.g} 1}
+ white {1 0.6 {white.g} 1}
  gamma {1 0.4 {gamma.g} 1}
  name Grade1
+ selected true
  xpos -101
  ypos 115
 }
@@ -246,7 +247,6 @@ Write {
  checkHashOnRead false
  version 3
  name Write1
- selected true
  xpos -101
  ypos 281
 }
