@@ -12,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="616"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -205,7 +205,7 @@ Merge2 {
  ypos 78
 }
 Grade {
- white {1 0.5 {white.g} 1}
+ white {1 1 {white.g} 1}
  gamma {1 0.4 {gamma.g} 1}
  name Grade1
  xpos -101
@@ -217,17 +217,19 @@ Grade {
  xpos -101
  ypos 139
 }
-set N663ae000 [stack 0]
-Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png
- file_type png
- checkHashOnRead false
- version 1
- name Write1
+Colorspace {
+ colorspace_out sRGB
+ name Colorspace1
  xpos -101
- ypos 194
+ ypos 163
 }
-push $N663ae000
+Clamp {
+ minimum {0.003921568627 0 0 0}
+ name Clamp1
+ xpos -101
+ ypos 233
+}
+set N663aec00 [stack 0]
 Viewer {
  frame 24
  frame_range 1-200
@@ -235,4 +237,16 @@ Viewer {
  name Viewer1
  xpos 221
  ypos 54
+}
+push $N663aec00
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png
+ raw true
+ file_type png
+ checkHashOnRead false
+ version 3
+ name Write1
+ selected true
+ xpos -101
+ ypos 281
 }
