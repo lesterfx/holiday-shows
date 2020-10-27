@@ -1,18 +1,22 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png" format:"450 200 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 200" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png" format:"450 72 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 72" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="0" w="1920" h="1200" fullscreen="1" screen="0">
+    <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="1257" stretch="1"/>
+            <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="1179"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="434"/>
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -25,22 +29,14 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
         </splitter>
     </window>
-    <window x="1920" y="0" w="1920" h="1200" fullscreen="1" screen="1">
-        <splitter orientation="2">
-            <split size="1200"/>
-            <dock id="" activePageId="Viewer.1">
-                <page id="Viewer.1"/>
-            </dock>
-        </splitter>
-    </window>
 </layout>
 }
 Root {
  inputs 0
- name /Users/mlester/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
- frame 4
- last_frame 200
- format "450 200 0 0 450 200 1 bloodbeat"
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
+ frame 56
+ last_frame 72
+ format "450 72 0 0 450 72 1 bloodbeat"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
  colorManagement Nuke
@@ -92,7 +88,7 @@ Constant {
  xpos -27
  ypos -174
 }
-set N11c87000 [stack 0]
+set N4f189800 [stack 0]
 Ramp {
  p0 {0 200}
  p1 {{parent.Rectangle1.area.r} 200}
@@ -111,18 +107,19 @@ Ramp {
  xpos 26
  ypos 14
 }
-set N11cba800 [stack 0]
-push $N11cba800
-push $N11c87000
+set N4f189000 [stack 0]
+push $N4f189000
+push $N4f189000
+push $N4f189800
 Ramp {
- p0 {{parent.Rectangle1.area.r} 200}
- p1 {333 0}
+ p0 {{parent.Rectangle1.area.r} {height}}
+ p1 {332 0}
  name Ramp1
  xpos 158
  ypos -66
 }
 ColorLookup {
- lut {master {curve C k 0 s0 L x0.01999999955 1 x0.0700000003 0 s0 K x0.1000000015 0 s0 L x0.1199999973 1 C k x0.1700000018 0 s0 x0.5 0 s0 L x0.5199999809 1 x0.5699999928 0 K x0.6000000238 0 s0 L x0.6200000048 1 C k x0.6700000167 0 s0}
+ lut {master {curve C k 0 s0 L x0.06088637561 0.8076642752 K x0.1749027073 0 s0 L x0.2263485491 1 C k x0.6583886743 0 s0}
    red {}
    green {}
    blue {}
@@ -131,7 +128,7 @@ ColorLookup {
  xpos 158
  ypos -42
 }
-set N11c87c00 [stack 0]
+set N4f188800 [stack 0]
 Rectangle {
  replace true
  invert true
@@ -140,7 +137,7 @@ Rectangle {
  xpos 280
  ypos -42
 }
-push $N11c87c00
+push $N4f188800
 TransformMasked {
  inputs 1+1
  scale {-1 1}
@@ -156,8 +153,8 @@ Merge2 {
  xpos 158
  ypos 14
 }
-set N5b329800 [stack 0]
-push $N11c87000
+set N4f189c00 [stack 0]
+push $N4f189800
 Noise {
  size {{parent.Noise1.size} {parent.Noise1.size}}
  zoffset {{parent.Noise1.zoffset}}
@@ -171,7 +168,7 @@ Noise {
  xpos -211
  ypos -69
 }
-set N11cba400 [stack 0]
+set N4f6f1c00 [stack 0]
 Ramp {
  replace true
  p0 {100 0}
@@ -180,15 +177,13 @@ Ramp {
  xpos -211
  ypos -15
 }
-set N11cba000 [stack 0]
-push $N11cba000
-push $N11cba400
-push $N11c87000
+set N4f6f1800 [stack 0]
+push $N4f6f1800
+push $N4f6f1c00
+push $N4f189800
 Noise {
  size {30 20}
- zoffset {0}
- octaves {2}
- lacunarity {2}
+ octaves 2
  gamma 1
  translate {-340 0}
  center {225 100}
@@ -217,8 +212,8 @@ Grade {
  xpos -101
  ypos 37
 }
-set N11cfb800 [stack 0]
-push $N5b329800
+set N4f6f0800 [stack 0]
+push $N4f189c00
 Merge2 {
  inputs 2
  operation multiply
@@ -239,9 +234,9 @@ Grade {
  xpos 26
  ypos 130
 }
-push $N11cfb800
+push $N4f6f0800
 Grade {
- white 0.1
+ white 0.2
  name Grade5
  xpos -101
  ypos 100
@@ -267,6 +262,16 @@ Grade {
  xpos -101
  ypos 201
 }
+set N4f772c00 [stack 0]
+Viewer {
+ inputs 2
+ frame 56
+ frame_range 1-72
+ name Viewer1
+ xpos 303
+ ypos 67
+}
+push $N4f772c00
 Colorspace {
  colorspace_out sRGB
  name Colorspace1
@@ -274,7 +279,7 @@ Colorspace {
  ypos 225
 }
 Clamp {
- minimum {0.003921568627 0 0 0}
+ minimum {0.003921568627 0 0.003922 0}
  MinClampTo_enable true
  name Clamp1
  xpos -101
@@ -285,19 +290,9 @@ Write {
  raw true
  file_type png
  checkHashOnRead false
- version 3
+ version 5
  name Write1
+ selected true
  xpos -101
  ypos 281
-}
-push $N11cba800
-push $N5b329800
-Viewer {
- inputs 2
- frame 4
- frame_range 1-200
- input_process false
- name Viewer1
- xpos 303
- ypos 67
 }
