@@ -53,8 +53,8 @@ class Animation(object):
                 time.sleep(1)
             print('go!')
 
-        epoch = time.time()
-        while not repeat or (y < height * repeat):
+        epoch = now = time.time()
+        while (repeat and (y < height * repeat)) or (not repeat and now < end_by):
             im_y = y % height
             for x, relay in zip(range(num_relays), self.home.relays):
                 color = data[width * im_y + x]
@@ -65,7 +65,8 @@ class Animation(object):
             self.home.show()
             while True:
                 previous_y = y
-                y = int((time.time() - epoch) * fps)
+                now = time.time()
+                y = int((now - epoch) * fps)
                 if y != previous_y:
                     break
         print('image complete')
