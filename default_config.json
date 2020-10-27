@@ -39,9 +39,7 @@
             "end": "October 31",
             "name": "Halloween",
             "animation": [
-                "eye_blink",
-                "black_hole",
-                "fairy"
+                "heartbeat"
             ]
         },
         {

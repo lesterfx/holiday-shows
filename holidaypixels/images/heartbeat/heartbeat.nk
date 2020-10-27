@@ -1,5 +1,5 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png" format:"450 72 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 72" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png" format:"450 576 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 576" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
@@ -34,9 +34,9 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
- frame 56
- last_frame 72
- format "450 72 0 0 450 72 1 bloodbeat"
+ frame 249
+ last_frame 576
+ format "450 576 0 0 450 576 1 bloodbeat"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
  colorManagement Nuke
@@ -112,21 +112,21 @@ push $N4f189000
 push $N4f189000
 push $N4f189800
 Ramp {
- p0 {{parent.Rectangle1.area.r} {height}}
+ p0 {{parent.Rectangle1.area.r} 72}
  p1 {332 0}
  name Ramp1
  xpos 158
- ypos -66
+ ypos -150
 }
 ColorLookup {
- lut {master {curve C k 0 s0 L x0.06088637561 0.8076642752 K x0.1749027073 0 s0 L x0.2263485491 1 C k x0.6583886743 0 s0}
+ lut {master {curve L 0 x0.06088637561 0.8076642752 x0.1749027073 0 x0.279759258 1 C k x0.6583886743 0 s0}
    red {}
    green {}
    blue {}
    alpha {}}
  name ColorLookup1
  xpos 158
- ypos -42
+ ypos -126
 }
 set N4f188800 [stack 0]
 Rectangle {
@@ -135,7 +135,7 @@ Rectangle {
  area {0 0 330 {height}}
  name Rectangle1
  xpos 280
- ypos -42
+ ypos -126
 }
 push $N4f188800
 TransformMasked {
@@ -144,7 +144,15 @@ TransformMasked {
  center {{parent.Rectangle1.area.r} 100}
  name Transform1
  xpos 158
- ypos -18
+ ypos -102
+}
+GodRays {
+ translate {0 576}
+ steps 3
+ max true
+ name GodRays1
+ xpos 158
+ ypos -70
 }
 Merge2 {
  inputs 2
@@ -262,16 +270,6 @@ Grade {
  xpos -101
  ypos 201
 }
-set N4f772c00 [stack 0]
-Viewer {
- inputs 2
- frame 56
- frame_range 1-72
- name Viewer1
- xpos 303
- ypos 67
-}
-push $N4f772c00
 Colorspace {
  colorspace_out sRGB
  name Colorspace1
@@ -285,14 +283,23 @@ Clamp {
  xpos -101
  ypos 249
 }
+set N4f772400 [stack 0]
+Viewer {
+ inputs 2
+ frame 249
+ frame_range 1-576
+ name Viewer1
+ xpos 303
+ ypos 67
+}
+push $N4f772400
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png
  raw true
  file_type png
  checkHashOnRead false
- version 5
+ version 6
  name Write1
- selected true
  xpos -101
  ypos 281
 }
