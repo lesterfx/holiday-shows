@@ -3,15 +3,19 @@
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="0" w="1920" h="1200" fullscreen="1" screen="0">
+    <window x="0" y="23" w="1792" h="1075" maximized="1" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="1257" stretch="1"/>
+            <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="1179"/>
+                <split size="616"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="434"/>
                 <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
@@ -25,20 +29,12 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
         </splitter>
     </window>
-    <window x="1920" y="0" w="1920" h="1200" fullscreen="1" screen="1">
-        <splitter orientation="2">
-            <split size="1200"/>
-            <dock id="" activePageId="Viewer.1">
-                <page id="Viewer.1"/>
-            </dock>
-        </splitter>
-    </window>
 </layout>
 }
 Root {
  inputs 0
- name /Users/mlester/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
- frame 225
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.nk
+ frame 60
  last_frame 576
  format "450 576 0 0 450 576 1 bloodbeat"
  proxy_type scale
@@ -58,81 +54,59 @@ Constant {
  xpos -101
  ypos -239
 }
-set N4930b800 [stack 0]
+set N145d9c00 [stack 0]
 Ramp {
- p0 {0 200}
- p1 {{parent.Rectangle1.area.r} 200}
- type smooth1
- name Ramp2
- xpos 622
- ypos -157
-}
-Ramp {
- invert true
- p0 {{width} 200}
- p1 {{parent.Rectangle1.area.r} 200}
- type smooth1
- color 0
- name Ramp3
- xpos 622
- ypos -133
-}
-set N4930b000 [stack 0]
-push $N4930b000
-push $N4930b800
-Ramp {
+ cliptype none
  p0 {{parent.Rectangle1.area.r} 72}
  p1 {332 0}
  name Ramp1
  xpos 222
- ypos -77
+ ypos -114
 }
 ColorLookup {
- lut {master {curve L x0.1203500926 0 x0.1812364757 1 x0.2952528 0 x0.4001093507 1 C k x0.7787387967 0 s0}
+ lut {master {curve L x0.1203500926 0 x0.1608060598 1 x0.2365642786 0 x0.3062363267 1 x0.6721006036 0}
    red {}
    green {}
    blue {}
    alpha {}}
  name ColorLookup1
  xpos 222
- ypos -53
+ ypos -90
 }
-set N4930a800 [stack 0]
+set N5ad3b800 [stack 0]
 Rectangle {
  replace true
  invert true
  area {0 0 330 {height}}
  name Rectangle1
- xpos 344
- ypos -53
+ xpos 345
+ ypos -90
 }
-push $N4930a800
+push $N5ad3b800
 TransformMasked {
  inputs 1+1
  scale {-1 1}
  center {{parent.Rectangle1.area.r} 100}
  name Transform1
  xpos 222
- ypos -29
+ ypos -66
+}
+Transform {
+ translate {0 {-height/7}}
+ center {225 288}
+ name Transform3
+ xpos 222
+ ypos -34
 }
 GodRays {
- translate {0 576}
- steps 3
+ translate {0 {height/8*9}}
+ steps 4
  max true
  name GodRays1
  xpos 222
  ypos 3
 }
-set N4930bc00 [stack 0]
-Merge2 {
- inputs 2
- operation multiply
- name Merge3
- xpos 414
- ypos 7
-}
-set N49be9c00 [stack 0]
-push $N4930bc00
+set N5ad3ac00 [stack 0]
 FilterErode {
  size {1 -2}
  filter triangle
@@ -153,14 +127,14 @@ Grade {
  xpos 222
  ypos 161
 }
-push $N4930b800
+push $N145d9c00
 AdjBBox {
  numpixels {55 0}
  name AdjBBox1
  xpos -101
  ypos -126
 }
-set N49be8400 [stack 0]
+set N60d29c00 [stack 0]
 Noise {
  cliptype none
  size {{parent.Noise1.size} {parent.Noise1.size}}
@@ -175,7 +149,7 @@ Noise {
  xpos -150
  ypos -73
 }
-set N49be8000 [stack 0]
+set N60d29800 [stack 0]
 Ramp {
  replace true
  p0 {100 0}
@@ -184,10 +158,10 @@ Ramp {
  xpos -211
  ypos -15
 }
-set N4639bc00 [stack 0]
-push $N4639bc00
-push $N49be8000
-push $N49be8400
+set N60d29400 [stack 0]
+push $N60d29400
+push $N60d29800
+push $N60d29c00
 Noise {
  cliptype none
  size {17 55}
@@ -220,7 +194,7 @@ Grade {
  xpos -101
  ypos 37
 }
-set N4639ac00 [stack 0]
+set N60d28400 [stack 0]
 AdjBBox {
  numpixels {{input.width*0.1}}
  name AdjBBox2
@@ -279,7 +253,7 @@ TransformMasked {
  xpos 19
  ypos 215
 }
-push $N4639ac00
+push $N60d28400
 STMap {
  inputs 2
  uv forward
@@ -292,8 +266,36 @@ Dot {
  xpos -67
  ypos 317
 }
-set N4ea05800 [stack 0]
-push $N49be9c00
+set N60d62400 [stack 0]
+push $N145d9c00
+Ramp {
+ p0 {0 200}
+ p1 {{parent.Rectangle1.area.r} 200}
+ type smooth1
+ name Ramp2
+ xpos 622
+ ypos -157
+}
+Ramp {
+ invert true
+ p0 {{width} 200}
+ p1 {{parent.Rectangle1.area.r} 200}
+ type smooth1
+ color 0
+ name Ramp3
+ xpos 622
+ ypos -133
+}
+set N145d9400 [stack 0]
+push $N5ad3ac00
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge3
+ xpos 414
+ ypos 7
+}
+set N5ad3a800 [stack 0]
 Merge2 {
  inputs 2
  operation multiply
@@ -301,20 +303,15 @@ Merge2 {
  xpos 414
  ypos 314
 }
-Keymix {
- inputs 3
- name Keymix2
- xpos 622
- ypos 367
-}
+set N60d62000 [stack 0]
 Grade {
  white {1 0.5 0.4 1}
  gamma {1 0.4 0.4 1}
  name Grade6
  xpos 622
- ypos 399
+ ypos 427
 }
-push $N4ea05800
+push $N60d62400
 Grade {
  white 0.2
  name Grade5
@@ -331,11 +328,11 @@ Grade {
 Merge2 {
  inputs 2
  operation plus
- mix 0.4
  name Merge1
  xpos -101
- ypos 435
+ ypos 427
 }
+set N5aca4c00 [stack 0]
 Grade {
  gamma 0.5
  name Grade4
@@ -355,7 +352,6 @@ Clamp {
  xpos -101
  ypos 526
 }
-set Na53e800 [stack 0]
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/heartbeat/heartbeat.png
  raw true
@@ -400,12 +396,21 @@ Group {
   ypos 261
  }
 end_group
-push $N4ea05800
-push $Na53e800
+push $N145d9400
+push $N5ad3a800
+push $N60d62000
+Keymix {
+ inputs 3
+ name Keymix2
+ xpos 622
+ ypos 367
+}
+push $N60d62400
+push $N5aca4c00
 Viewer {
  inputs 2
+ frame 60
  frame_range 1-576
- input_process false
  name Viewer1
  xpos -283
  ypos 388
