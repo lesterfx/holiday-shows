@@ -152,10 +152,10 @@ class Relay(object):
         self.pin.value = value
 
 class StripWrapper(object):
-    def __init__(self, real_strip, pixel_order):
-        self.real_strip = real_strip
+    def __init__(self, led_count, pin, frequency, dma, invert, brightness, pin_channel, pixel_order):
+        self.real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
-        self.cached = [0] * len(real_strip)
+        self.cached = [0] * led_count
         self.pixel_order = [pixel_order.index(x) for x in 'rgb']
 
     def map(self, *rgb):
@@ -197,8 +197,7 @@ class Home(object):
             invert = self.globals.strip.invert
             brightness = self.globals.strip.brightness
             pin_channel = self.globals.strip.pin_channel
-            real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
-            return StripWrapper(real_strip, pixel_order)
+            return StripWrapper(led_count, pin, frequency, dma, invert, brightness, pin_channel, pixel_order)
             # return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
         elif display == 'console':
             self.max = consolepixel.LED_COUNT
