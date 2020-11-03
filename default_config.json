@@ -10,7 +10,7 @@
             "pin_channel": 0,
             "brightness": 255
         },
-        "ranges": [[17, 446]],
+        "ranges": [[17, 446], [500, 750]],
         "relays": [
             2,
             3,
