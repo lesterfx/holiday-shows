@@ -167,6 +167,8 @@ class StripWrapper(object):
         self.cached[x] = rgb
         if rgb:
             rgb = self.map(*rgb)
+        else:
+            rgb = (0, 0, 0)
         self.real_strip.setPixelColor(x, WS_Color(*rgb))
 
     def __getitem__(self, x):
