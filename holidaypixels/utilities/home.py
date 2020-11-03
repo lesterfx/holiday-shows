@@ -155,7 +155,7 @@ class StripWrapper(object):
     def __init__(self, led_count, pin, frequency, dma, invert, brightness, pin_channel, pixel_order):
         self.real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
-        self.cached = [0] * led_count
+        self.cached = [(0, 0, 0)] * led_count
         self.pixel_order = [pixel_order.index(x) for x in 'rgb']
 
     def map(self, *rgb):
