@@ -158,10 +158,20 @@ class StripWrapper(object):
         self.real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
         self.cached = [(0, 0, 0)] * led_count
-        self.pixel_order = [pixel_order.index(x) for x in 'rgb']
+        self.shift = [pixel_order.index(x) for x in 'rgb']
+        self.delay = self.calculate_delay(led_count)
+
+    def calculate_delay(self, pixels):
+        # about 1ms per 100 bytes
+        # 1ms per 33 pixels
+        return 0.001 * pixels/33
 
     def map(self, *rgb):
-        return rgb[self.pixel_order[0]], rgb[self.pixel_order[1]], rgb[self.pixel_order[2]]
+        return (
+            r * self.shift[0] +
+            g * self.shift[1] + 
+            b * self.shift[2]
+        )
 
     def __setitem__(self, x, rgb):
         self.cached[x] = rgb
@@ -175,8 +185,9 @@ class StripWrapper(object):
         return self.cached[x]
 
     def show(self):
-        now = time.time()
-        time.sleep(.04)
+        need_to_wait = time.time() - self.last_show + self.delay
+        if need_to_wait > 0:
+            time.sleep(need_to_wait)
         self.real_strip.show()
         self.last_show = time.time()
 
