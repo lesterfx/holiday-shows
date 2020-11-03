@@ -109,6 +109,8 @@ class Color (object):
         )
     
     def __ror__(self, other):
+        if isinstance(other, int):
+            return self
         return self | other
 
     def __eq__(self, other):
