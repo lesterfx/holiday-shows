@@ -175,7 +175,10 @@ class StripWrapper(object):
         return self.cached[x]
 
     def show(self):
+        now = time.time()
+        time.sleep(.04)
         self.real_strip.show()
+        self.last_show = time.time()
 
 class Home(object):
     def __init__(self, globals_, display='gpio', outfile=None):
