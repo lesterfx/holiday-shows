@@ -18,7 +18,8 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'pin', 'pixel_order', 'ranges', 'brightness', 'relays'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'relays', 'strip'])
+StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 
 class CalendarEntry(object):
@@ -165,12 +166,33 @@ class Holiday_Pixels(object):
         if self.args.norelays:
             globals_['relays'] = []
         corners = [int(corner) for corner in globals_['corners']]
-        pin = getattr(board, 'D{}'.format(int(globals_['pin'])))
-        pixel_order = getattr(neopixel, globals_['pixel_order'])
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
-        brightness = max(0, min(int(globals_['brightness']), 255))
         relays = [getattr(board, 'D{}'.format(int(relay))) for relay in globals_['relays']]
-        self.globals = GlobalPrefs(corners, pin, pixel_order, ranges, brightness, relays)
+        strip = self.process_strip(globals_['strip'])
+        self.globals = GlobalPrefs(
+            corners=corners,
+            ranges=ranges,
+            relays=relays,
+            strip=strip
+        )
+
+    def process_strip(self, strip):
+        pin = int(strip['pin'])
+        pixel_order = strip['pixel_order'].lower()
+        brightness = max(0, min(int(strip['brightness']), 255))
+        frequency = int(strip['frequency'])
+        dma = int(strip['dma'])
+        invert = bool(strip['invert'])
+        pin_channel = int(strip['pin_channel'])
+        return StripPrefs(
+            pin=pin,
+            pixel_order=pixel_order,
+            brightness=brightness,
+            frequency=frequency,
+            dma=dma,
+            invert=invert,
+            pin_channel=pin_channel
+        )
 
     def process_schedule(self, schedule):
         lat, lon = schedule['location']

@@ -13,7 +13,7 @@ import traceback
 
 import board
 import digitalio
-import neopixel
+from rpi_ws281x import Adafruit_NeoPixel
 
 from . import consolepixel, imagepixel
 
@@ -151,6 +151,21 @@ class Relay(object):
     def set(self, value):
         self.pin.value = value
 
+class StripWrapper(object):
+    def __init__(self, real_strip, pixel_order):
+        self.real_strip = real_strip
+        self.real_strip.begin()
+        self.pixel_order = [pixel_order.index(x) for x in 'rgb']
+
+    def map(self, *rgb):
+        return rgb[self.pixel_order[0]], rgb[self.pixel_order[1]], rgb[self.pixel_order[2]]
+
+    def __setitem__(self, x, rgb):
+        self.real_strip.setPixelColor(x, self.map(*rgb))
+
+    def show(self):
+        self.real_strip.show()
+
 class Home(object):
     def __init__(self, globals_, display='gpio', outfile=None):
         self.globals = globals_
@@ -167,9 +182,17 @@ class Home(object):
     def init_strip(self, display, outfile):
         print('Initializing Strip')
         if display == 'gpio':
-            pin = self.globals.pin
-            pixel_order = self.globals.pixel_order
-            return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
+            led_count = self.max + 1
+            pin = self.globals.strip.pin
+            pixel_order = self.globals.strip.pixel_order
+            frequency = self.globals.strip.frequency
+            dma = self.globals.strip.dma
+            invert = self.globals.strip.invert
+            brightness = self.globals.strip.brightness
+            pin_channel = self.globals.strip.pin_channel
+            real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
+            return StripWrapper(real_strip, pixel_order)
+            # return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
         elif display == 'console':
             self.max = consolepixel.LED_COUNT
             return consolepixel.ConsolePixel(n=self.max+1)

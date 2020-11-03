@@ -1,10 +1,16 @@
 {
     "globals": {
         "corners": [160, 214],
-        "pin": 18,
-        "pixel_order": "GRB",
+        "strip": {
+            "pin": 18,
+            "pixel_order": "GRB",
+            "frequency": 800000,
+            "dma": 10,
+            "invert": false,
+            "pin_channel": 0,
+            "brightness": 255
+        },
         "ranges": [[17, 446]],
-        "brightness": 255,
         "relays": [
             2,
             3,
