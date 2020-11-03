@@ -160,6 +160,7 @@ class StripWrapper(object):
         self.cached = [(0, 0, 0)] * led_count
         self.shift = [pixel_order.index(x) for x in 'rgb']
         self.delay = self.calculate_delay(led_count)
+        self.next_available = 0
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
@@ -185,11 +186,11 @@ class StripWrapper(object):
         return self.cached[x]
 
     def show(self):
-        need_to_wait = time.time() - self.last_show + self.delay
+        need_to_wait = self.next_available - time.time()
         if need_to_wait > 0:
             time.sleep(need_to_wait)
         self.real_strip.show()
-        self.last_show = time.time()
+        self.next_available = time.time() + self.delay
 
 class Home(object):
     def __init__(self, globals_, display='gpio', outfile=None):
