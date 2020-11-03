@@ -161,7 +161,9 @@ class StripWrapper(object):
         return rgb[self.pixel_order[0]], rgb[self.pixel_order[1]], rgb[self.pixel_order[2]]
 
     def __setitem__(self, x, rgb):
-        self.real_strip.setPixelColor(x, self.map(*rgb))
+        if rgb:
+            rgb = self.map(*rgb)
+        self.real_strip.setPixelColor(x, rgb)
 
     def show(self):
         self.real_strip.show()
