@@ -167,7 +167,7 @@ class StripWrapper(object):
         # 1ms per 33 pixels
         return 0.001 * pixels/33
 
-    def map(self, *rgb):
+    def map(self, r, g, b):
         return (
             r * self.shift[0] +
             g * self.shift[1] + 
