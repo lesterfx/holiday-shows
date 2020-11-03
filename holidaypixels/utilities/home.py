@@ -155,15 +155,20 @@ class StripWrapper(object):
     def __init__(self, real_strip, pixel_order):
         self.real_strip = real_strip
         self.real_strip.begin()
+        self.cached = [0] * len(real_strip)
         self.pixel_order = [pixel_order.index(x) for x in 'rgb']
 
     def map(self, *rgb):
         return rgb[self.pixel_order[0]], rgb[self.pixel_order[1]], rgb[self.pixel_order[2]]
 
     def __setitem__(self, x, rgb):
+        self.cached[x] = rgb
         if rgb:
             rgb = self.map(*rgb)
         self.real_strip.setPixelColor(x, rgb)
+
+    def __getitem__(self, x):
+        return self.cached[x]
 
     def show(self):
         self.real_strip.show()
