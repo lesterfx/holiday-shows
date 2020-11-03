@@ -13,7 +13,7 @@ import traceback
 
 import board
 import digitalio
-from rpi_ws281x import Adafruit_NeoPixel
+from rpi_ws281x import Adafruit_NeoPixel, Color as WS_Color
 
 from . import consolepixel, imagepixel
 
@@ -167,7 +167,7 @@ class StripWrapper(object):
         self.cached[x] = rgb
         if rgb:
             rgb = self.map(*rgb)
-        self.real_strip.setPixelColor(x, rgb)
+        self.real_strip.setPixelColor(x, WS_Color(*rgb))
 
     def __getitem__(self, x):
         return self.cached[x]
