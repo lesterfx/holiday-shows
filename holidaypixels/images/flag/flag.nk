@@ -20,7 +20,6 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
-                    <page id="DAG.2"/>
                 </dock>
             </splitter>
             <split size="615"/>
@@ -760,21 +759,28 @@ Expression {
  col {1 1 1}
  addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
 }
+Reformat {
+ type scale
+ flop true
+ name Reformat1
+ xpos -15
+ ypos 672
+}
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
  file_type png
  checkHashOnRead false
- version 1
+ version 2
  name Write1
+ selected true
  xpos -15
  ypos 715
 }
 Viewer {
- frame 25
  frame_range 1-48
  roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
- colour_sample_bbox {-0.6222222447 0.03999999911 -0.6177777648 0.04444444552}
- samplepoints {{-0.6222222447 0.03999999911}
+ colour_sample_bbox {0.4711111188 -0.2088888884 0.4755555689 -0.2044444382}
+ samplepoints {{0.4711111188 -0.2088888884}
    }
  input_process false
  name Viewer1
