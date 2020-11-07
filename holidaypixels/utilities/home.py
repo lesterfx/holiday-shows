@@ -189,6 +189,7 @@ class StripWrapper(object):
         need_to_wait = self.next_available - time.time()
         if need_to_wait > 0:
             time.sleep(need_to_wait)
+        print('.', end='')
         self.real_strip.show()
         self.next_available = time.time() + self.delay
 
