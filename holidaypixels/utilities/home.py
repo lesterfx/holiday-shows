@@ -159,6 +159,7 @@ class StripWrapper(object):
         self.real_strip.begin()
         self.cached = [(0, 0, 0)] * led_count
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
+        print('rgb shift:' + self.shift)
         self.delay = self.calculate_delay(led_count)
         self.next_available = 0
 
