@@ -131,7 +131,7 @@
             "image": "/home/pi/pixels/holidaypixels/images/flag/flag.png",
             "countdown": 0,
             "repeat": 0,
-            "fps": 24,
+            "fps": 24
         },
         "flag_old": {
             "center": 332,
