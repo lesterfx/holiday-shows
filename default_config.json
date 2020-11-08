@@ -3,7 +3,7 @@
         "corners": [160, 214],
         "strip": {
             "pin": 18,
-            "pixel_order": "GRB",
+            "pixel_order": "RGB",
             "frequency": 800000,
             "dma": 10,
             "invert": false,
@@ -181,6 +181,12 @@
         "heartbeat": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/heartbeat/heartbeat.png",
+            "fps": 24,
+            "repeat": 0
+        }
+        "test": {
+            "module": "image",
+            "image": "/home/pi/pixels/holidaypixels/images/test/test.png",
             "fps": 24,
             "repeat": 0
         }
