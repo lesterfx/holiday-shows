@@ -34,7 +34,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.nk
- frame 33
+ frame 38
  last_frame 48
  format "450 48 0 0 450 48 1 flag"
  proxy_type scale
@@ -90,19 +90,6 @@ NoOp {
  strength 10
  addUserKnob {12 offset}
  offset {16 -5}
-}
-Viewer {
- inputs 0
- frame 33
- frame_range 1-48
- roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
- colour_sample_bbox {-0.06222222373 0.05777777731 -0.05777777731 0.06222222373}
- samplepoints {{0.4711111188 -0.2088888884}
-   }
- input_process false
- name Viewer1
- xpos -190
- ypos 9
 }
 Constant {
  inputs 0
@@ -824,18 +811,40 @@ Reformat {
  ypos 672
 }
 Keyer {
- operation "green keyer"
+ invert true
+ operation bluescreen
  name Keyer1
  xpos -15
  ypos 696
 }
+Grade {
+ white 0.2
+ maskChannelInput rgba.alpha
+ name Grade1
+ xpos -15
+ ypos 728
+}
+set N56a17400 [stack 0]
+Viewer {
+ frame 38
+ frame_range 1-48
+ roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
+ colour_sample_bbox {-0.06222222373 0.05777777731 -0.05777777731 0.06222222373}
+ samplepoints {{0.4711111188 -0.2088888884}
+   }
+ input_process false
+ name Viewer1
+ xpos -190
+ ypos 9
+}
+push $N56a17400
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
  raw true
  file_type png
  use_limit true
  checkHashOnRead false
- version 5
+ version 7
  name Write1
  selected true
  xpos -15
