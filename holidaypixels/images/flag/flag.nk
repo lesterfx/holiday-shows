@@ -12,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="616"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1">
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -818,7 +818,7 @@ Keyer {
  ypos 696
 }
 Grade {
- white 0.2
+ white 0.1
  maskChannelInput rgba.alpha
  name Grade1
  xpos -15
