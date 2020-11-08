@@ -1,5 +1,5 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png" format:"450 48 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 48" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png" format:"450 100 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
@@ -34,9 +34,8 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.nk
- frame 38
- last_frame 48
- format "450 48 0 0 450 48 1 flag"
+ frame 7
+ format "450 100 0 0 450 100 1 flag"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
  colorManagement Nuke
@@ -826,13 +825,12 @@ Grade {
 }
 set N56a17400 [stack 0]
 Viewer {
- frame 38
- frame_range 1-48
+ frame 7
+ frame_range 1-100
  roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
  colour_sample_bbox {-0.06222222373 0.05777777731 -0.05777777731 0.06222222373}
  samplepoints {{0.4711111188 -0.2088888884}
    }
- input_process false
  name Viewer1
  xpos -190
  ypos 9
@@ -844,9 +842,8 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 7
+ version 8
  name Write1
- selected true
  xpos -15
  ypos 841
 }
