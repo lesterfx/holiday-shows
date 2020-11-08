@@ -6,7 +6,7 @@
             "pixel_order": "RGB",
             "frequency": 800000,
             "dma": 10,
-            "invert": false,
+            "invert": true,
             "pin_channel": 0,
             "brightness": 255
         },
