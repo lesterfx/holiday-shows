@@ -16,14 +16,14 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1">
+            <dock id="" activePageId="Properties.1" focus="true">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
             </dock>
@@ -52,90 +52,126 @@ Constant {
  xpos 93
  ypos -128
 }
-Ramp {
- output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
- p0 {0 0}
- p1 {75 0}
- name Ramp1
+set N53dc7000 [stack 0]
+Expression {
+ temp_name0 offset
+ temp_expr0 -10
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ channel0 {rgba.red -rgba.green rgba.blue none}
+ expr0 "i % 12 ? 0 : 1"
+ name Expression6
+ xpos 614
+ ypos -81
+}
+push $N53dc7000
+Expression {
+ temp_name0 offset
+ temp_expr0 -8
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ channel0 {-rgba.red -rgba.green rgba.blue none}
+ expr0 "i % 12 ? 0 : 1"
+ name Expression5
+ xpos 509
+ ypos -75
+}
+push $N53dc7000
+Expression {
+ temp_name0 offset
+ temp_expr0 0
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ expr0 "i % 12 ? 0 : 1"
+ name Expression1
  xpos 93
  ypos -56
 }
-Ramp {
- output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
- p0 {75 0}
- p1 {150 0}
- name Ramp2
- xpos 93
- ypos -32
+push $N53dc7000
+Expression {
+ temp_name0 offset
+ temp_expr0 -2
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ channel0 {rgba.red rgba.green -rgba.blue}
+ expr0 "i % 12 ? 0 : 1"
+ name Expression2
+ xpos 192
+ ypos -61
+}
+push 0
+push $N53dc7000
+Expression {
+ temp_name0 offset
+ temp_expr0 -6
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ channel0 {-rgba.red rgba.green rgba.blue none}
+ expr0 "i % 12 ? 0 : 1"
+ name Expression4
+ xpos 403
+ ypos -72
+}
+push $N53dc7000
+Expression {
+ temp_name0 offset
+ temp_expr0 -4
+ temp_name1 i
+ temp_expr1 "x + y + offset"
+ channel0 {-rgba.red rgba.green -rgba.blue none}
+ expr0 "i % 12 ? 0 : 1"
+ name Expression3
+ xpos 294
+ ypos -69
+}
+Merge2 {
+ inputs 6+1
+ name Merge1
+ xpos 575
+ ypos -16
 }
 Ramp {
- output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
- p0 {150 0}
- p1 {225 0}
- name Ramp3
- xpos 93
- ypos -8
-}
-Ramp {
- output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
- invert true
- p0 {300 0}
- p1 {225 0}
- color 0
- name Ramp4
- xpos 93
- ypos 16
-}
-Ramp {
- output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
- invert true
- p0 {375 0}
- p1 {300 0}
- color 0
- name Ramp5
- xpos 93
- ypos 40
-}
-Ramp {
- output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
- invert true
- p0 {450 0}
- p1 {375 0}
- color 0
- name Ramp6
- xpos 93
- ypos 64
-}
-Ramp {
- invert true
- p0 {100 0}
- p1 {100 128}
- color 0
- name Ramp7
- xpos 93
- ypos 88
-}
-Ramp {
- invert true
  p0 {100 256}
- p1 {100 128}
+ p1 {100 0}
  color 0
- name Ramp8
- xpos 93
- ypos 112
+ name Ramp1
+ xpos 575
+ ypos 8
 }
-Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/test/test.png
- file_type png
- checkHashOnRead false
- version 1
- name Write1
- xpos 93
- ypos 136
+Ramp {
+ invert true
+ p0 {106 0}
+ p1 {160 0}
+ color 0
+ name Ramp2
+ xpos 575
+ ypos 32
 }
+Ramp {
+ invert true
+ p0 {214 0}
+ p1 {160 0}
+ color 0
+ name Ramp3
+ xpos 575
+ ypos 56
+}
+set N53e45400 [stack 0]
 Viewer {
  frame_range 1-100
  name Viewer1
  xpos -53
  ypos 96
+}
+push $N53e45400
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/test/test.png
+ raw true
+ file_type png
+ checkHashOnRead false
+ version 2
+ name Write1
+ selected true
+ xpos 93
+ ypos 136
 }

@@ -80,6 +80,30 @@ Group {
   ypos 261
  }
 end_group
+NoOp {
+ inputs 0
+ name NoOp1
+ xpos -169
+ ypos -260
+ addUserKnob {20 User}
+ addUserKnob {7 strength}
+ strength 10
+ addUserKnob {12 offset}
+ offset {16 -5}
+}
+Viewer {
+ inputs 0
+ frame 33
+ frame_range 1-48
+ roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
+ colour_sample_bbox {-0.06222222373 0.05777777731 -0.05777777731 0.06222222373}
+ samplepoints {{0.4711111188 -0.2088888884}
+   }
+ input_process false
+ name Viewer1
+ xpos -190
+ ypos 9
+}
 Constant {
  inputs 0
  channels rgb
@@ -805,43 +829,13 @@ Keyer {
  xpos -15
  ypos 696
 }
-Grade {
- white {0.8300771713 1 0.5469558239 1}
- maskChannelInput rgba.alpha
- name Grade1
- xpos -15
- ypos 728
-}
-set N5bd66000 [stack 0]
-Viewer {
- frame 33
- frame_range 1-48
- roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
- colour_sample_bbox {-0.6622222066 -0.05777777731 -0.6577777863 -0.05333333462}
- samplepoints {{0.4711111188 -0.2088888884}
-   }
- input_process false
- name Viewer1
- xpos -190
- ypos 9
-}
-NoOp {
- inputs 0
- name NoOp1
- xpos -169
- ypos -260
- addUserKnob {20 User}
- addUserKnob {7 strength}
- strength 10
- addUserKnob {12 offset}
- offset {16 -5}
-}
-push $N5bd66000
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
+ raw true
  file_type png
+ use_limit true
  checkHashOnRead false
- version 3
+ version 5
  name Write1
  selected true
  xpos -15
