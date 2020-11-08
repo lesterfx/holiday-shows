@@ -183,7 +183,7 @@
             "image": "/home/pi/pixels/holidaypixels/images/heartbeat/heartbeat.png",
             "fps": 24,
             "repeat": 0
-        }
+        },
         "test": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/test/test.png",
