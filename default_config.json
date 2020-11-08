@@ -126,14 +126,14 @@
             "emit_seconds": 4,
             "fade": 0
         },
-        "flag": {
+        "flag_image": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/flag/flag.png",
             "countdown": 0,
             "repeat": 0,
             "fps": 24
         },
-        "flag_old": {
+        "flag": {
             "center": 332,
             "blue_range": [264, 400],
             "every": 20,
