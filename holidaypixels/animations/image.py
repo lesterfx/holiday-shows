@@ -46,7 +46,7 @@ class Animation(object):
         width = image.width
         height = image.height
 
-        countdown = self.settings.get('countdown', 10)
+        countdown = self.settings.get('countdown', 0)
         if countdown:
             for i in range(countdown):
                 print(countdown-i)

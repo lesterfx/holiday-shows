@@ -129,7 +129,6 @@
         "flag_image": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/flag/flag.png",
-            "countdown": 0,
             "repeat": 0,
             "fps": 24
         },
@@ -177,6 +176,7 @@
         "xmas1": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
+            "countdown": 10,
             "fps": 24,
             "relays": 3
         },
