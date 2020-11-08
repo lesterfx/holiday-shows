@@ -34,7 +34,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.nk
- frame 25
+ frame 33
  last_frame 48
  format "450 48 0 0 450 48 1 flag"
  proxy_type scale
@@ -47,6 +47,39 @@ Root {
  logLut Cineon
  floatLut linear
 }
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 265
+ ypos 165
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Rectangle {
+  invert true
+  area {0 {height-1} {width} {height}}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 161
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+end_group
 Constant {
  inputs 0
  channels rgb
@@ -766,20 +799,25 @@ Reformat {
  xpos -15
  ypos 672
 }
-Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
- file_type png
- checkHashOnRead false
- version 2
- name Write1
- selected true
+Keyer {
+ operation "green keyer"
+ name Keyer1
  xpos -15
- ypos 715
+ ypos 696
 }
+Grade {
+ white {0.8300771713 1 0.5469558239 1}
+ maskChannelInput rgba.alpha
+ name Grade1
+ xpos -15
+ ypos 728
+}
+set N5bd66000 [stack 0]
 Viewer {
+ frame 33
  frame_range 1-48
  roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
- colour_sample_bbox {0.4711111188 -0.2088888884 0.4755555689 -0.2044444382}
+ colour_sample_bbox {-0.6622222066 -0.05777777731 -0.6577777863 -0.05333333462}
  samplepoints {{0.4711111188 -0.2088888884}
    }
  input_process false
@@ -787,39 +825,6 @@ Viewer {
  xpos -190
  ypos 9
 }
-Group {
- inputs 0
- name VIEWER_INPUT
- xpos 265
- ypos 165
-}
- Input {
-  inputs 0
-  name Input1
-  xpos 237
-  ypos 97
- }
- Transform {
-  translate {0 {frame-1}}
-  center {225 12}
-  name Transform1
-  xpos 237
-  ypos 137
- }
- Rectangle {
-  invert true
-  area {0 {height-1} {width} {height}}
-  color 0
-  name Rectangle1
-  xpos 237
-  ypos 161
- }
- Output {
-  name Output1
-  xpos 237
-  ypos 261
- }
-end_group
 NoOp {
  inputs 0
  name NoOp1
@@ -830,4 +835,15 @@ NoOp {
  strength 10
  addUserKnob {12 offset}
  offset {16 -5}
+}
+push $N5bd66000
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
+ file_type png
+ checkHashOnRead false
+ version 3
+ name Write1
+ selected true
+ xpos -15
+ ypos 841
 }
