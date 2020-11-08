@@ -54,6 +54,7 @@ class Animation(object):
             print('go!')
 
         epoch = time.time()
+        colors = set()
         while (repeat and (y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
             im_y = y % height
             for x, relay in zip(range(num_relays), self.home.relays):
@@ -61,7 +62,11 @@ class Animation(object):
                 relay.set(bool(color[0]))
             for x in range(num_relays, width):
                 color = data[width * im_y + x]
-                self.home[x-num_relays] = color[0], color[1], color[2]
+                color_tup = color[0], color[1], color[2]
+                if color_tup not in colors:
+                    colors.add(color_tup)
+                    print(color_tup)
+                self.home[x-num_relays] = color_tup
             self.home.show()
             while True:
                 previous_y = y
