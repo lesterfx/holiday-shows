@@ -835,7 +835,7 @@ Grade {
 }
 Grade {
  inputs 1+1
- white {1 0.7998712063 0.5864573121 1}
+ white {1 0.9225699902 0.8400000334 1}
  name Grade2
  selected true
  xpos -15
@@ -860,7 +860,7 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 9
+ version 10
  name Write1
  xpos -15
  ypos 841
