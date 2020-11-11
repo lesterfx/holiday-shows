@@ -12,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="616"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="434"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -809,40 +809,58 @@ Reformat {
  xpos -15
  ypos 672
 }
+set N58fb5c00 [stack 0]
+Keyer {
+ operation "green keyer"
+ name Keyer2
+ xpos 108
+ ypos 728
+}
+push $N58fb5c00
 Keyer {
  invert true
  operation bluescreen
  name Keyer1
- xpos -15
- ypos 696
+ xpos 108
+ ypos 683
 }
+push $N58fb5c00
 Grade {
+ inputs 1+1
  white 0.1
- maskChannelInput rgba.alpha
+ maskChannelInput -rgba.alpha
  name Grade1
  xpos -15
  ypos 728
 }
-set N56a17400 [stack 0]
+Grade {
+ inputs 1+1
+ white {1 0.7998712063 0.5864573121 1}
+ name Grade2
+ selected true
+ xpos -15
+ ypos 752
+}
+set N58e95400 [stack 0]
 Viewer {
- frame 7
  frame_range 1-100
  roi {-0.9046000242 0.01539999992 -0.6944000125 0.0645999983}
  colour_sample_bbox {-0.06222222373 0.05777777731 -0.05777777731 0.06222222373}
  samplepoints {{0.4711111188 -0.2088888884}
    }
+ input_process false
  name Viewer1
  xpos -190
  ypos 9
 }
-push $N56a17400
+push $N58e95400
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/flag/flag.png
  raw true
  file_type png
  use_limit true
  checkHashOnRead false
- version 8
+ version 9
  name Write1
  xpos -15
  ypos 841
