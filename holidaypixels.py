@@ -187,7 +187,7 @@ class Holiday_Pixels(object):
         dma = int(strip['dma'])
         invert = bool(strip['invert'])
         pin_channel = int(strip['pin_channel'])
-        relay = int(strip['relay'])
+        relay = getattr(board, 'D{}'.format(int(strip['relay'])))
         return StripPrefs(
             pin=pin,
             pixel_order=pixel_order,
