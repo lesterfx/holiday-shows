@@ -19,7 +19,7 @@ import neopixel
 from holidaypixels.utilities import sun, home
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'relays', 'strip'])
-StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel'])
+StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 
 class CalendarEntry(object):
@@ -65,10 +65,13 @@ class Holiday_Pixels(object):
         config = self.load_config()
         self.process_config(config)
         self.init_strip()
-        if self.args.demo:
-            self.demo(self.args.demo)
-        else:
-            self.main()
+        try:
+            if self.args.demo:
+                self.demo(self.args.demo)
+            else:
+                self.main()
+        finally:
+            self.strip.on = False
 
     def init_strip(self):
         try:
@@ -184,6 +187,7 @@ class Holiday_Pixels(object):
         dma = int(strip['dma'])
         invert = bool(strip['invert'])
         pin_channel = int(strip['pin_channel'])
+        relay = int(strip['relay'])
         return StripPrefs(
             pin=pin,
             pixel_order=pixel_order,
@@ -191,7 +195,8 @@ class Holiday_Pixels(object):
             frequency=frequency,
             dma=dma,
             invert=invert,
-            pin_channel=pin_channel
+            pin_channel=pin_channel,
+            relay=relay
         )
 
     def process_schedule(self, schedule):

@@ -8,7 +8,8 @@
             "dma": 10,
             "invert": false,
             "pin_channel": 0,
-            "brightness": 255
+            "brightness": 255,
+            "relay": 9
         },
         "ranges": [[17, 446]],
         "relays": [

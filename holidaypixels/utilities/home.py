@@ -149,19 +149,40 @@ class Relay(object):
     def __init__(self, pin):
         self.pin = digitalio.DigitalInOut(pin)
         self.pin.direction = digitalio.Direction.OUTPUT
+        self.value = None
 
     def set(self, value):
+        self.value = value
         self.pin.value = value
 
 class StripWrapper(object):
-    def __init__(self, led_count, pin, frequency, dma, invert, brightness, pin_channel, pixel_order):
+    def __init__(self, led_count, strip_prefs):
+        pin = strip_prefs.pin
+        frequency = strip_prefs.frequency
+        dma = strip_prefs.dma
+        invert = strip_prefs.invert
+        brightness = strip_prefs.brightness
+        pin_channel = strip_prefs.pin_channel
+
         self.real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
+
+        pixel_order = strip_prefs.pixel_order
+        self.relay = Relay(strip_prefs.relay)
+
         self.cached = [(0, 0, 0)] * led_count
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         print('rgb shift:', self.shift)
         self.delay = self.calculate_delay(led_count)
         self.next_available = 0
+
+    @property
+    def on(self):
+        return self.relay.value
+
+    @on.setter
+    def on(self, value):
+        self.relay.set(value)
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
@@ -210,14 +231,7 @@ class Home(object):
         print('Initializing Strip')
         if display == 'gpio':
             led_count = self.max + 1
-            pin = self.globals.strip.pin
-            pixel_order = self.globals.strip.pixel_order
-            frequency = self.globals.strip.frequency
-            dma = self.globals.strip.dma
-            invert = self.globals.strip.invert
-            brightness = self.globals.strip.brightness
-            pin_channel = self.globals.strip.pin_channel
-            return StripWrapper(led_count, pin, frequency, dma, invert, brightness, pin_channel, pixel_order)
+            return StripWrapper(led_count, self.globals.strip)
             # return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
         elif display == 'console':
             self.max = consolepixel.LED_COUNT
@@ -230,6 +244,7 @@ class Home(object):
         return [Relay(pin) for pin in self.globals.relays]
 
     def __enter__(self):
+        self.strip.on = True
         return self
 
     def __exit__(self, *args, **kwargs):
@@ -237,6 +252,7 @@ class Home(object):
         self.clear()
         self.clear_relays()
         self.show()
+        self.strip.on = False
 
     def sleep(self, seconds):
         if hasattr(self, 'fps'):
@@ -290,7 +306,7 @@ class Home(object):
     def print_fps(self):
         now = time.time()
         if now - self.fps_timer >= 1:
-            print(f'\r{self.fps_count} fps', end='')
+            print(f'\r{self.fps_count} fps (on: {self.strip.on})', end='')
             self.fps_count = 0
             self.fps_timer = now
         self.fps_count += 1

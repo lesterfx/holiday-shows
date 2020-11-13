@@ -15,6 +15,7 @@ class Animation(object):
         return 'blank'
 
     def main(self, end_by):
+        self.home.strip.on = False
         while datetime.datetime.now() < end_by:
             self.home *= 0
             self.home.show(force=True)
