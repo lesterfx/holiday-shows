@@ -1,6 +1,6 @@
 {
     "globals": {
-        "corners": [160, 214],
+        "corners": [160, 214, 446, 450, 600],
         "strip": {
             "pin": 18,
             "pixel_order": "RGB",
@@ -11,7 +11,7 @@
             "brightness": 255,
             "relay": 9
         },
-        "ranges": [[17, 446]],
+        "ranges": [[17, 750]],
         "relays": [
             2,
             3,
