@@ -174,6 +174,7 @@ class StripWrapper(object):
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         print('rgb shift:', self.shift)
         self.delay = self.calculate_delay(led_count)
+        print('minimum time between frames:', self.delay)
         self.next_available = 0
 
     @property
@@ -210,6 +211,7 @@ class StripWrapper(object):
     def show(self):
         need_to_wait = self.next_available - time.time()
         if need_to_wait > 0:
+            print('need to wait', need_to_wait)
             time.sleep(need_to_wait)
         self.real_strip.show()
         self.next_available = time.time() + self.delay
