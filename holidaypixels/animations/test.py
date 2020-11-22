@@ -41,6 +41,7 @@ class Animation(object):
             for x in range(450, 500):
                 self.home[x] = colors[(x + t) % len(colors)]
             self.home.show()
+            print('test')
             time.sleep(1)
 
         max_ = self.globals.ranges[-1][1]
