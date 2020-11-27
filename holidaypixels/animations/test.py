@@ -18,14 +18,18 @@ class Animation(object):
 
     def main(self, end_by):
         max_ = self.globals.ranges[-1][1]
-        for x in range(0, max_, 5):
-            self.home[x] = Color(0, 0, 0.5)
-        for x in range(0, max_, 10):
-            self.home[x] = Color(0, 0.5, 0)
-        for x in range(0, max_, 50):
-            self.home[x] = Color(0.5, 0, 0)
+        digits = len(bin(max_)) - 1
+        for x in range(0, max_, digits):
+            num = bin(x)[2:]
+            for i, val in enumerate(num):
+                if i == '1':
+                    self.home[x+i] = Color(1, 0, 0)
+                elif i == '0':
+                    self.home[x+i] = Color(0, 1, 0)
+
         for corner in self.globals.corners:
             self.home[corner] = Color(1, 1, 1)
+
         while datetime.datetime.now() < end_by:
             self.home.show()
             time.sleep(1)
