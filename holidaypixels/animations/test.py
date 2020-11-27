@@ -22,9 +22,9 @@ class Animation(object):
         for x in range(0, max_, digits):
             num = bin(x)[2:]
             for i, val in enumerate(num):
-                if i == '1':
+                if val == '1':
                     self.home[x+i] = Color(1, 0, 0)
-                elif i == '0':
+                elif val == '0':
                     self.home[x+i] = Color(0, 1, 0)
 
         for corner in self.globals.corners:
