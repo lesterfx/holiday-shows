@@ -38,7 +38,7 @@ class Animation(object):
             Color(0, 1, 1),
         ]
         for t in range(1000):
-            for x in range(450, 750):
+            for x in range(450, 850):
                 self.home[x] = colors[(x + t) % len(colors)]
             self.home.show()
             print('test')
