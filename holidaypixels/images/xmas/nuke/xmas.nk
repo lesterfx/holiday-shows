@@ -11,11 +11,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="657"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="385"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -592,6 +592,7 @@ Reformat {
  type scale
  flop true
  name Reformat4
+ selected true
  xpos 557
  ypos 277
 }
@@ -3729,18 +3730,6 @@ Write {
  xpos 496
  ypos 1786
 }
-push $N5cd5b600
-Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
- raw true
- file_type png
- use_limit true
- checkHashOnRead false
- version 19
- name Write1
- xpos 899
- ypos 630
-}
 push $N5c623000
 push $N5cd5b600
 Viewer {
@@ -3748,11 +3737,23 @@ Viewer {
  frame 40
  frame_range 1-42
  frame_range_lock true
- colour_sample_bbox {1 -0.1923937351 1.004474282 -0.1879194677}
+ colour_sample_bbox {-0.7835178375 0.3247232437 -0.7810578346 0.3271832764}
  samplepoints {{-0.8687499762 -0.05104166642}
    }
  input_process false
  name Viewer1
  xpos 1118
  ypos 578
+}
+push $N5cd5b600
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
+ raw true
+ file_type png
+ use_limit true
+ checkHashOnRead false
+ version 20
+ name Write1
+ xpos 899
+ ypos 630
 }
