@@ -17,33 +17,6 @@ class Animation(object):
         return 'Test'
 
     def main(self, end_by):
-        colors = [
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(0, 0, 1),
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(0, 1, 0),
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(1, 0, 0),
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(1, 1, 0),
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(1, 0, 1),
-            Color(0, 0, 0),
-            Color(0, 0, 0),
-            Color(0, 1, 1),
-        ]
-        for t in range(1000):
-            for x in range(450, 850):
-                self.home[x] = colors[(x + t) % len(colors)]
-            self.home.show()
-            print('test')
-            time.sleep(1)
-
         max_ = self.globals.ranges[-1][1]
         for x in range(0, max_, 5):
             self.home[x] = Color(0, 0, 1)
