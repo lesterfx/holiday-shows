@@ -10,12 +10,12 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="868"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <split size="657"/>
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="174"/>
-                <dock id="" activePageId="DAG.1">
+                <split size="385"/>
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -146,7 +146,7 @@ Read {
  ypos -435
 }
 Crop {
- box {0 2810 {width} 2860}
+ box {0 2810 {width} 2960}
  reformat true
  crop false
  name Crop8
@@ -172,7 +172,7 @@ Crop {
 }
 Reformat {
  type "to box"
- box_width 150
+ box_width 160
  box_height {{height}}
  box_fixed true
  resize distort
@@ -191,7 +191,7 @@ Crop {
 }
 Reformat {
  type "to box"
- box_width 150
+ box_width 160
  box_height {{height}}
  box_fixed true
  resize distort
@@ -206,7 +206,7 @@ Group {
  ypos 111
  addUserKnob {20 User}
  addUserKnob {3 space}
- space 2
+ space 22
 }
  Input {
   inputs 0
@@ -271,12 +271,12 @@ push $N5d012800
 end_group
 push $N5aecbc00
 Crop {
- box {49 0 480 {input.height}}
+ box {50 0 479 {input.height}}
  reformat true
  crop false
  name Crop11
  xpos 557
- ypos -30
+ ypos -31
 }
 set N5d012000 [stack 0]
 Rectangle {
@@ -847,10 +847,10 @@ Group {
  inputs 2
  name stack5
  xpos 899
- ypos 406
+ ypos 407
  addUserKnob {20 User}
  addUserKnob {3 space}
- space 2
+ space 22
 }
  Input {
   inputs 0
@@ -914,18 +914,6 @@ push $N5cc03000
  }
 end_group
 set N5cd5b600 [stack 0]
-Write {
- file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
- raw true
- file_type png
- use_limit true
- checkHashOnRead false
- version 18
- name Write1
- xpos 899
- ypos 630
-}
-push $N5cd5b600
 Transform {
  translate {0 {frame x1213 2225.26086}}
  center {1024 778}
@@ -3741,6 +3729,18 @@ Write {
  xpos 496
  ypos 1786
 }
+push $N5cd5b600
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
+ raw true
+ file_type png
+ use_limit true
+ checkHashOnRead false
+ version 19
+ name Write1
+ xpos 899
+ ypos 630
+}
 push $N5c623000
 push $N5cd5b600
 Viewer {
@@ -3748,12 +3748,11 @@ Viewer {
  frame 40
  frame_range 1-42
  frame_range_lock true
- colour_sample_bbox {-1.111368895 10.51972198 1.194895625 10.73317909}
+ colour_sample_bbox {1 -0.1923937351 1.004474282 -0.1879194677}
  samplepoints {{-0.8687499762 -0.05104166642}
    }
  input_process false
  name Viewer1
- selected true
  xpos 1118
  ypos 578
 }
