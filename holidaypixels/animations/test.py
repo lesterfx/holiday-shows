@@ -28,7 +28,10 @@ class Animation(object):
                     self.home[x+i] = Color(0, 1, 0)
 
         for corner in self.globals.corners:
-            self.home[corner] = Color(1, 1, 1)
+            self.home[corner] = Color(0, 0, 1)
+        for black in self.globals.black:
+            for x in range(black[0], black[-1]):
+                self.home[x] = Color(1, 1, 1)
 
         while datetime.datetime.now() < end_by:
             self.home.show()
