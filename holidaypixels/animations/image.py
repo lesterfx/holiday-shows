@@ -3,6 +3,7 @@
 import datetime
 import os
 from random import randint
+import socket
 import time
 
 from PIL import Image
@@ -19,58 +20,64 @@ class Animation(object):
         return 'Image'
 
     def main(self, end_by):
-        num_relays = self.settings.get('relays', 0)
-        # assert num_relays <= len(self.globals.relays)
+        self.num_relays = self.settings.get('relays', 0)
         path = self.settings['image']
-        fps = self.settings['fps']
+        self.fps = self.settings['fps']
         path = os.path.expanduser(path)
-        repeat = self.settings.get('repeat', 1)
+        self.repeat = self.settings.get('repeat', 1)
         if 'variations' in self.settings:
             path = path.format(randint(1, self.settings['variations']))
         print('Opening', path)
         image = Image.open(path)
-        data = image.getdata()
-        width = min(image.width - num_relays, self.home.max)
+        self.data = image.getdata()
+        self.width = image.width
+        self.height = image.height
 
+        self.validate_relays()
+
+        self.present(end_by)
+
+    def validate_relays(self):
         try:
-            for y in range(image.height):
-                for x, relay in zip(range(num_relays), self.home.relays):
-                    color = data[image.width * y + x]
+            for y in range(self.height):
+                for x, relay in zip(range(self.num_relays), self.home.relays):
+                    color = self.data[self.width * y + x]
                     assert color[0] == color[1] == color[2]
                     assert color[0] in (0, 255)
         except AssertionError:
             raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
+    def present(self, end_by):
         previous_y = None
         y = 0
-        width = image.width
-        height = image.height
+        width = self.width
+        height = self.height
 
         countdown = self.settings.get('countdown', 0)
         if countdown:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect(("192.168.1.222", 4322))
             for i in range(countdown):
                 print(countdown-i)
                 time.sleep(1)
             print('go!')
+            s.send('hello')
+            s.close()
 
         epoch = time.time()
-        # colors = set()
-        while (repeat and (y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
+        while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):
             im_y = y % height
-            for x, relay in zip(range(num_relays), self.home.relays):
-                color = data[width * im_y + x]
+            for x, relay in zip(range(self.num_relays), self.home.relays):
+                color = self.data[width * im_y + x]
                 relay.set(bool(color[0]))
-            for x in range(num_relays, width):
-                color = data[width * im_y + x]
+            for x in range(self.num_relays, width):
+                color = self.data[width * im_y + x]
                 color_tup = color[0], color[1], color[2]
-                # if color_tup not in colors:
-                #     colors.add(color_tup)
-                #     print(color_tup)
-                self.home[x-num_relays] = color_tup
+                self.home[x-self.num_relays] = color_tup
             self.home.show()
             while True:
                 previous_y = y
-                y = int((time.time() - epoch) * fps)
+                y = int((time.time() - epoch) * self.fps)
                 if y != previous_y:
                     break
         print('image complete')
