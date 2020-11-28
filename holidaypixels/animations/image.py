@@ -61,7 +61,7 @@ class Animation(object):
                 print(countdown-i)
                 time.sleep(1)
             print('go!')
-            s.send('hello')
+            s.send(b'hello')
             s.close()
 
         epoch = time.time()
