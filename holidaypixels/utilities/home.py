@@ -188,7 +188,8 @@ class StripWrapper(object):
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
         # 1ms per 33 pixels
-        return 0.001 * pixels/33
+        return 0.001 * pixels/33 * 1.3
+        # 1.3 multiplier just in case
 
     def map(self, r, g, b):
         return (
