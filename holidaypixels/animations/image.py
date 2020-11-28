@@ -56,7 +56,7 @@ class Animation(object):
         countdown = self.settings.get('countdown', 0)
         if countdown:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("192.168.1.222", 4322))
+            s.connect(("192.168.1.222", 4321))
             for i in range(countdown):
                 print(countdown-i)
                 time.sleep(1)
