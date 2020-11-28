@@ -11,7 +11,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="657"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="385"/>
@@ -22,7 +22,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1">
+            <dock id="" activePageId="Properties.1" focus="true">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
             </dock>
@@ -140,7 +140,7 @@ Read {
  file xmas/blender/xmas.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 28
+ version 29
  name Read2
  xpos 557
  ypos -435
@@ -269,14 +269,6 @@ push $N5d012800
   ypos -34
  }
 end_group
-Rectangle {
- opacity 0.8
- area {0 2412 {width} 2854}
- color 0
- name Rectangle3
- xpos 899
- ypos 135
-}
 push $N5aecbc00
 Crop {
  box {50 0 479 {input.height}}
@@ -3759,7 +3751,7 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 22
+ version 23
  name Write1
  selected true
  xpos 899
