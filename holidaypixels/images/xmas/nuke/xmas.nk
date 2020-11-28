@@ -596,8 +596,9 @@ Reformat {
  ypos 277
 }
 Grade {
- white 0.8
+ white 0.6
  name Grade10
+ selected true
  xpos 557
  ypos 301
 }
@@ -3760,7 +3761,6 @@ Write {
  checkHashOnRead false
  version 24
  name Write1
- selected true
  xpos 899
  ypos 630
 }
