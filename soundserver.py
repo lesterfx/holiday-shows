@@ -17,16 +17,16 @@ serversocket.bind(('192.168.1.222', 4321))
 # become a server socket
 serversocket.listen(5)
 
-last_address = None
+last_ip = None
 try:
     while True:
         print('waiting for signal')
-        (clientsocket, address) = serversocket.accept()
-        print('received connection from', address)
-        if last_address and address != last_address:
-            print('rejecting connection from different address:', address)
-        elif not last_address:
-            last_address = address
+        clientsocket, (ip, port) = serversocket.accept()
+        print('received connection from', ip)
+        if last_ip and ip != last_ip:
+            print('rejecting connection from different ip:', ip)
+        elif not last_ip:
+            last_ip = ip
         clientsocket.recv(2048)
         sound.play()
         print('music has started')
