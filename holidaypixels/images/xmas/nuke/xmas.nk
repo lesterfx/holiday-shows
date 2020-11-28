@@ -11,7 +11,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="657"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="385"/>
@@ -22,7 +22,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1" focus="true">
+            <dock id="" activePageId="Properties.1">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
             </dock>
@@ -595,6 +595,13 @@ Reformat {
  xpos 557
  ypos 277
 }
+Grade {
+ white 0.8
+ name Grade10
+ xpos 557
+ ypos 301
+}
+set N6c462800 [stack 0]
 push $N5aecbc00
 Expression {
  expr0 "r > threshold"
@@ -3730,7 +3737,7 @@ Write {
  ypos 1786
 }
 push $N5c623000
-push $N5cd5b600
+push $N6c462800
 Viewer {
  inputs 2
  frame 40
@@ -3751,7 +3758,7 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 23
+ version 24
  name Write1
  selected true
  xpos 899
