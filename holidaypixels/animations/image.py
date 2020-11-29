@@ -40,7 +40,9 @@ class Animation(object):
         while now <= end_by:
             while now.minute != 0:
                 print('minute is', now.minute)
-                time.sleep(60-now.second)
+                self.home.clear()
+                self.home.show()
+                time.sleep(1)
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)
