@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import socket
 
 from pygame import mixer
@@ -22,13 +23,13 @@ try:
     while True:
         print('waiting for signal')
         clientsocket, (ip, port) = serversocket.accept()
-        print('received connection from', ip)
+        print('received connection from', ip, 'at', datetime.datetime.now())
         if last_ip and ip != last_ip:
             print('rejecting connection from different ip:', ip)
         elif not last_ip:
             last_ip = ip
         clientsocket.recv(2048)
         sound.play()
-        print('music has started')
+        print('music started at', datetime.datetime.now())
 finally:
     serversocket.close()

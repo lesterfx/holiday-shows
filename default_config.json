@@ -117,7 +117,7 @@
             "end": "December 31",
             "name": "Christmas",
             "animation": [
-                "snow_blow"
+                "xmas1"
             ]
         }
     ],
@@ -185,7 +185,7 @@
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
             "countdown": 10,
             "fps": 24,
-            "relays": 3
+            "relays": 4
         },
         "heartbeat": {
             "module": "image",
