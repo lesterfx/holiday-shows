@@ -38,9 +38,9 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         while now <= end_by:
-            while now.minute != 0:
+            while now.minute != 2:
                 print('minute is', now.minute)
-                time.sleep(10)
+                time.sleep(60-now.second)
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)
