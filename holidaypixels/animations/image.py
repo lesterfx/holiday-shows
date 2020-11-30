@@ -49,11 +49,12 @@ class Animation(object):
             now = datetime.datetime.now()
 
     def simple_xmas(self):
+        print('hello?')
         offset = int(time.time())
         found_one = 0
+        self.home.clear()
         for x in range(self.globals.max):
             pos = (x + offset) % 10
-            self.home.clear()
             if pos == 0:
                 self.home[x] = 255, 0, 0
                 found_one = x
@@ -61,6 +62,7 @@ class Animation(object):
                 self.home[x] = 255, 255, 255
                 found_one = x
         print(found_one)
+        print('hello!')
         self.home.show()
 
     def activate_relays(self):
