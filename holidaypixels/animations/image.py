@@ -49,7 +49,7 @@ class Animation(object):
             now = datetime.datetime.now()
 
     def simple_xmas(self):
-        offset = int(time.time() % 10)
+        offset = int(time.time())
         found_one = 0
         for x in range(self.globals.max):
             pos = (x + offset) % 10
