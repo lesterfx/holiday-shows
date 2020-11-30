@@ -9,7 +9,6 @@ import time
 from PIL import Image
 
 from ..utilities.home import Color
-from . import simple_xmas
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -39,16 +38,30 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         while now <= end_by:
-            waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while now.minute != 0:
                 print('minute is', now.minute)
-                waiting.main()
+                self.simple_xmas()
                 time.sleep(1)
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)
             self.activate_relays()
             now = datetime.datetime.now()
+
+    def simple_xmas(self):
+        offset = int(time.time() % 10)
+        found_one = 0
+        for x in range(self.globals.max):
+            pos = (x + offset) % 10
+            self.home.clear()
+            if pos == 0:
+                self.home[x] = 255, 0, 0
+                found_one = x
+            elif pos == 5:
+                self.home[x] = 255, 255, 255
+                found_one = x
+        print(found_one)
+        self.home.show()
 
     def activate_relays(self):
         for relay in self.home.relays:
