@@ -9,6 +9,7 @@ import time
 from PIL import Image
 
 from ..utilities.home import Color
+from . import simple_xmas
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -38,26 +39,15 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         while now <= end_by:
+            waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while now.minute != 0:
                 print('minute is', now.minute)
-                self.simple_xmas()
-                time.sleep(0.1)
+                waiting.main()
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)
             self.activate_relays()
             now = datetime.datetime.now()
-
-    def simple_xmas(self):
-        offset = int(time.time() * 3)
-        self.home.clear()
-        for x in range(self.globals.max):
-            pos = (x + offset) % 10
-            if pos == 0:
-                self.home[x] = 255, 0, 0
-            elif pos == 5:
-                self.home[x] = 255, 255, 255
-        self.home.show()
 
     def activate_relays(self):
         for relay in self.home.relays:
@@ -81,6 +71,8 @@ class Animation(object):
 
         countdown = self.settings.get('countdown', 0)
         if countdown:
+            self.home.clear()
+            self.home.show()
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect(("192.168.1.222", 4321))
             for i in range(countdown):

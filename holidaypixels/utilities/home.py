@@ -286,6 +286,12 @@ class Home(object):
         func.seconds = seconds
 
         return func
+    
+    def blacked_out(self, x):
+        for blackout in self.globals.black:
+            if x in range(blackout[0], blackout[-1]+1):
+                return True
+        return False
 
     @staticmethod
     def run_for(seconds, function, *args, **kwargs):
