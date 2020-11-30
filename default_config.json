@@ -34,7 +34,7 @@
         ],
         "start_time": "sunset",
         "sunset_offset": "-01:00",
-        "end_time": "22:00",
+        "end_time": "21:59",
         "dusk_brightness": 255,
         "dusk_duration": "02:00"
     },
@@ -116,8 +116,18 @@
             "start": "November 29",
             "end": "December 31",
             "name": "Christmas",
+            "days": ["Friday", "Saturday", "Sunday"],
             "animation": [
                 "xmas1"
+            ]
+        },
+        {
+            "start": "November 29",
+            "end": "December 31",
+            "name": "Christmas Simple",
+            "days": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+            "animation": [
+                "simple_xmas"
             ]
         }
     ],

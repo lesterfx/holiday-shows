@@ -13,6 +13,9 @@ class Animation(object):
         return 'Simple Xmas'
 
     def main(self, end_by=None):
+        if end_by:
+            for relay in self.home.relays:
+                relay.set(active)
         while True:
             offset = int(time.time() * 3)
             self.home.clear()
