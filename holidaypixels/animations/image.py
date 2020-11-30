@@ -42,9 +42,8 @@ class Animation(object):
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while now.minute != 0:
                 print('minute is', now.minute)
-                self.home.clear()
-                self.home.show()
                 waiting.main()
+                time.sleep(1)
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)

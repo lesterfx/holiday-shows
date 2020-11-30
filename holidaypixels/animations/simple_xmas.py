@@ -14,14 +14,14 @@ class Animation(object):
 
     def main(self, end_by=None):
         while True:
-            offset = time.time() % 10
+            offset = int(time.time() % 10)
             for x in range(self.globals.max):
                 pos = (x + offset) % 10
                 self.home.clear()
                 if pos == 0:
-                    self.home[x] = Color(1, 0, 0)
+                    self.home[x] = 255, 0, 0
                 elif pos == 5:
-                    self.home[x] = Color(1, 1, 1)
+                    self.home[x] = 255, 255, 255
             self.home.show()
             if end_by is None:
                 return
