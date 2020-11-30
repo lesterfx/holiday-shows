@@ -15,13 +15,17 @@ class Animation(object):
     def main(self, end_by=None):
         while True:
             offset = int(time.time() % 10)
+            found_one = 0
             for x in range(self.globals.max):
                 pos = (x + offset) % 10
                 self.home.clear()
                 if pos == 0:
                     self.home[x] = 255, 0, 0
+                    found_one = x
                 elif pos == 5:
                     self.home[x] = 255, 255, 255
+                    found_one = x
+            print(found_one)
             self.home.show()
             if end_by is None:
                 return
