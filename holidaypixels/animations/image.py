@@ -39,7 +39,7 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         while now <= end_by:
-            waiting = simple_xmas.Animation()
+            waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while now.minute != 0:
                 print('minute is', now.minute)
                 self.home.clear()
