@@ -9,6 +9,7 @@ import time
 from PIL import Image
 
 from ..utilities.home import Color
+from . import simple_xmas
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -38,11 +39,12 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         while now <= end_by:
+            waiting = simple_xmas.Animation()
             while now.minute != 0:
                 print('minute is', now.minute)
                 self.home.clear()
                 self.home.show()
-                time.sleep(1)
+                waiting.main()
                 now = datetime.datetime.now()
             self.present(end_by)
             time.sleep(30)
