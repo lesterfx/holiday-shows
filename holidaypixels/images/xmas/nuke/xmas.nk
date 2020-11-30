@@ -139,7 +139,7 @@ Read {
  file xmas/blender/xmas.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 30
+ version 32
  name Read2
  xpos 557
  ypos -435
@@ -856,7 +856,6 @@ push $N40956800
   ypos -34
  }
 end_group
-set N4ba8e000 [stack 0]
 Group {
  inputs 2
  name stack4
@@ -3814,7 +3813,7 @@ Write {
  ypos 1786
 }
 push $N5c623000
-push $N4ba8e000
+push $N5cd5b600
 Viewer {
  inputs 2
  frame 1
@@ -3835,7 +3834,7 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 26
+ version 28
  name Write1
  selected true
  xpos 899

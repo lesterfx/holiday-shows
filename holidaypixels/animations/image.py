@@ -44,14 +44,15 @@ class Animation(object):
                 print('minute is', now.minute)
                 waiting.main()
                 now = datetime.datetime.now()
+            self.activate_relays(False)
             self.present(end_by)
             time.sleep(30)
-            self.activate_relays()
+            self.activate_relays(True)
             now = datetime.datetime.now()
 
-    def activate_relays(self):
+    def activate_relays(self, active=True):
         for relay in self.home.relays:
-            relay.set(True)
+            relay.set(active)
 
     def validate_relays(self):
         try:
