@@ -15,7 +15,7 @@ class Animation(object):
     def main(self, end_by=None):
         if end_by:
             for relay in self.home.relays:
-                relay.set(active)
+                relay.set(True)
         while True:
             offset = int(time.time() * 3)
             self.home.clear()
