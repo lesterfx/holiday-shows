@@ -17,19 +17,32 @@ class Animation(object):
             for relay in self.home.relays:
                 relay.set(True)
         while True:
-            offset = int(time.time() * 3)
-            self.home.clear()
-            for x in range(self.globals.max):
-                if self.home.blacked_out(x):
-                    continue
-                pos = (x + offset) % 10
-                if pos == 0:
-                    self.home[x] = 255, 0, 0
-                elif pos == 5:
-                    self.home[x] = 255, 255, 255
-            self.home.show()
+            self.set_pixels()
+            self.set_relays()
             time.sleep(0.1)
             if end_by is None:
                 return
             elif datetime.datetime.now() >= end_by:
                 break
+    
+    def set_relays(self):
+        offset = int(time.time())
+        num_relays = len(self.home.relays)
+        for i, relay in enumerate(self.home.relays):
+            if offset % num_relays == i:
+                relay.set(False)
+            else:
+                relay.set(True)
+
+    def set_pixels(self):
+        offset = int(time.time() * 3)
+        self.home.clear()
+        for x in range(self.globals.max):
+            if self.home.blacked_out(x):
+                continue
+            pos = (x + offset) % 10
+            if pos == 0:
+                self.home[x] = 255, 0, 0
+            elif pos == 5:
+                self.home[x] = 255, 255, 255
+        self.home.show()
