@@ -8,6 +8,7 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
+        self.timer = 0
 
     def __str__(self):
         return 'Simple Xmas'
@@ -20,13 +21,14 @@ class Animation(object):
             self.set_pixels()
             self.set_relays()
             time.sleep(0.1)
+            self.timer += 1
             if end_by is None:
                 return
             elif datetime.datetime.now() >= end_by:
                 break
     
     def set_relays(self):
-        offset = int(time.time())
+        offset = self.timer // 10
         num_relays = len(self.home.relays)
         for i, relay in enumerate(self.home.relays):
             if offset % num_relays == i:
@@ -35,7 +37,7 @@ class Animation(object):
                 relay.set(True)
 
     def set_pixels(self):
-        offset = int(time.time() * 3)
+        offset = self.timer // 3
         self.home.clear()
         for x in range(self.globals.max):
             if self.home.blacked_out(x):
