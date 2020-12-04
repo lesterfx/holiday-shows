@@ -19,14 +19,17 @@
         "max": 810,
         "ranges": [[17, 810]],
         "relays": [
-            4,
-            3,
             2,
-            17,
-            27,
-            22,
+            3,
+            4,
+            5,
+            6,
             10,
-            14
+            17,
+            19,
+            22,
+            26,
+            27
         ]
     },
     "schedule": {
@@ -118,18 +121,8 @@
             "start": "November 29",
             "end": "December 31",
             "name": "Christmas",
-            "days": ["Friday", "Saturday", "Sunday"],
             "animation": [
                 "xmas1"
-            ]
-        },
-        {
-            "start": "November 29",
-            "end": "December 31",
-            "name": "Christmas Simple",
-            "days": ["Monday", "Tuesday", "Wednesday", "Thursday"],
-            "animation": [
-                "simple_xmas"
             ]
         }
     ],
@@ -197,7 +190,12 @@
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
             "countdown": 10,
             "fps": 24,
-            "relays": 4
+            "relays": 4,
+            "days": [
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ]
         },
         "heartbeat": {
             "module": "image",
