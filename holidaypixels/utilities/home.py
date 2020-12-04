@@ -147,6 +147,7 @@ class Pixel(object):
 
 class Relay(object):
     def __init__(self, pin):
+        self.pin_number = pin
         self.pin = digitalio.DigitalInOut(pin)
         self.pin.direction = digitalio.Direction.OUTPUT
         self.value = None

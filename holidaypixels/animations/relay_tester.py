@@ -16,7 +16,7 @@ class Animation(object):
         self.home.strip.on = False
         while datetime.datetime.now() < end_by:
             for relay in self.home.relays:
-                print(relay.pin)
+                print(relay.pin_number)
                 for _ in range(20):
                     relay.set(True)
                     time.sleep(1)
