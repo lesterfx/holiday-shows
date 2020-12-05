@@ -111,6 +111,7 @@ class Holiday_Pixels(object):
                 settings = self.animations.get(animation, {})
                 animation = settings.get('module', animation)
                 module = importlib.import_module('.' + animation, 'holidaypixels.animations')
+                settings.update(self.settings_overrides)
                 animation = module.Animation(home, self.globals, settings)
                 animations.append(animation)
             while datetime.datetime.now() < until:
@@ -247,6 +248,10 @@ class Holiday_Pixels(object):
             self.calendar.add(entry)
 
     def process_animations(self, animations):
+        if self.args.settings:
+            self.settings_overrides = json.loads(self.args.settings)
+        else:
+        self.settings_overrides = {}
         self.animations = animations
 
     def load_args(self):
@@ -261,6 +266,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--save', help='Where to save the rendered image')
         parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
+        parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
         self.args = parser.parse_args()
         print(self.args)
 
