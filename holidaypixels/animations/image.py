@@ -43,7 +43,7 @@ class Animation(object):
         now = datetime.datetime.now()
         while now <= end_by:
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
-            while now.minute != 0:
+            while now.minute != int(self.settings.minute):
                 print('minute is', now.minute)
                 waiting.main()
                 now = datetime.datetime.now()
