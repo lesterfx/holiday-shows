@@ -19,7 +19,7 @@ class Animation(object):
         self.globals = globals_
         self.settings = settings
         self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/silence.mp3')
-        self.sound = mixer.Sound(self.settings.music)
+        self.sound = mixer.Sound(self.settings['music'])
 
     def __str__(self):
         return 'Image'
