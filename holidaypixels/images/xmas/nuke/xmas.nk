@@ -11,7 +11,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="612"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="430"/>
@@ -22,7 +22,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1">
+            <dock id="" activePageId="Properties.1" focus="true">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
             </dock>
@@ -685,17 +685,17 @@ Crop {
 Dilate {
  size 6
  name Dilate3
- selected true
  xpos -386
  ypos 191
+ disable true
 }
 Transform {
  translate {0 {parent.Dilate3.size}}
  center {0.5 2325}
  name Transform1
- selected true
  xpos -386
  ypos 223
+ disable true
 }
 push $N6fc84c00
 Crop {
@@ -4487,8 +4487,9 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 32
+ version 34
  name Write1
+ selected true
  xpos 899
  ypos 630
 }
