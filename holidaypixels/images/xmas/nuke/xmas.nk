@@ -11,11 +11,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="612"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="430"/>
-                <dock id="" activePageId="DAG.1">
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -621,7 +621,14 @@ Expression {
  addUserKnob {7 threshold l "" +STARTLINE}
  threshold 0.55
 }
-set N541c0c00 [stack 0]
+Rectangle {
+ area {0 0 {width} 30}
+ color 0
+ name Rectangle3
+ xpos -936
+ ypos -13
+}
+set N6fc84c00 [stack 0]
 Crop {
  box {413 0 {box.x+1} {input.height}}
  reformat true
@@ -630,7 +637,7 @@ Crop {
  xpos 164
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {376 0 {box.x+1} {input.height}}
  reformat true
@@ -639,7 +646,7 @@ Crop {
  xpos 54
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {340 0 {box.x+1} {input.height}}
  reformat true
@@ -648,7 +655,7 @@ Crop {
  xpos -56
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {306 0 {box.x+1} {input.height}}
  reformat true
@@ -657,7 +664,7 @@ Crop {
  xpos -166
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {269 0 {box.x+1} {input.height}}
  reformat true
@@ -666,7 +673,7 @@ Crop {
  xpos -276
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {233 0 {box.x+1} {input.height}}
  reformat true
@@ -675,7 +682,21 @@ Crop {
  xpos -386
  ypos 167
 }
-push $N541c0c00
+Dilate {
+ size 10
+ name Dilate3
+ xpos -386
+ ypos 191
+}
+Transform {
+ translate {0 10}
+ center {0.5 2325}
+ name Transform1
+ xpos -386
+ ypos 223
+}
+set N6fc84400 [stack 0]
+push $N6fc84c00
 Crop {
  box {197 0 {box.x+1} {input.height}}
  reformat true
@@ -684,7 +705,7 @@ Crop {
  xpos -496
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {161 0 {box.x+1} {input.height}}
  reformat true
@@ -693,7 +714,7 @@ Crop {
  xpos -606
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {126 0 {box.x+1} {input.height}}
  reformat true
@@ -702,7 +723,7 @@ Crop {
  xpos -716
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {87 0 {box.x+1} {input.height}}
  reformat true
@@ -711,7 +732,7 @@ Crop {
  xpos -826
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {55 0 {box.x+1} {input.height}}
  reformat true
@@ -720,7 +741,7 @@ Crop {
  xpos -936
  ypos 167
 }
-push $N541c0c00
+push $N6fc84c00
 Crop {
  box {16 0 {box.x+1} {input.height}}
  reformat true
@@ -4466,11 +4487,10 @@ Write {
  checkHashOnRead false
  version 29
  name Write1
- selected true
  xpos 899
  ypos 630
 }
-push $N1a026b00
+push $N6fc84400
 Viewer {
  inputs 2
  frame_range 1-42
