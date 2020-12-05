@@ -49,7 +49,10 @@ class Animation(object):
                 waiting.main()
                 now = datetime.datetime.now()
             self.activate_relays(False)
-            self.present(end_by)
+            try:
+                self.present(end_by)
+            finally:
+                self.sound.stop()
             time.sleep(30)
             self.activate_relays(True)
             now = datetime.datetime.now()

@@ -92,9 +92,17 @@ class Holiday_Pixels(object):
             self.run(event_end, *event.animation)
 
     def demo(self, *animation):
-        if not self.args.minutes and not self.args.seconds:
-            self.args.minutes = 1
-        self.run(datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes, seconds=self.args.seconds), *animation)
+        if self.args.until:
+            hour, minute = map(int, self.args.until.split(':'))
+            until = datetime.datetime.now()
+            until.hour = hour
+            until.minute = minute
+            until.second = 0
+        else:
+            if not self.args.minutes and not self.args.seconds:
+                self.args.minutes = 1
+            until = datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes, seconds=self.args.seconds)
+        self.run(until, *animation)
 
     def run(self, until, *animation_names):
         animations = []
@@ -246,6 +254,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--reset', const=True, choices=['force'], nargs='?', default=False, help='Create a sample config file if one does not exist')
         parser.add_argument('--config', default=self.config_path, help='Path to config file')
         parser.add_argument('--demo', help='Run named animation immediately')
+        parser.add_argument('--until', default='', help='When to stop demo')
         parser.add_argument('--minutes', default=0, type=int, help='How many minutes to run demo')
         parser.add_argument('--seconds', default=0, type=int, help='How many seconds to run demo')
         parser.add_argument('--display', choices=['gpio', 'console', 'image'], default='gpio', help='Where to render the animation')
