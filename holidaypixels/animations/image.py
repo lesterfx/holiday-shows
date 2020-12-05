@@ -3,16 +3,19 @@
 import datetime
 import os
 from random import randint
-import socket
+# import socket
 import time
 
 from PIL import Image
+from pygame import mixer
 
 from ..utilities.home import Color
 from . import simple_xmas
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
+        mixer.init()
+        self.sound = mixer.Sound('xmas1.mp3')
         self.home = home
         self.globals = globals_
         self.settings = settings
@@ -74,14 +77,15 @@ class Animation(object):
         if countdown:
             self.home.clear()
             self.home.show()
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("192.168.1.222", 4321))
+            # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # s.connect(("192.168.1.222", 4321))
             for i in range(countdown):
                 print(countdown-i)
                 time.sleep(1)
-            print('go!')
-            s.send(b'hello')
-            s.close()
+            # print('go!')
+            # s.send(b'hello')
+            self.sound.play()
+            # s.close()
 
         epoch = time.time()
         while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):

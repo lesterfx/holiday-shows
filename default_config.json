@@ -19,19 +19,18 @@
         "max": 810,
         "ranges": [[17, 810]],
         "relays": [
-            2,
-            3,
-            21,
-            4,
+            19,
             5,
             6,
-            10,
-            14,
-            17,
-            19,
+            3,
             22,
-            26,
-            27
+            10,
+            2,
+            4,
+            17,
+            14,
+            27,
+            21
         ]
     },
     "schedule": {
@@ -192,7 +191,7 @@
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
             "countdown": 10,
             "fps": 24,
-            "relays": 4,
+            "relays": 12,
             "days": [
                 "Friday",
                 "Saturday",
