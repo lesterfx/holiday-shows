@@ -49,7 +49,7 @@ class Animation(object):
             while True:
                 now = datetime.datetime.now()
                 if now.weekday() not in days:
-                    print('Keeping it simple today')
+                    print(f'Keeping it simple today ({now.weekday()} not in {days})')
                 elif now.minute != waitfor_minute:
                     print(f'minute is {now.minute}. waiting for {waitfor_minute}')
                 else:
