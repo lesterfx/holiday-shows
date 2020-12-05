@@ -18,7 +18,7 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        self.silence = mixer.Sound('silence.mp3')
+        self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/silence.mp3')
         self.sound = mixer.Sound(self.settings.music)
 
     def __str__(self):
