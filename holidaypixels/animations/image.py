@@ -41,11 +41,11 @@ class Animation(object):
 
         self.activate_relays()
         now = datetime.datetime.now()
-        print('waiting until minute', int(self.settings['minute']))
+        waitfor_minute = int(self.settings['minute'])
         while now <= end_by:
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
-            while now.minute != int(self.settings['minute']):
-                print('minute is', now.minute)
+            while now.minute != waitfor_minute:
+                print(f'minute is {now.minute}. waiting for {waitfor_minute}')
                 waiting.main()
                 now = datetime.datetime.now()
             self.activate_relays(False)
@@ -86,6 +86,7 @@ class Animation(object):
             # print('go!')
             # s.send(b'hello')
             self.sound.play()
+            time.sleep(0.1)
             # s.close()
 
         epoch = time.time()
