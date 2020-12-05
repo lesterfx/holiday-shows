@@ -683,13 +683,13 @@ Crop {
  ypos 167
 }
 Dilate {
- size 10
+ size 7
  name Dilate3
  xpos -386
  ypos 191
 }
 Transform {
- translate {0 10}
+ translate {0 {parent.Dilate3.size}}
  center {0.5 2325}
  name Transform1
  xpos -386
@@ -4485,7 +4485,7 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 29
+ version 30
  name Write1
  xpos 899
  ypos 630
