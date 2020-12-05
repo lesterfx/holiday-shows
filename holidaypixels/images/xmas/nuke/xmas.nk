@@ -11,11 +11,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="612"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="430"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -683,7 +683,7 @@ Crop {
  ypos 167
 }
 Dilate {
- size 7
+ size 6
  name Dilate3
  xpos -386
  ypos 191
@@ -4485,8 +4485,9 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 30
+ version 31
  name Write1
+ selected true
  xpos 899
  ypos 630
 }
