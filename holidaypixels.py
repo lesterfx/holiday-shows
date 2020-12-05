@@ -94,10 +94,7 @@ class Holiday_Pixels(object):
     def demo(self, *animation):
         if self.args.until:
             hour, minute = map(int, self.args.until.split(':'))
-            until = datetime.datetime.now()
-            until.hour = hour
-            until.minute = minute
-            until.second = 0
+            until = datetime.datetime.now().replace(hour=hour, minute=minute, second=0)
         else:
             if not self.args.minutes and not self.args.seconds:
                 self.args.minutes = 1
