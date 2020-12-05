@@ -251,7 +251,7 @@ class Holiday_Pixels(object):
         if self.args.settings:
             self.settings_overrides = json.loads(self.args.settings)
         else:
-        self.settings_overrides = {}
+            self.settings_overrides = {}
         self.animations = animations
 
     def load_args(self):
