@@ -139,7 +139,7 @@ Read {
  file xmas/blender/xmas.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 32
+ version 33
  name Read2
  xpos 557
  ypos -435
@@ -685,6 +685,7 @@ Crop {
 Dilate {
  size 6
  name Dilate3
+ selected true
  xpos -386
  ypos 191
 }
@@ -692,10 +693,10 @@ Transform {
  translate {0 {parent.Dilate3.size}}
  center {0.5 2325}
  name Transform1
+ selected true
  xpos -386
  ypos 223
 }
-set N6fc84400 [stack 0]
 push $N6fc84c00
 Crop {
  box {197 0 {box.x+1} {input.height}}
@@ -1509,6 +1510,7 @@ push $N6fc85400
   ypos -34
  }
 end_group
+set N1a028680 [stack 0]
 Group {
  inputs 2
  name stack4
@@ -4485,13 +4487,12 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 31
+ version 32
  name Write1
- selected true
  xpos 899
  ypos 630
 }
-push $N6fc84400
+push $N1a028680
 Viewer {
  inputs 2
  frame_range 1-42
