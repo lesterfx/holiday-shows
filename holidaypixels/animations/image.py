@@ -41,6 +41,7 @@ class Animation(object):
 
         self.activate_relays()
         now = datetime.datetime.now()
+        print('waiting until minute', int(self.settings['minute']):)
         while now <= end_by:
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while now.minute != int(self.settings['minute']):
