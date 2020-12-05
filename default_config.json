@@ -190,6 +190,7 @@
         "xmas1": {
             "module": "image",
             "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
+            "music": "/home/pi/xmas.mp3",
             "countdown": 10,
             "fps": 24,
             "relays": 12,

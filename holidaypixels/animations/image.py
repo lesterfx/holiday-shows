@@ -15,10 +15,11 @@ from . import simple_xmas
 class Animation(object):
     def __init__(self, home, globals_, settings):
         mixer.init()
-        self.sound = mixer.Sound('xmas1.mp3')
         self.home = home
         self.globals = globals_
         self.settings = settings
+        self.silence = mixer.Sound('silence.mp3')
+        self.sound = mixer.Sound(self.settings.music)
 
     def __str__(self):
         return 'Image'
@@ -42,12 +43,18 @@ class Animation(object):
         self.activate_relays()
         now = datetime.datetime.now()
         waitfor_minute = int(self.settings['minute'])
+        days = set(self.settings['days'])
         while now <= end_by:
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
-            while now.minute != waitfor_minute:
-                print(f'minute is {now.minute}. waiting for {waitfor_minute}')
-                waiting.main()
+            while True:
                 now = datetime.datetime.now()
+                if now.weekday() not in days:
+                    print('Keeping it simple today')
+                elif now.minute != waitfor_minute:
+                    print(f'minute is {now.minute}. waiting for {waitfor_minute}')
+                else:
+                    break
+                waiting.main()
             self.activate_relays(False)
             try:
                 self.present(end_by)
@@ -83,6 +90,7 @@ class Animation(object):
             self.home.show()
             # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # s.connect(("192.168.1.222", 4321))
+            self.silence.play()
             for i in range(countdown):
                 print(countdown-i)
                 time.sleep(1)
