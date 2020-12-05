@@ -11,7 +11,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="612"/>
-                <dock id="" activePageId="Viewer.1">
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="430"/>
@@ -22,7 +22,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1" focus="true">
+            <dock id="" activePageId="Properties.1">
                 <page id="Properties.1"/>
                 <page id="uk.co.thefoundry.backgroundrenderview.1"/>
             </dock>
@@ -139,7 +139,7 @@ Read {
  file xmas/blender/xmas.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 33
+ version 36
  name Read2
  xpos 557
  ypos -435
@@ -595,7 +595,7 @@ Reformat {
  ypos 277
 }
 Grade {
- white 0.6
+ white 0.5
  name Grade10
  xpos 557
  ypos 301
@@ -1510,7 +1510,6 @@ push $N6fc85400
   ypos -34
  }
 end_group
-set N1a028680 [stack 0]
 Group {
  inputs 2
  name stack4
@@ -4487,13 +4486,12 @@ Write {
  file_type png
  use_limit true
  checkHashOnRead false
- version 34
+ version 36
  name Write1
- selected true
  xpos 899
  ypos 630
 }
-push $N1a028680
+push $N5750bc00
 Viewer {
  inputs 2
  frame_range 1-42

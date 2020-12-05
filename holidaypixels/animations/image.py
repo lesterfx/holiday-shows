@@ -89,7 +89,7 @@ class Animation(object):
             # print('go!')
             # s.send(b'hello')
             self.sound.play()
-            time.sleep(0.1)
+            time.sleep(self.globals.audio_delay)
             # s.close()
 
         epoch = time.time()

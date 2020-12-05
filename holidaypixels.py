@@ -18,7 +18,7 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relays', 'strip'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relays', 'strip', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 
@@ -180,13 +180,15 @@ class Holiday_Pixels(object):
         strip = self.process_strip(globals_['strip'])
         black = globals_['black']
         max_ = globals_['max']
+        audio_delay = globals_['audio_delay']
         self.globals = GlobalPrefs(
             corners=corners,
             ranges=ranges,
             max=max_,
             black=black,
             relays=relays,
-            strip=strip
+            strip=strip,
+            audio_delay=audio_delay
         )
 
     def process_strip(self, strip):
