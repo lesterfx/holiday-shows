@@ -194,7 +194,7 @@
             "countdown": 10,
             "fps": 24,
             "relays": 12,
-            "minute": 0,
+            "minute": 1,
             "days": [
                 "Friday",
                 "Saturday",
