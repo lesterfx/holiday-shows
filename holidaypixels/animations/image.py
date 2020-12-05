@@ -48,7 +48,7 @@ class Animation(object):
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             while True:
                 now = datetime.datetime.now()
-                if now.weekday() not in days:
+                if now.strftime('%A') not in days:
                     print(f'Keeping it simple today ({now.weekday()} not in {days})')
                 elif now.minute != waitfor_minute:
                     print(f'minute is {now.minute}. waiting for {waitfor_minute}')
