@@ -40,7 +40,7 @@
             -122.4
         ],
         "start_time": "sunset",
-        "sunset_offset": "-01:00",
+        "sunset_offset": "-00:40",
         "end_time": "21:59",
         "dusk_brightness": 255,
         "dusk_duration": "02:00"
