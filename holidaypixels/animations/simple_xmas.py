@@ -17,7 +17,6 @@ class Animation(object):
         while datetime.datetime.now() < end_by:
             self.set_pixels()
             self.set_relays()
-            time.sleep(0.01)
             self.timer += 1
     
     def set_relays(self):
