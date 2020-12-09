@@ -20,7 +20,7 @@ class Animation(object):
         while True:
             self.set_pixels()
             self.set_relays()
-            time.sleep(0.1)
+            time.sleep(0.01)
             self.timer += 1
             if end_by is None:
                 return
@@ -37,7 +37,7 @@ class Animation(object):
                 relay.set(True)
 
     def set_pixels(self):
-        offset = self.timer // 10
+        offset = self.timer // 3
         self.home.clear()
         for x in range(self.globals.max):
             if self.home.blacked_out(x):
