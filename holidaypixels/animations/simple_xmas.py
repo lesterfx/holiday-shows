@@ -46,5 +46,5 @@ class Animation(object):
             if pos == 0:
                 self.home[x] = 255, 0, 0
             elif pos == 5:
-                self.home[x] = 255, 255, 255
+                self.home[x] = 0, 255, 0
         self.home.show()
