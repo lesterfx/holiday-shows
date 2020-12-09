@@ -45,25 +45,22 @@ class Animation(object):
         waitfor_minute = int(self.settings['minute'])
         days = set(self.settings['days'])
         while True:
+            self.activate_relays(True)
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
-            while True:
-                now = datetime.datetime.now()
-                if now.strftime('%A') not in days:
-                    print(f'Keeping it simple today ({now.weekday()} not in {days})')
-                elif now.minute != waitfor_minute:
-                    print(f'minute is {now.minute}. waiting for {waitfor_minute}')
-                elif now > end_by:
-                    return
-                else:
-                    break
-                waiting.main()
+            if now.strftime('%A') in days:
+                until = now.replace(minute=waitfor_minute, hour=now.hour, second=0, microsecond=0)
+                if until < now:
+                    until += datetime.timedelta(hours=1)
+                waiting.main(until)
+                return
+            else:
+                waiting.main(end_by)
             self.activate_relays(False)
             try:
                 self.present(end_by)
             finally:
                 self.sound.stop()
             time.sleep(30)
-            self.activate_relays(True)
 
     def activate_relays(self, active=True):
         for relay in self.home.relays:

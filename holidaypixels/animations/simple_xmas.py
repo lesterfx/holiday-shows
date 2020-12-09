@@ -13,19 +13,12 @@ class Animation(object):
     def __str__(self):
         return 'Simple Xmas'
 
-    def main(self, end_by=None):
-        if end_by:
-            for relay in self.home.relays:
-                relay.set(True)
-        while True:
+    def main(self, end_by):
+        while datetime.datetime.now() < end_by:
             self.set_pixels()
             self.set_relays()
             time.sleep(0.01)
             self.timer += 1
-            if end_by is None:
-                return
-            elif datetime.datetime.now() >= end_by:
-                break
     
     def set_relays(self):
         offset = self.timer // 30
