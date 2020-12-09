@@ -37,14 +37,14 @@ class Animation(object):
                 relay.set(True)
 
     def set_pixels(self):
-        offset = self.timer // 3
+        offset = self.timer // 10
         self.home.clear()
         for x in range(self.globals.max):
             if self.home.blacked_out(x):
                 continue
-            pos = (x + offset) % 10
+            pos = (x + offset) % 30
             if pos == 0:
                 self.home[x] = 255, 0, 0
-            elif pos == 5:
+            elif pos == 15:
                 self.home[x] = 0, 255, 0
         self.home.show()
