@@ -51,9 +51,11 @@ class Animation(object):
                 until = now.replace(minute=waitfor_minute, hour=now.hour, second=0, microsecond=0)
                 if until < now:
                     until += datetime.timedelta(hours=1)
+                print('simple xmas until', until)
                 waiting.main(until)
                 return
             else:
+                print('simple xmas until night time:', end_by)
                 waiting.main(end_by)
             self.activate_relays(False)
             try:
