@@ -28,7 +28,7 @@ class Animation(object):
                 break
     
     def set_relays(self):
-        offset = self.timer // 10
+        offset = self.timer // 30
         num_relays = len(self.home.relays)
         for i, relay in enumerate(self.home.relays):
             if offset % num_relays == i:
@@ -37,7 +37,7 @@ class Animation(object):
                 relay.set(True)
 
     def set_pixels(self):
-        offset = self.timer // 3
+        offset = self.timer // 2
         self.home.clear()
         for x in range(self.globals.max):
             if self.home.blacked_out(x):
