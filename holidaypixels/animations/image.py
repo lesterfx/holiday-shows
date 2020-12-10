@@ -53,10 +53,10 @@ class Animation(object):
                     until += datetime.timedelta(hours=1)
                 print('simple xmas until', until)
                 waiting.main(until)
-                return
             else:
                 print('simple xmas until night time:', end_by)
                 waiting.main(end_by)
+                return
             self.activate_relays(False)
             try:
                 self.present(end_by)
