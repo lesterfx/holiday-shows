@@ -41,10 +41,10 @@ class Animation(object):
         self.validate_relays()
 
         self.activate_relays()
-        now = datetime.datetime.now()
         waitfor_minute = int(self.settings['minute'])
         days = set(self.settings['days'])
         while True:
+            now = datetime.datetime.now()
             self.activate_relays(True)
             waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
             if now.strftime('%A') in days:
