@@ -268,6 +268,12 @@ push $N1eb2c800
   ypos -34
  }
 end_group
+Grade {
+ white 0.25
+ name Grade12
+ xpos 899
+ ypos 135
+}
 push $N582e3c00
 Crop {
  box {550 0 979 {input.height}}
@@ -595,7 +601,7 @@ Reformat {
  ypos 225
 }
 Grade {
- white 0.5
+ white 0.25
  name Grade10
  xpos 557
  ypos 249
@@ -603,13 +609,13 @@ Grade {
 set N15e6f000 [stack 0]
 Rectangle {
  replace true
- area {-402 438 1536 617}
+ area {-402 -78 1536 617}
  name Rectangle4
  xpos 418
  ypos 249
 }
 Rectangle {
- area {-402 -26 1536 155}
+ area {-402 1070 1536 1642}
  name Rectangle5
  xpos 418
  ypos 273
@@ -617,13 +623,14 @@ Rectangle {
 Rectangle {
  area {-402 1822 1536 2842}
  name Rectangle6
+ selected true
  xpos 418
  ypos 297
 }
 push $N15e6f000
 Grade {
  inputs 1+1
- white 0.5
+ white 0.7
  name Grade11
  xpos 557
  ypos 297
@@ -4516,7 +4523,6 @@ Write {
  checkHashOnRead false
  version 38
  name Write1
- selected true
  xpos 899
  ypos 630
 }
