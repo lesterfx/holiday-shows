@@ -49,12 +49,15 @@ class Animation(object):
         self.validate_relays()
 
         waitfor_minute = int(self.settings['minute'])
-        days = set(self.settings['days'])
+        if 'days' in self.settings:
+            days = set(self.settings['days'])
+        else:
+            days = None
         while True:
             now = datetime.datetime.now().replace(second=0, microsecond=0)
             self.activate_relays(True)
             waiting = waiting_module.Animation(self.home, self.globals, self.settings)
-            if now.strftime('%A') in days:
+            if days is None or now.strftime('%A') in days:
                 until = now.replace(minute=waitfor_minute, hour=now.hour, second=0, microsecond=0)
                 if until < now:
                     until += datetime.timedelta(hours=1)
