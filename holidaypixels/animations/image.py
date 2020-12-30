@@ -67,14 +67,14 @@ class Animation(object):
                     return
                 else:
                     print(animation, 'until', until)
-                    waiting.main(until)
+                    waiting.main(until - datetime.timedelta(seconds=2))
             else:
                 print(animation, 'until night time:', end_by)
                 waiting.main(end_by)
                 return
             self.activate_relays(False)
             try:
-                self.present(end_by)
+                self.present(end_by, epoch=until.timestamp())
             finally:
                 self.sound.stop()
             time.sleep(30)
