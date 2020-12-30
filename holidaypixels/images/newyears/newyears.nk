@@ -1,0 +1,7875 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/newyears.png" format:"810 21600 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 21600" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="0" w="1792" h="1120" fullscreen="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="644"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                    <page id="Viewer.2"/>
+                    <page id="Viewer.3"/>
+                </dock>
+                <split size="451"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                    <page id="DAG.3"/>
+                    <page id="DAG.2"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/newyears/newyears.nk
+ project_directory "\[python \{nuke.script_directory()\}]/../../"
+ frame 15369
+ last_frame 21600
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 1054
+ ypos 638
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {-height+frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Reformat {
+  type "to box"
+  box_width {{input.width}}
+  box_height 10
+  box_fixed true
+  resize none
+  center false
+  name Reformat1
+  selected true
+  xpos 237
+  ypos 161
+ }
+ Rectangle {
+  invert true
+  area {0 0 {width} 1}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 185
+ }
+set N5ce4ac00 [stack 0]
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+push $N5ce4ac00
+ Viewer {
+  frame_range 1-841
+  frame_range_lock true
+  name Viewer1
+  xpos 347
+  ypos 161
+ }
+end_group
+Read {
+ inputs 0
+ file_type png
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
+ format "814 4650 0 0 814 4650 1 "
+ origset true
+ raw true
+ name Read3
+ xpos 1151
+ ypos 423
+}
+NoOp {
+ inputs 0
+ name NoOp2
+ xpos 2879
+ ypos 1361
+ addUserKnob {20 User}
+ addUserKnob {7 repeat}
+ repeat 100
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "80 21600 0 0 80 21600 1 secondfloor"
+ name Constant4
+ xpos 2480
+ ypos 1275
+}
+set Nbe6ebc00 [stack 0]
+Expression {
+ temp_name0 show
+ temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_name2 dy
+ temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_name3 value
+ temp_expr3 "show ? dy/80 : 0"
+ expr0 value+r
+ expr1 value+g
+ expr2 value+b
+ name Expression9
+ xpos 2521
+ ypos 1468
+ addUserKnob {20 User}
+ addUserKnob {3 offset}
+ offset 7165
+ addUserKnob {3 repeat}
+ repeat 80
+}
+Noise {
+ size {2 30}
+ zoffset 1
+ octaves 2
+ gain 1.6
+ gamma 2
+ rotate 30
+ center {1024 778}
+ color 0
+ name Noise6
+ xpos 2521
+ ypos 1492
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat13
+ xpos 2521
+ ypos 1542
+}
+push $Nbe6ebc00
+Rectangle {
+ area {0 0 80 7200}
+ name Rectangle7
+ xpos 2567
+ ypos 1405
+}
+set Nf1b58c00 [stack 0]
+push $Nbe6ebc00
+Expression {
+ temp_name0 minute
+ temp_expr0 (height-y)/24/60
+ temp_name1 pixels
+ temp_expr1 "(10 - minute)*6"
+ temp_name2 show
+ temp_expr2 (height-y-x+pixels)/24/60*6>=1
+ channel0 rgba
+ expr0 "x < pixels && show"
+ channel1 {-rgba.red -rgba.green -rgba.blue}
+ expr1 show
+ channel2 {-rgba.red -rgba.green -rgba.blue}
+ channel3 {none none none -rgba.alpha}
+ name Expression2
+ xpos 2614
+ ypos 1299
+}
+set N25a2800 [stack 0]
+Transform {
+ translate {0 1}
+ center {1024 778}
+ name Transform11
+ xpos 2750
+ ypos 1299
+}
+push $N25a2800
+Merge2 {
+ inputs 2
+ operation difference
+ name Merge27
+ xpos 2750
+ ypos 1323
+}
+GodRays {
+ translate {-64 64}
+ steps 6
+ max true
+ name GodRays1
+ xpos 2750
+ ypos 1347
+}
+push $N25a2800
+Merge2 {
+ inputs 2
+ operation stencil
+ name Merge28
+ xpos 2614
+ ypos 1351
+}
+set Na4e2d000 [stack 0]
+Expression {
+ temp_name0 show
+ temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_name2 dy
+ temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_name3 value
+ temp_expr3 "show ? dy/80 : 0"
+ expr0 value+r
+ expr1 value+g
+ expr2 value+b
+ name Expression7
+ xpos 2715
+ ypos 1472
+ addUserKnob {20 User}
+ addUserKnob {3 offset}
+ offset 7180
+ addUserKnob {3 repeat}
+ repeat 110
+}
+Noise {
+ inputs 1+1
+ size {2 30}
+ zoffset 3
+ octaves 2
+ gain 1.6
+ gamma 2
+ rotate 30
+ center {1024 778}
+ color 0
+ name Noise8
+ xpos 2715
+ ypos 1496
+}
+Group {
+ inputs 2
+ name stack17
+ xpos 2614
+ ypos 1622
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set Nfe8bbc00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $Nfe8bbc00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+set Na758f700 [stack 0]
+push $Na758f700
+push $Nbe6ebc00
+Expression {
+ temp_name0 show
+ temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_name2 dy
+ temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_name3 value
+ temp_expr3 "show ? dy/80 : 0"
+ expr0 value+r
+ expr1 value+g
+ expr2 value+b
+ name Expression10
+ xpos 2415
+ ypos 1468
+ addUserKnob {20 User}
+ addUserKnob {3 offset}
+ offset 7195
+ addUserKnob {3 repeat}
+ repeat 100
+}
+Noise {
+ size {2 30}
+ octaves 2
+ gain 1.6
+ gamma 2
+ rotate 30
+ center {1024 778}
+ color 0
+ name Noise5
+ xpos 2415
+ ypos 1492
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat11
+ xpos 2415
+ ypos 1542
+}
+push $Nf1b58c00
+push $Na4e2d000
+Expression {
+ temp_name0 show
+ temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_name2 dy
+ temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_name3 value
+ temp_expr3 "show ? dy/80 : 0"
+ expr0 value+r
+ expr1 value+g
+ expr2 value+b
+ name Expression8
+ xpos 2614
+ ypos 1472
+ addUserKnob {20 User}
+ addUserKnob {3 offset}
+ offset 7210
+ addUserKnob {3 repeat}
+ repeat 90
+}
+Noise {
+ inputs 1+1
+ size {2 30}
+ zoffset 2
+ octaves 2
+ gain 1.6
+ gamma 2
+ rotate 30
+ center {1024 778}
+ color 0
+ name Noise7
+ xpos 2614
+ ypos 1496
+}
+Group {
+ inputs 2
+ name stack18
+ xpos 2513
+ ypos 1623
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N96674800 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N96674800
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Reformat {
+ type scale
+ flop true
+ black_outside true
+ name Reformat12
+ xpos 2513
+ ypos 1714
+}
+Group {
+ inputs 2
+ name stack16
+ xpos 2614
+ ypos 1771
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N199f0c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N199f0c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Grade {
+ white {0.6 0.3 0 0.6}
+ name Grade22
+ xpos 2614
+ ypos 1795
+}
+CheckerBoard2 {
+ inputs 0
+ format "450 4650 0 0 450 4650 1 "
+ boxsize 240
+ color0 0
+ color1 0
+ color2 0
+ color3 0
+ linecolor {0 0 1 1}
+ linewidth {0 1}
+ centerlinecolor 0
+ centerlinewidth 0
+ name CheckerBoard1
+ xpos 1834
+ ypos 938
+}
+CheckerBoard2 {
+ inputs 0
+ format "450 4650 0 0 450 4650 1 "
+ boxsize 24
+ color0 0
+ color1 0
+ color2 0
+ color3 0
+ linecolor {1 1 0 1}
+ linewidth {0 1}
+ centerlinecolor 0
+ centerlinewidth 0
+ name CheckerBoard2
+ xpos 1727
+ ypos 961
+}
+Merge2 {
+ inputs 2
+ name Merge5
+ xpos 1834
+ ypos 1010
+}
+set Naf1b0000 [stack 0]
+Ramp {
+ replace true
+ p0 {450 100}
+ p1 {433 100}
+ type smooth0
+ name Ramp8
+ xpos 2051
+ ypos 1195
+}
+set Nde97fc00 [stack 0]
+Grade {
+ channels rgba
+ gamma 5
+ name Grade18
+ xpos 1985
+ ypos 1267
+}
+push $Naf1b0000
+Transform {
+ translate {0 -117}
+ center {225 2325}
+ name Transform3
+ xpos 1834
+ ypos 1090
+}
+set Nb6c27c00 [stack 0]
+FilterErode {
+ channels rgba
+ size {0 -6}
+ filter triangle
+ name FilterErode4
+ xpos 1644
+ ypos 1176
+}
+Dot {
+ name Dot2
+ xpos 1678
+ ypos 1291
+}
+Grade {
+ channels rgba
+ gamma 0.27
+ name Grade19
+ xpos 1644
+ ypos 1309
+}
+push $Nb6c27c00
+Dilate {
+ size {0 6}
+ name Dilate4
+ xpos 1732
+ ypos 1203
+}
+Transform {
+ translate {0 6}
+ center {225 2325}
+ name Transform6
+ xpos 1732
+ ypos 1235
+}
+push $Nde97fc00
+Grade {
+ channels rgba
+ gamma 5
+ name Grade17
+ xpos 1944
+ ypos 1195
+}
+push $Nb6c27c00
+Grade {
+ inputs 1+1
+ white 4
+ invert_mask true
+ name Grade14
+ xpos 1834
+ ypos 1195
+}
+FilterErode {
+ channels rgba
+ size {0 -8}
+ filter triangle
+ name FilterErode3
+ xpos 1834
+ ypos 1243
+}
+Grade {
+ blackpoint 1
+ white_clamp true
+ name Grade15
+ xpos 1834
+ ypos 1267
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge2
+ xpos 1834
+ ypos 1291
+}
+Merge2 {
+ inputs 2
+ operation mask
+ name Merge3
+ xpos 1834
+ ypos 1315
+}
+Grade {
+ inputs 1+1
+ white 0
+ name Grade16
+ xpos 1834
+ ypos 1339
+}
+Transform {
+ translate {-130 0}
+ scale {-1 1}
+ center {425 2325}
+ name Transform8
+ xpos 1834
+ ypos 1363
+}
+set Na3ef2400 [stack 0]
+Shuffle {
+ red green
+ blue green
+ name Shuffle3
+ xpos 1801
+ ypos 1423
+}
+Grade {
+ white {0.6 0.3 0 0.6}
+ name Grade21
+ xpos 1801
+ ypos 1447
+}
+push $Na3ef2400
+Shuffle {
+ red blue
+ green blue
+ name Shuffle2
+ xpos 1893
+ ypos 1422
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge26
+ xpos 1837
+ ypos 1487
+}
+Crop {
+ box {0 40 450 1507}
+ name Crop26
+ xpos 1837
+ ypos 1511
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "429 21600 0 0 429 21600 1 firstfloor"
+ name Constant2
+ xpos 1549
+ ypos -925
+}
+Crop {
+ box {0 0 450 450}
+ reformat true
+ crop false
+ name Crop23
+ xpos 1549
+ ypos -853
+ disable true
+}
+Crop {
+ box {0 -450 979 440}
+ name Crop25
+ xpos 1549
+ ypos -829
+}
+Radial {
+ cliptype none
+ replace true
+ area {0 -450 979 440}
+ softness 0
+ color {0 0 0 1}
+ name Radial1
+ xpos 1549
+ ypos -765
+}
+Grade {
+ channels rgba
+ whitepoint 0.86
+ white_clamp true
+ name Grade13
+ xpos 1549
+ ypos -741
+}
+Blur {
+ size {0 29}
+ name Blur8
+ xpos 1549
+ ypos -717
+ disable true
+}
+AdjBBox {
+ name AdjBBox1
+ xpos 1549
+ ypos -685
+}
+NoOp {
+ name NoOp1
+ xpos 1549
+ ypos -661
+ addUserKnob {20 User}
+ addUserKnob {12 offset}
+ offset {-4 24}
+ addUserKnob {12 position l "starting position"}
+ position {410 0}
+}
+Group {
+ name Group21
+ label "\[value color]"
+ xpos 1549
+ ypos -637
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N5ce61c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N95880000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N95880000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N5ce61c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N95880000
+ Viewer {
+  frame 15369
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group1
+ label "\[value color]"
+ xpos 1549
+ ypos -605
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ndfa12000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Ndfa12800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Ndfa12800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ndfa12000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nea447c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nea447c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group2
+ label "\[value color]"
+ xpos 1549
+ ypos -573
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nfe1c6000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N9fa22000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N9fa22000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nfe1c6000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N18f91000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N18f91000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group3
+ label "\[value color]"
+ xpos 1549
+ ypos -541
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N4e6fcc00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N51277c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N51277c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N4e6fcc00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N3f50400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N3f50400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group4
+ label "\[value color]"
+ xpos 1549
+ ypos -509
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N2739800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Ndea14000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Ndea14000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N2739800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nded85400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nded85400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group5
+ label "\[value color]"
+ xpos 1549
+ ypos -477
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nfcab7000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nea608000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nea608000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nfcab7000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nb79de800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nb79de800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group6
+ label "\[value color]"
+ xpos 1549
+ ypos -445
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nb7775800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Na9d5c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Na9d5c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nb7775800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ne5d2b800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ne5d2b800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group7
+ label "\[value color]"
+ xpos 1549
+ ypos -413
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N19a04c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Neee1400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Neee1400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N19a04c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ne166000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ne166000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group8
+ label "\[value color]"
+ xpos 1549
+ ypos -381
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nede55000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nb6aa8000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nb6aa8000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nede55000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N4ba6400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N4ba6400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group9
+ label "\[value color]"
+ xpos 1549
+ ypos -349
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N7b07c400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N8e9f7c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N8e9f7c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N7b07c400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N2739400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N2739400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group10
+ label "\[value color]"
+ xpos 1549
+ ypos -317
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf98bec00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nff408400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nff408400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf98bec00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nff408400
+ Viewer {
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group11
+ label "\[value color]"
+ xpos 1549
+ ypos -285
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nedd0e400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N7f59b400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N7f59b400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nedd0e400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nc7257800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nc7257800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group12
+ label "\[value color]"
+ xpos 1549
+ ypos -253
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf17b8800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nfeab3c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nfeab3c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf17b8800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nad60d800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nad60d800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group13
+ label "\[value color]"
+ xpos 1549
+ ypos -221
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Necd12800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N30627000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N30627000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Necd12800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nca666c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nca666c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group14
+ label "\[value color]"
+ xpos 1549
+ ypos -189
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf86e9800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nde992000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nde992000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf86e9800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Na7bb2800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Na7bb2800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group15
+ label "\[value color]"
+ xpos 1549
+ ypos -157
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N14788000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf9df0000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf9df0000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N14788000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nfe1c6400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nfe1c6400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group16
+ label "\[value color]"
+ xpos 1549
+ ypos -125
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nedf86000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nede54000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nede54000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nedf86000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Naae70000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Naae70000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group17
+ label "\[value color]"
+ xpos 1549
+ ypos -93
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N3f51000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N1e954000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N1e954000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N3f51000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N9d6bac00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N9d6bac00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group18
+ label "\[value color]"
+ xpos 1549
+ ypos -61
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Na9cec00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nb6c30400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nb6c30400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Na9cec00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N51276000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N51276000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group19
+ label "\[value color]"
+ xpos 1549
+ ypos -29
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf5e48400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N8bed400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N8bed400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf5e48400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N14787400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N14787400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group20
+ label "\[value color]"
+ xpos 1549
+ ypos 3
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nb65bac00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N30d400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N30d400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nb65bac00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N30d400
+ Viewer {
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group22
+ label "\[value color]"
+ xpos 1549
+ ypos 35
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N2738800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Na158b000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Na158b000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N2738800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nd272c800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nd272c800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group23
+ label "\[value color]"
+ xpos 1549
+ ypos 67
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ne3722000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N932a6400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N932a6400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ne3722000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nde9c2400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nde9c2400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group24
+ label "\[value color]"
+ xpos 1549
+ ypos 99
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Na156800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Ne3864c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Ne3864c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Na156800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nabe64400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nabe64400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group25
+ label "\[value color]"
+ xpos 1549
+ ypos 131
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N60057800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Neb611400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Neb611400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N60057800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N10115400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N10115400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group26
+ label "\[value color]"
+ xpos 1549
+ ypos 163
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Naadf5c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf448e800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf448e800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Naadf5c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nede57000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nede57000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group27
+ label "\[value color]"
+ xpos 1549
+ ypos 195
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N977aec00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nbc01f800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nbc01f800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N977aec00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N335d800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N335d800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group28
+ label "\[value color]"
+ xpos 1549
+ ypos 227
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nd9bba800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nd6e18800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nd6e18800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nd9bba800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nded6cc00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nded6cc00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group29
+ label "\[value color]"
+ xpos 1549
+ ypos 259
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N9fa23800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nee9adc00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nee9adc00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N9fa23800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ndcda000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ndcda000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group30
+ label "\[value color]"
+ xpos 1549
+ ypos 291
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ne3c44800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N7ce59800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N7ce59800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ne3c44800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N1de83800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N1de83800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group31
+ label "\[value color]"
+ xpos 1549
+ ypos 323
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nede57c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf7c14000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf7c14000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nede57c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf7c14000
+ Viewer {
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group32
+ label "\[value color]"
+ xpos 1549
+ ypos 355
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N124c4400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nebd28400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nebd28400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N124c4400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ncd8d3c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ncd8d3c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group33
+ label "\[value color]"
+ xpos 1549
+ ypos 387
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N8e239400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nc7256400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nc7256400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N8e239400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nfeab3000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nfeab3000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group34
+ label "\[value color]"
+ xpos 1549
+ ypos 419
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Na0c6f400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf241f000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf241f000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Na0c6f400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nbc774800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nbc774800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group35
+ label "\[value color]"
+ xpos 1549
+ ypos 451
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ncaa3f000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N331b3400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N331b3400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ncaa3f000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ncd9d5400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ncd9d5400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group36
+ label "\[value color]"
+ xpos 1549
+ ypos 483
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Neb784800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N25a3400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N25a3400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Neb784800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N18a7dc00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N18a7dc00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group37
+ label "\[value color]"
+ xpos 1549
+ ypos 515
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N885c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Necb1e000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Necb1e000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N885c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Necd13400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Necd13400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group38
+ label "\[value color]"
+ xpos 1549
+ ypos 547
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N1fbee400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nfa4b9800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nfa4b9800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N1fbee400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nf73f1c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf73f1c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group39
+ label "\[value color]"
+ xpos 1549
+ ypos 579
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N3b73c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf448c000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf448c000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N3b73c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N7f675000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N7f675000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group40
+ label "\[value color]"
+ xpos 1549
+ ypos 611
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Naae48000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Naae49c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Naae49c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Naae48000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N9255c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N9255c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group41
+ label "\[value color]"
+ xpos 1549
+ ypos 643
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N131d400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N7fbb1800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N7fbb1800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N131d400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N7fbb1800
+ Viewer {
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group42
+ label "\[value color]"
+ xpos 1549
+ ypos 675
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf885e000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N3b3df800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N3b3df800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf885e000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N90151000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N90151000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group43
+ label "\[value color]"
+ xpos 1549
+ ypos 707
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nded85c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N14417c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N14417c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nded85c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nabaa3c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nabaa3c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group44
+ label "\[value color]"
+ xpos 1549
+ ypos 739
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nce7b3c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nfe94ec00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nfe94ec00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nce7b3c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ne5220c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ne5220c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group45
+ label "\[value color]"
+ xpos 1549
+ ypos 771
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ncd18400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nae458000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nae458000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ncd18400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nca3bf400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nca3bf400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group46
+ label "\[value color]"
+ xpos 1549
+ ypos 803
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Naae4d000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N8e238800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N8e238800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Naae4d000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nf22d6c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf22d6c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group47
+ label "\[value color]"
+ xpos 1549
+ ypos 835
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf1e04c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Ne7d28c00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Ne7d28c00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf1e04c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nb9c67800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nb9c67800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group48
+ label "\[value color]"
+ xpos 1549
+ ypos 867
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N3b72400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nb5e1a000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nb5e1a000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N3b72400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ne386fc00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ne386fc00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group49
+ label "\[value color]"
+ xpos 1549
+ ypos 899
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf9552000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nc254fc00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nc254fc00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf9552000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Na361000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Na361000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group50
+ label "\[value color]"
+ xpos 1549
+ ypos 931
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N3bef9c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nc32dc00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nc32dc00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N3bef9c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N1491fc00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N1491fc00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group51
+ label "\[value color]"
+ xpos 1549
+ ypos 963
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf802f400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  selected true
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf4866800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf4866800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf802f400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf4866800
+ Viewer {
+  frame_range 1-21600
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group52
+ label "\[value color]"
+ xpos 1549
+ ypos 995
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nd0398800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Na9d5400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Na9d5400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nd0398800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nab49e000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nab49e000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group53
+ label "\[value color]"
+ xpos 1549
+ ypos 1027
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nbc775c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N596e1000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N596e1000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nbc775c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Ne2719800 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Ne2719800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group54
+ label "\[value color]"
+ xpos 1549
+ ypos 1059
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N90540c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf512bc00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf512bc00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N90540c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nff26cc00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nff26cc00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group55
+ label "\[value color]"
+ xpos 1549
+ ypos 1091
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Na15c8400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N37a4a000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N37a4a000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Na15c8400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N831eb000 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N831eb000
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group56
+ label "\[value color]"
+ xpos 1549
+ ypos 1123
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nf448d000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N50ddcc00 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N50ddcc00
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nf448d000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N95a94400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N95a94400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group57
+ label "\[value color]"
+ xpos 1549
+ ypos 1155
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Neaac7400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nfd95f000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nfd95f000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Neaac7400
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Na15c9c00 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Na15c9c00
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group58
+ label "\[value color]"
+ xpos 1549
+ ypos 1187
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ne1129c00 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N9ddfa400 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N9ddfa400
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ne1129c00
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set Nf31c6400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf31c6400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group59
+ label "\[value color]"
+ xpos 1549
+ ypos 1219
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set N9f18e800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N148a2800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N148a2800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $N9f18e800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 445
+  ypos -18
+ }
+set N50ddd400 [stack 0]
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N50ddd400
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  selected true
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group60
+ label "\[value color]"
+ xpos 1549
+ ypos 1251
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {0.6 0.3 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Nc8838000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set Nf86e9000 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $Nf86e9000
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Nc8838000
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  selected true
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $Nf86e9000
+ Viewer {
+  frame 15369
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Group {
+ name Group61
+ label "\[value color]"
+ xpos 1549
+ ypos 1283
+ addUserKnob {20 User}
+ addUserKnob {12 position}
+ position {{"input.position + NoOp1.offset"} {"input.position + NoOp1.offset"}}
+ addUserKnob {18 color}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 445
+  ypos -321
+ }
+set Ne5764800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos 361
+  ypos -285
+ }
+ Reformat {
+  type scale
+  scale {2 1}
+  resize none
+  center false
+  name Reformat1
+  xpos 361
+  ypos -261
+ }
+ Transform {
+  translate {0 {parent.position.y}}
+  scale {{(width/2-parent.position.x)/(width/2-1)} 0.056}
+  center {{parent.width} 0}
+  black_outside false
+  name Transform3
+  xpos 361
+  ypos -237
+ }
+ Reformat {
+  type scale
+  scale {0.5 1}
+  resize none
+  center false
+  name Reformat2
+  xpos 361
+  ypos -213
+ }
+set N5a992800 [stack 0]
+ Dilate {
+  size {-1 0}
+  name Dilate4
+  xpos 251
+  ypos -159
+ }
+push $N5a992800
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 361
+  ypos -155
+ }
+ Crop {
+  box {{parent.position.x} {parent.position.y} 450 {parent.position.y+48}}
+  name Crop24
+  xpos 361
+  ypos -131
+ }
+ Rectangle {
+  area {{parent.position.x} 0 {area.x+1} {parent.position.y}}
+  name Rectangle7
+  xpos 361
+  ypos -83
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name Grade1
+  xpos 361
+  ypos -59
+ }
+push $Ne5764800
+ Merge2 {
+  inputs 2
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  selected true
+  xpos 445
+  ypos -18
+ }
+ Output {
+  name Output1
+  xpos 445
+  ypos 15
+ }
+push $N5a992800
+ Viewer {
+  frame_range 1-4650
+  input_process false
+  name Viewer1
+  xpos 691
+  ypos -121
+ }
+end_group
+Crop {
+ box {0 0 433 21600}
+ name Crop24
+ xpos 1549
+ ypos 1353
+}
+Transform {
+ translate {-163 0}
+ center {214.5 10800}
+ name Transform10
+ xpos 1549
+ ypos 1412
+}
+Merge2 {
+ inputs 2
+ Achannels {rgba.red rgba.green rgba.blue none}
+ name Merge1
+ xpos 1738
+ ypos 1564
+}
+Transform {
+ translate {0 -12912}
+ scale {1 -1}
+ center {214.5 10800}
+ name Transform7
+ xpos 1738
+ ypos 1588
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "429 21600 0 0 429 21600 1 firstfloor"
+ name Constant3
+ xpos 2227
+ ypos 1194
+}
+Noise {
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ size 4
+ gamma 1
+ center {225 2325}
+ color 0.49
+ name Noise1
+ xpos 2227
+ ypos 1266
+}
+Noise {
+ output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+ size 4
+ gamma 1
+ center {225 2325}
+ color 0.365
+ name Noise2
+ xpos 2227
+ ypos 1290
+}
+Noise {
+ output {rgba.red rgba.green rgba.blue -rgba.alpha}
+ size 4
+ zoffset 2
+ gamma 1
+ center {225 2325}
+ name Noise3
+ xpos 2227
+ ypos 1314
+}
+Noise {
+ opacity 0.315
+ size 88
+ center {225 2325}
+ color 0
+ name Noise4
+ xpos 2227
+ ypos 1338
+}
+Ramp {
+ opacity 0.355
+ p0 {100 0}
+ p1 {100 7200}
+ color 0
+ name Ramp9
+ xpos 2227
+ ypos 1362
+}
+Grade {
+ blackpoint 0.61
+ name Grade20
+ xpos 2227
+ ypos 1386
+}
+Shuffle {
+ alpha white
+ name Shuffle1
+ xpos 2227
+ ypos 1410
+}
+Transform {
+ translate {0 7200}
+ scale {1 -1}
+ center {214.5 0}
+ name Transform9
+ xpos 2227
+ ypos 1453
+}
+Merge2 {
+ inputs 2
+ name Merge22
+ xpos 1738
+ ypos 1647
+}
+Crop {
+ box {-17 0 429 8688}
+ crop false
+ name Crop27
+ xpos 1738
+ ypos 1671
+}
+Crop {
+ box {-17 0 429 21600}
+ reformat true
+ crop false
+ name Crop28
+ xpos 1738
+ ypos 1695
+}
+set N4cb5800 [stack 0]
+Expression {
+ temp_name0 dy
+ temp_expr0 (height-y)/24/60/9
+ temp_name1 grad
+ temp_expr1 "(x-startx)/(endx-startx) <= dy"
+ temp_name3 show
+ temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
+ expr0 r*show
+ expr1 g*show
+ expr2 b*show
+ name Expression11
+ xpos 1738
+ ypos 1743
+ addUserKnob {20 User}
+ addUserKnob {7 startx}
+ startx -168
+ addUserKnob {7 endx}
+ endx 264
+}
+set Naeb6e400 [stack 0]
+push $N4cb5800
+Expression {
+ temp_name0 dy
+ temp_expr0 (height-y+1)/24/60/9
+ temp_name1 grad
+ temp_expr1 "(x-startx)/(endx-startx) <= dy"
+ temp_name3 show
+ temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
+ expr0 r*show
+ expr1 g*show
+ expr2 b*show
+ name Expression12
+ xpos 1861
+ ypos 1735
+ addUserKnob {20 User}
+ addUserKnob {7 startx}
+ startx -168
+ addUserKnob {7 endx}
+ endx 264
+}
+Merge2 {
+ inputs 2
+ operation difference
+ name Merge29
+ xpos 1861
+ ypos 1759
+}
+GodRays {
+ translate {256 256}
+ to_color 0
+ steps 8
+ max true
+ name GodRays2
+ xpos 1861
+ ypos 1783
+}
+push $Naeb6e400
+Merge2 {
+ inputs 2
+ name Merge30
+ xpos 1738
+ ypos 1802
+}
+Group {
+ inputs 2
+ name stack15
+ xpos 1738
+ ypos 1935
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set Ne7ed4c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $Ne7ed4c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/newyears.png
+ raw true
+ file_type png
+ use_limit true
+ checkHashOnRead false
+ version 39
+ name Write1
+ selected true
+ xpos 1738
+ ypos 2014
+}
+Viewer {
+ inputs 2
+ frame 15369
+ frame_range 14339-16315
+ frame_range_lock true
+ gamma 1.23
+ roi {0.3129999936 -0.07249999791 0.8289999962 0.05550000072}
+ colour_sample_bbox {-0.3456790149 -5.308641911 -0.3432098627 -5.306172848}
+ samplepoints {{-0.3456790149 -5.308641911}
+   }
+ input_process false
+ name Viewer1
+ xpos 1118
+ ypos 578
+}

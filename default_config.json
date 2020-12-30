@@ -121,10 +121,19 @@
         },
         {
             "start": "November 29",
-            "end": "December 31",
+            "end": "December 29",
             "name": "Christmas",
             "animation": [
                 "xmas1"
+            ]
+        },
+        {
+            "start": "December 30",
+            "end": "December 31",
+            "name": "New Year's Eve",
+
+            "animation": [
+                "newyears"
             ]
         }
     ],
@@ -195,11 +204,20 @@
             "fps": 24,
             "relays": 12,
             "minute": 1,
+            "intermediate_animation": "simple_xmas",
             "days": [
                 "Friday",
                 "Saturday",
                 "Sunday"
             ]
+        },
+        "newyears": {
+            "module": "image",
+            "image": "/home/pi/pixels/holidaypixels/images/newyears.png",
+            "intermediate_animation": "blank",
+            "fps": 24,
+            "relays": 0,
+            "minute": 50
         },
         "heartbeat": {
             "module": "image",

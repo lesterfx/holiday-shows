@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import datetime
+import importlib
 import os
 from random import randint
-# import socket
 import time
 
 from PIL import Image
@@ -18,8 +18,13 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
-        self.sound = mixer.Sound(self.settings['music'])
+        music = self.settings.get('music')
+        if music:
+            self.sound = mixer.Sound(music)
+            self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
+        else:
+            self.sound = None
+            self.silence = None
 
     def __str__(self):
         return 'Image'
@@ -38,28 +43,30 @@ class Animation(object):
         self.width = image.width
         self.height = image.height
 
+        animation = self.settings['intermediate_animation']
+        waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
+
         self.validate_relays()
 
-        self.activate_relays()
         waitfor_minute = int(self.settings['minute'])
         days = set(self.settings['days'])
         while True:
-            now = datetime.datetime.now()
+            now = datetime.datetime.now().replace(second=0, microsecond=0)
             self.activate_relays(True)
-            waiting = simple_xmas.Animation(self.home, self.globals, self.settings)
+            waiting = waiting_module.Animation(self.home, self.globals, self.settings)
             if now.strftime('%A') in days:
                 until = now.replace(minute=waitfor_minute, hour=now.hour, second=0, microsecond=0)
                 if until < now:
                     until += datetime.timedelta(hours=1)
                 if until > end_by:
-                    print('LAST SHOW ENDED. simple xmas until night time:', end_by)
+                    print('LAST SHOW ENDED', animation, 'until night time:', end_by)
                     waiting.main(end_by)
                     return
                 else:
-                    print('simple xmas until', until)
+                    print(animation, 'until', until)
                     waiting.main(until)
             else:
-                print('simple xmas until night time:', end_by)
+                print(animation, 'until night time:', end_by)
                 waiting.main(end_by)
                 return
             self.activate_relays(False)
@@ -83,7 +90,7 @@ class Animation(object):
         except AssertionError:
             raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
-    def present(self, end_by):
+    def present(self, end_by, epoch=None):
         previous_y = None
         y = 0
         width = self.width
@@ -93,19 +100,23 @@ class Animation(object):
         if countdown:
             self.home.clear()
             self.home.show()
-            # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # s.connect(("192.168.1.222", 4321))
-            self.silence.play()
+            if self.silence:
+                self.silence.play()
             for i in range(countdown):
                 print(countdown-i)
                 time.sleep(1)
-            # print('go!')
-            # s.send(b'hello')
+        if self.sound:
             self.sound.play()
             time.sleep(self.globals.audio_delay)
-            # s.close()
+            epoch = time.time()
+        else:
+            early = epoch - time.time()
+            if early > 0:
+                print('early by', early, 'seconds. sleeping')
+                time.sleep(early)
+            else:
+                print('not early. late by', early, 'seconds')
 
-        epoch = time.time()
         while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):
             im_y = y % height
             for x, relay in zip(range(self.num_relays), self.home.relays):
