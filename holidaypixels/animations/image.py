@@ -76,7 +76,8 @@ class Animation(object):
             try:
                 self.present(end_by, epoch=until.timestamp())
             finally:
-                self.sound.stop()
+                if self.sound:
+                    self.sound.stop()
             time.sleep(30)
 
     def activate_relays(self, active=True):
@@ -99,10 +100,12 @@ class Animation(object):
         width = self.width
         height = self.height
 
+        self.home.strip.on = True
+        self.home.clear()
+        self.home.show()
+
         countdown = self.settings.get('countdown', 0)
         if countdown:
-            self.home.clear()
-            self.home.show()
             if self.silence:
                 self.silence.play()
             for i in range(countdown):
