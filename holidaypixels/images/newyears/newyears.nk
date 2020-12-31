@@ -11,13 +11,13 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="644"/>
+                <split size="897"/>
                 <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                     <page id="Viewer.2"/>
                     <page id="Viewer.3"/>
                 </dock>
-                <split size="451"/>
+                <split size="198"/>
                 <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
@@ -39,7 +39,7 @@ Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/newyears/newyears.nk
  project_directory "\[python \{nuke.script_directory()\}]/../../"
- frame 15369
+ frame 14527
  last_frame 21600
  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
  proxy_type scale
@@ -137,22 +137,26 @@ Constant {
 set Nbe6ebc00 [stack 0]
 Expression {
  temp_name0 show
- temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_expr0 "((y-offset+size+repeat*1000+x*slope) % repeat < size) && y+x*slope < offset"
  temp_name2 dy
- temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_expr2 "(y+size+x*slope-offset+repeat*1000) % repeat"
  temp_name3 value
- temp_expr3 "show ? dy/80 : 0"
+ temp_expr3 "show ? dy/size : 0"
  expr0 value+r
  expr1 value+g
  expr2 value+b
- name Expression9
+ name Expression3
  xpos 2521
  ypos 1468
  addUserKnob {20 User}
  addUserKnob {3 offset}
- offset 7165
+ offset 7200
  addUserKnob {3 repeat}
- repeat 80
+ repeat 57
+ addUserKnob {7 slope}
+ slope 0.2
+ addUserKnob {7 size R 0 100}
+ size 22.5
 }
 Noise {
  size {2 30}
@@ -235,22 +239,26 @@ Merge2 {
 set Na4e2d000 [stack 0]
 Expression {
  temp_name0 show
- temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_expr0 "((y-offset+size+repeat*1000+x*slope) % repeat < size) && y+x*slope < offset"
  temp_name2 dy
- temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_expr2 "(y+size+x*slope-offset+repeat*1000) % repeat"
  temp_name3 value
- temp_expr3 "show ? dy/80 : 0"
+ temp_expr3 "show ? dy/size : 0"
  expr0 value+r
  expr1 value+g
  expr2 value+b
- name Expression7
+ name Expression1
  xpos 2715
  ypos 1472
  addUserKnob {20 User}
  addUserKnob {3 offset}
- offset 7180
+ offset 7200
  addUserKnob {3 repeat}
- repeat 110
+ repeat 67
+ addUserKnob {7 slope}
+ slope 0.2
+ addUserKnob {7 size R 0 100}
+ size 22.5
 }
 Noise {
  inputs 1+1
@@ -335,27 +343,29 @@ push $Nfe8bbc00
   ypos -34
  }
 end_group
-set Na758f700 [stack 0]
-push $Na758f700
 push $Nbe6ebc00
 Expression {
  temp_name0 show
- temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_expr0 "((y-offset+size+repeat*1000+x*slope) % repeat < size) && y+x*slope < offset"
  temp_name2 dy
- temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_expr2 "(y+size+x*slope-offset+repeat*1000) % repeat"
  temp_name3 value
- temp_expr3 "show ? dy/80 : 0"
+ temp_expr3 "show ? dy/size : 0"
  expr0 value+r
  expr1 value+g
  expr2 value+b
- name Expression10
+ name Expression4
  xpos 2415
  ypos 1468
  addUserKnob {20 User}
  addUserKnob {3 offset}
- offset 7195
+ offset 7200
  addUserKnob {3 repeat}
- repeat 100
+ repeat 47
+ addUserKnob {7 slope}
+ slope 0.2
+ addUserKnob {7 size R 0 100}
+ size 22.5
 }
 Noise {
  size {2 30}
@@ -380,11 +390,11 @@ push $Nf1b58c00
 push $Na4e2d000
 Expression {
  temp_name0 show
- temp_expr0 "((y-offset+repeat*1000+x) % repeat < 80) && y+x < offset"
+ temp_expr0 "((y-offset+size+repeat*1000+x*slope) % repeat < size) && y+x*slope < offset"
  temp_name2 dy
- temp_expr2 "(y+x-offset+repeat*1000) % repeat"
+ temp_expr2 "(y+size+x*slope-offset+repeat*1000) % repeat"
  temp_name3 value
- temp_expr3 "show ? dy/80 : 0"
+ temp_expr3 "show ? dy/size : 0"
  expr0 value+r
  expr1 value+g
  expr2 value+b
@@ -393,9 +403,13 @@ Expression {
  ypos 1472
  addUserKnob {20 User}
  addUserKnob {3 offset}
- offset 7210
+ offset 7200
  addUserKnob {3 repeat}
- repeat 90
+ repeat 61
+ addUserKnob {7 slope}
+ slope 0.2
+ addUserKnob {7 size R 0 100}
+ size 22.5
 }
 Noise {
  inputs 1+1
@@ -564,6 +578,15 @@ Grade {
  xpos 2614
  ypos 1795
 }
+Ramp {
+ invert true
+ p0 {100 0}
+ p1 {100 7200}
+ color 0
+ name Ramp1
+ xpos 2614
+ ypos 1819
+}
 CheckerBoard2 {
  inputs 0
  format "450 4650 0 0 450 4650 1 "
@@ -606,7 +629,7 @@ set Naf1b0000 [stack 0]
 Ramp {
  replace true
  p0 {450 100}
- p1 {433 100}
+ p1 {291.7999878 100}
  type smooth0
  name Ramp8
  xpos 2051
@@ -759,6 +782,12 @@ Crop {
  xpos 1837
  ypos 1511
 }
+Grade {
+ white 0.4
+ name Grade3
+ xpos 1837
+ ypos 1535
+}
 Constant {
  inputs 0
  channels rgb
@@ -818,7 +847,7 @@ NoOp {
  ypos -661
  addUserKnob {20 User}
  addUserKnob {12 offset}
- offset {-4 24}
+ offset {-3 24}
  addUserKnob {12 position l "starting position"}
  position {410 0}
 }
@@ -925,7 +954,7 @@ push $N5ce61c00
  }
 push $N95880000
  Viewer {
-  frame 15369
+  frame 14527
   frame_range 1-21600
   input_process false
   name Viewer1
@@ -7469,7 +7498,7 @@ push $Nc8838000
  }
 push $Nf86e9000
  Viewer {
-  frame 15369
+  frame 14527
   frame_range 1-4650
   input_process false
   name Viewer1
@@ -7605,7 +7634,7 @@ Merge2 {
  Achannels {rgba.red rgba.green rgba.blue none}
  name Merge1
  xpos 1738
- ypos 1564
+ ypos 1552
 }
 Transform {
  translate {0 -12912}
@@ -7613,7 +7642,100 @@ Transform {
  center {214.5 10800}
  name Transform7
  xpos 1738
- ypos 1588
+ ypos 1576
+}
+Grade {
+ white 0.25
+ name Grade1
+ xpos 1738
+ ypos 1600
+}
+Crop {
+ box {-17 0 429 8688}
+ crop false
+ name Crop27
+ xpos 1738
+ ypos 1671
+}
+Crop {
+ box {-17 0 429 21600}
+ reformat true
+ crop false
+ name Crop28
+ xpos 1738
+ ypos 1695
+}
+set N4cb5800 [stack 0]
+Expression {
+ temp_name0 dy
+ temp_expr0 (height-y)/24/60/9
+ temp_name1 grad
+ temp_expr1 "(x-startx)/(endx-startx) <= dy"
+ temp_name3 show
+ temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
+ expr0 r*show
+ expr1 g*show
+ expr2 b*show
+ name Expression11
+ xpos 1738
+ ypos 1743
+ addUserKnob {20 User}
+ addUserKnob {7 startx}
+ startx -60
+ addUserKnob {7 endx}
+ endx 264
+}
+set Naeb6e400 [stack 0]
+push $N4cb5800
+Expression {
+ temp_name0 dy
+ temp_expr0 (height-y+1)/24/60/9
+ temp_name1 grad
+ temp_expr1 "(x-startx)/(endx-startx) <= dy"
+ temp_name3 show
+ temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
+ expr0 r*show
+ expr1 g*show
+ expr2 b*show
+ name Expression12
+ xpos 1861
+ ypos 1735
+ addUserKnob {20 User}
+ addUserKnob {7 startx}
+ startx {{parent.Expression11.startx}}
+ addUserKnob {7 endx}
+ endx {{parent.Expression11.endx}}
+}
+Merge2 {
+ inputs 2
+ operation difference
+ name Merge29
+ xpos 1861
+ ypos 1759
+}
+GodRays {
+ translate {256 256}
+ to_color 0
+ steps 8
+ max true
+ name GodRays2
+ xpos 1861
+ ypos 1783
+}
+push $Naeb6e400
+Merge2 {
+ inputs 2
+ name Merge30
+ xpos 1738
+ ypos 1802
+}
+Transform {
+ translate {56 0}
+ scale {-1 1}
+ center {223 10800}
+ name Transform1
+ xpos 1738
+ ypos 1826
 }
 Constant {
  inputs 0
@@ -7663,7 +7785,7 @@ Noise {
  ypos 1338
 }
 Ramp {
- opacity 0.355
+ opacity 0.42
  p0 {100 0}
  p1 {100 7200}
  color 0
@@ -7691,96 +7813,37 @@ Transform {
  xpos 2227
  ypos 1453
 }
-Merge2 {
- inputs 2
- name Merge22
- xpos 1738
- ypos 1647
+Dot {
+ name Dot1
+ xpos 2074
+ ypos 1701
 }
 Crop {
  box {-17 0 429 8688}
  crop false
- name Crop27
- xpos 1738
- ypos 1671
+ name Crop3
+ xpos 2040
+ ypos 1719
 }
 Crop {
  box {-17 0 429 21600}
  reformat true
  crop false
- name Crop28
- xpos 1738
- ypos 1695
-}
-set N4cb5800 [stack 0]
-Expression {
- temp_name0 dy
- temp_expr0 (height-y)/24/60/9
- temp_name1 grad
- temp_expr1 "(x-startx)/(endx-startx) <= dy"
- temp_name3 show
- temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
- expr0 r*show
- expr1 g*show
- expr2 b*show
- name Expression11
- xpos 1738
+ name Crop4
+ xpos 2040
  ypos 1743
- addUserKnob {20 User}
- addUserKnob {7 startx}
- startx -168
- addUserKnob {7 endx}
- endx 264
-}
-set Naeb6e400 [stack 0]
-push $N4cb5800
-Expression {
- temp_name0 dy
- temp_expr0 (height-y+1)/24/60/9
- temp_name1 grad
- temp_expr1 "(x-startx)/(endx-startx) <= dy"
- temp_name3 show
- temp_expr3 "x < startx ? 1 : x > endx-1 ? 1 : grad"
- expr0 r*show
- expr1 g*show
- expr2 b*show
- name Expression12
- xpos 1861
- ypos 1735
- addUserKnob {20 User}
- addUserKnob {7 startx}
- startx -168
- addUserKnob {7 endx}
- endx 264
 }
 Merge2 {
  inputs 2
- operation difference
- name Merge29
- xpos 1861
- ypos 1759
-}
-GodRays {
- translate {256 256}
- to_color 0
- steps 8
- max true
- name GodRays2
- xpos 1861
- ypos 1783
-}
-push $Naeb6e400
-Merge2 {
- inputs 2
- name Merge30
+ name Merge22
  xpos 1738
- ypos 1802
+ ypos 1886
 }
 Group {
  inputs 2
  name stack15
  xpos 1738
- ypos 1935
+ ypos 1952
  addUserKnob {20 User}
  addUserKnob {3 space}
  space 22
@@ -7846,6 +7909,7 @@ push $Ne7ed4c00
   ypos -34
  }
 end_group
+set N5968f080 [stack 0]
 Write {
  file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/newyears.png
  raw true
@@ -7854,22 +7918,64 @@ Write {
  checkHashOnRead false
  version 39
  name Write1
- selected true
  xpos 1738
  ypos 2014
 }
+Read {
+ inputs 0
+ file_type png
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/xmas/nuke/xmas.png
+ format "822 4650 0 0 822 4650 1 "
+ origset true
+ name Read1
+ xpos 1434
+ ypos 1870
+}
+Crop {
+ box {12 2830 822 3682}
+ reformat true
+ crop false
+ name Crop1
+ xpos 1434
+ ypos 1950
+}
+Grade {
+ whitepoint 0
+ name Grade2
+ xpos 1434
+ ypos 1974
+}
+push $N5968f080
+Crop {
+ box {0 8402 810 9016}
+ reformat true
+ crop false
+ name Crop2
+ xpos 1607
+ ypos 1982
+}
+set Nfbfc1000 [stack 0]
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge4
+ xpos 1542
+ ypos 2014
+}
+push $Nfbfc1000
+push $N5968f080
 Viewer {
  inputs 2
- frame 15369
- frame_range 14339-16315
+ frame 14527
+ frame_range 14396-14612
  frame_range_lock true
- gamma 1.23
  roi {0.3129999936 -0.07249999791 0.8289999962 0.05550000072}
- colour_sample_bbox {-0.3456790149 -5.308641911 -0.3432098627 -5.306172848}
+ colour_sample_bbox {-0.6938271523 0.1299999952 -0.316049397 0.4241999984}
  samplepoints {{-0.3456790149 -5.308641911}
    }
  input_process false
  name Viewer1
+ selected true
  xpos 1118
  ypos 578
 }
