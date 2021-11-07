@@ -44,7 +44,7 @@ class Animation(object):
                 color = Color(0, 1, hue-4)
             elif hue < 6:
                 color = Color(0, 6-hue, 1)
-
+            print(color)
             for black in self.globals.black:
                 for x in range(black[0], black[-1]):
                     self.home[x] = color
