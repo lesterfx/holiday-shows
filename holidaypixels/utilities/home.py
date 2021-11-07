@@ -215,7 +215,7 @@ class StripWrapper(object):
         if need_to_wait > 0:
             print('need to wait', need_to_wait)
             time.sleep(need_to_wait)
-        self.real_strip.show()
+        # self.real_strip.show()
         self.next_available = time.time() + self.delay
 
 class Home(object):

@@ -29,10 +29,25 @@ class Animation(object):
 
         for corner in self.globals.corners:
             self.home[corner] = Color(0, 0, 1)
-        for black in self.globals.black:
-            for x in range(black[0], black[-1]):
-                self.home[x] = Color(1, 1, 1)
-
+        
         while datetime.datetime.now() < end_by:
+            hue = time.time() % 6
+            if hue < 1:
+                color = Color(hue, 0, 1)
+            elif hue < 2:
+                color = Color(1, 0, 2-hue)
+            elif hue < 3:
+                color = Color(1, hue-2, 0)
+            elif hue < 4:
+                color = Color(4-hue, 1, 0)
+            elif hue < 5:
+                color = Color(0, 1, hue-4)
+            elif hue < 6:
+                color = Color(0, 6-hue, 1)
+
+            for black in self.globals.black:
+                for x in range(black[0], black[-1]):
+                    self.home[x] = color
             self.home.show()
-            time.sleep(1)
+            # time.sleep(1)
+
