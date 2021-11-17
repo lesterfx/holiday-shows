@@ -194,6 +194,7 @@ class Holiday_Pixels(object):
         )
 
     def process_remotes(self, remotes):
+        print(remotes)
         return [RemotePrefs(name=remote['name'], ip=remote['ip'], port=remote['port']) for remote in remotes]
 
     def process_strip(self, strip):
