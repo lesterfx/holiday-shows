@@ -9,7 +9,7 @@
             "invert": false,
             "pin_channel": 0,
             "brightness": 255,
-            "relay": "srip"
+            "relay": "strip"
         },
         "black": [
             [0, 17],
