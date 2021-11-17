@@ -190,6 +190,7 @@ class Relay(object):
         self.value = int(bool(value))
         self.changed = True
     
+    @property
     def msg(self):
         return b'{0.index:02d}:{0.value}'.format(self)
     
