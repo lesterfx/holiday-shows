@@ -145,9 +145,9 @@ class Pixel(object):
 class Remote(dict):
     def __init__(self, name, config):
         self.name = name
-        self.ip = config['ip']
-        self.port = config['port']
-        for i, relay_name in enumerate(config['relays']):
+        self.ip = config.ip
+        self.port = config.port
+        for i, relay_name in enumerate(config.relays):
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
         # self.connect()
