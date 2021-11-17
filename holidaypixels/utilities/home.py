@@ -161,9 +161,9 @@ class Remote(dict):
     
     def send(self, *msgs):
         if msgs:
-            print(b';'.join(msgs))
-            # self.socket.send(b';'.join(msgs))
-        print(f'{self.name}: {len(msgs)} relays toggled')
+            msg = b';'.join(msgs)
+            # self.socket.send(msg)
+        print(f'{self.name}: {msg}')
 
     def show(self):
         msgs = []
