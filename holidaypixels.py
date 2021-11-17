@@ -176,7 +176,7 @@ class Holiday_Pixels(object):
             globals_['relays'] = []
         corners = [int(corner) for corner in globals_['corners']]
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
-        relays = [getattr(board, 'D{}'.format(int(relay))) for relay in globals_['relays']]
+        relay_order = globals_['relay_order']
         strip = self.process_strip(globals_['strip'])
         black = globals_['black']
         max_ = globals_['max']
@@ -186,7 +186,7 @@ class Holiday_Pixels(object):
             ranges=ranges,
             max=max_,
             black=black,
-            relays=relays,
+            relay_order=relay_order,
             strip=strip,
             audio_delay=audio_delay
         )
