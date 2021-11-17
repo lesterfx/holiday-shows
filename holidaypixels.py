@@ -199,7 +199,7 @@ class Holiday_Pixels(object):
         dma = int(strip['dma'])
         invert = bool(strip['invert'])
         pin_channel = int(strip['pin_channel'])
-        # relay = getattr(board, 'D{}'.format(int(strip['relay'])))
+        relay = strip['relay']
         return StripPrefs(
             pin=pin,
             pixel_order=pixel_order,
@@ -207,7 +207,8 @@ class Holiday_Pixels(object):
             frequency=frequency,
             dma=dma,
             invert=invert,
-            pin_channel=pin_channel
+            pin_channel=pin_channel,
+            relay=self.strip.relays[relay]
         )
 
     def process_schedule(self, schedule):
