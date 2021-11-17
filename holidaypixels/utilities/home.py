@@ -192,7 +192,7 @@ class Relay(object):
     
     @property
     def msg(self):
-        return b'{0.index:02d}:{0.value}'.format(self)
+        return bytes(f'{self.index:02d}:{self.value}')
     
     def show(self):
         logger.debug(f'inefficient relay showing: {self.name} {self.value}')
