@@ -22,7 +22,7 @@
         "remotes": {
             "side_yard": {
                 "ip": "192.168.1.231",
-                "port": "23",
+                "port": 23,
                 "relays": [
                     "wreath",
                     "speakers",
@@ -44,7 +44,7 @@
             },
             "porch": {
                 "ip": "192.168.1.232",
-                "port": "23",
+                "port": 23,
                 "relays": [
                     "candycanes",
                     "tree_right",
@@ -66,7 +66,7 @@
             },
             "upstairs": {
                 "ip": "192.168.1.230",
-                "port": "23",
+                "port": 23,
                 "relays": [
                     null,
                     null,
