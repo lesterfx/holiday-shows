@@ -9,7 +9,7 @@
             "invert": false,
             "pin_channel": 0,
             "brightness": 255,
-            "relay": 9
+            "relay": "pixels"
         },
         "black": [
             [0, 17],
@@ -18,21 +18,90 @@
         ],
         "max": 810,
         "ranges": [[17, 810]],
-        "relays": [
-            10,
-            3,
-            22,
-            5,
-            19,
-            6,
-            26,
-            4,
-            17,
-            14,
-            27,
-            21
-        ],
-        "audio_delay": 0.1
+        "audio_delay": 0.1,
+        "remotes": {
+            "side_yard": {
+                "ip": "192.168.1.231",
+                "port": "23",
+                "relays": [
+                    "wreath",
+                    "speakers",
+                    "strip",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            },
+            "porch": {
+                "ip": "192.168.1.232",
+                "port": "23",
+                "relays": [
+                    "candycanes",
+                    "tree_right",
+                    "tree_left",
+                    "pillar_right",
+                    "pillar_left",
+                    "snowflake",
+                    "deer_right",
+                    "deer_center",
+                    "deer_left",
+                    "presents",
+                    "truck",
+                    "icicles",
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            },
+            "upstairs": {
+                "ip": "192.168.1.230",
+                "port": "23",
+                "relays": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ]
+            }
+        },
+        "relay_order": [
+            "wreath",
+            "candycanes",
+            "tree_right",
+            "tree_left",
+            "pillar_right",
+            "pillar_left",
+            "snowflake",
+            "deer_right",
+            "deer_center",
+            "deer_left",
+            "presents",
+            "truck",
+            "icicles"
+        ]
     },
     "schedule": {
         "location": [

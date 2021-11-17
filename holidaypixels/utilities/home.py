@@ -197,7 +197,7 @@ class Relay(object):
         self.remote.show()
 
 class StripWrapper(object):
-    def __init__(self, led_count, strip_prefs):
+    def __init__(self, led_count, strip_prefs, relay):
         pin = strip_prefs.pin
         frequency = strip_prefs.frequency
         dma = strip_prefs.dma
@@ -209,7 +209,7 @@ class StripWrapper(object):
         self.real_strip.begin()
 
         pixel_order = strip_prefs.pixel_order
-        self.relay = Relay(strip_prefs.relay)
+        self.relay = relay
 
         self.cached = [(0, 0, 0)] * led_count
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
@@ -263,8 +263,8 @@ class Home(object):
     def __init__(self, globals_, display='gpio', outfile=None):
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
-        self.strip = self.init_strip(display, outfile)
         self.init_relays()
+        self.strip = self.init_strip(display, outfile)
         # self.cache = [None] * len(self)
         # self.previous = None
         self.clear()
@@ -276,8 +276,7 @@ class Home(object):
         print('Initializing Strip')
         if display == 'gpio':
             led_count = self.max + 1
-            return StripWrapper(led_count, self.globals.strip)
-            # return neopixel.NeoPixel(pin=pin, n=self.max+1, brightness=1, auto_write=False, pixel_order=pixel_order)
+            return StripWrapper(led_count, self.globals.strip, self.relays['strip'])
         elif display == 'console':
             self.max = consolepixel.LED_COUNT
             return consolepixel.ConsolePixel(n=self.max+1)
