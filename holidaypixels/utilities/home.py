@@ -276,7 +276,7 @@ class Home(object):
         print('Initializing Strip')
         if display == 'gpio':
             led_count = self.max + 1
-            return StripWrapper(led_count, self.globals.strip, self.relays['strip'])
+            return StripWrapper(led_count, self.globals.strip, self.relays[self.globals.strip.relay])
         elif display == 'console':
             self.max = consolepixel.LED_COUNT
             return consolepixel.ConsolePixel(n=self.max+1)

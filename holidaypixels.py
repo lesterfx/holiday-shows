@@ -208,7 +208,7 @@ class Holiday_Pixels(object):
             dma=dma,
             invert=invert,
             pin_channel=pin_channel,
-            relay=self.strip.relays[relay]
+            relay=relay
         )
 
     def process_schedule(self, schedule):
