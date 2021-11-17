@@ -159,7 +159,7 @@ class Remote(dict):
         self.socket.setblocking(False)
         self.socket.settimeout(0.1)
     
-    def send(self, msgs):
+    def send(self, *msgs):
         print(msgs)
         if msgs:
             logger.info(b';'.join(msgs))
@@ -171,7 +171,7 @@ class Remote(dict):
         for relay in self.values():
             if relay.changed:
                 msgs.append(relay.msg)
-        self.send(msgs)
+        self.send(*msgs)
     
     def all(self, state):
         for relay in self.values():
