@@ -13,7 +13,7 @@ from rpi_ws281x import Adafruit_NeoPixel, Color as WS_Color
 from . import consolepixel, imagepixel
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 GAMMA = 1
 
