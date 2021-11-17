@@ -18,7 +18,7 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relays', 'strip', 'audio_delay'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relay_order', 'strip', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 
