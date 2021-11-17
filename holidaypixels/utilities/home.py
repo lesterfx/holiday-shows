@@ -2,14 +2,9 @@
 
 from __future__ import print_function, division
 
-import copy
-import datetime
-import json
-import gc
-import os
-import sys
+import logging
+import socket
 import time
-import traceback
 
 import board
 import digitalio
@@ -17,8 +12,10 @@ from rpi_ws281x import Adafruit_NeoPixel, Color as WS_Color
 
 from . import consolepixel, imagepixel
 
-GAMMA = 1
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
+GAMMA = 1
 
 class Color (object):
     def __init__(self, r, g=None, b=None, luma=1, mode='over'):
@@ -145,16 +142,59 @@ class Pixel(object):
     def __lt__(self, other):
         return self.position < other.position
 
+class Remote(dict):
+    def __init__(self, name, config):
+        self.name = name
+        self.ip = config['ip']
+        self.port = config['port']
+        for i, relay_name in enumerate(config['relays']):
+            relay = Relay(self, relay_name, i)
+            self[relay_name] = relay
+        # self.connect()
+        self.all(0)
+
+    def connect(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.conn = self.socket.connect((self.ip, self.port))
+        self.socket.setblocking(False)
+        self.socket.settimeout(0.1)
+    
+    def send(self, msgs):
+        if msgs:
+            logger.info(b';'.join(msgs))
+            # self.socket.send(b';'.join(msgs))
+        logger.info(f'{self.name}: {len(msgs)} relays toggled')
+
+    def show(self):
+        msgs = []
+        for relay in self.values():
+            if relay.changed:
+                msgs.append(relay.msg)
+        self.send(msgs)
+    
+    def all(self, state):
+        for relay in self.values():
+            relay.state = state
+            relay.changed = False
+        self.send('all0' if state else 'all1')
+
 class Relay(object):
-    def __init__(self, pin):
-        self.pin_number = pin
-        self.pin = digitalio.DigitalInOut(pin)
-        self.pin.direction = digitalio.Direction.OUTPUT
-        self.value = None
+    def __init__(self, remote, name, index):
+        self.remote = remote
+        self.name = name
+        self.index = index
+        self.value = 0
 
     def set(self, value):
-        self.value = value
-        self.pin.value = value
+        self.value = int(bool(value))
+        self.changed = True
+    
+    def msg(self):
+        return b'{0.index:02d}:{0.value}'.format(self)
+    
+    def show(self):
+        logger.debug(f'inefficient relay showing: {self.name} {self.value}')
+        self.remote.show()
 
 class StripWrapper(object):
     def __init__(self, led_count, strip_prefs):
@@ -185,6 +225,7 @@ class StripWrapper(object):
     @on.setter
     def on(self, value):
         self.relay.set(value)
+        self.relay.show()  # TODO: potentially inefficient
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
@@ -223,7 +264,7 @@ class Home(object):
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
         self.strip = self.init_strip(display, outfile)
-        self.relays = self.init_relays()
+        self.init_relays()
         # self.cache = [None] * len(self)
         # self.previous = None
         self.clear()
@@ -245,7 +286,12 @@ class Home(object):
             return imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
 
     def init_relays(self):
-        return [Relay(pin) for pin in self.globals.relays]
+        self.relays = {}
+        self.remotes = {}
+        for name, config in self.globals.remotes.items():
+            remote = Remote(name, config)
+            self.remotes[name] = remote
+            self.relays.update(remote)
 
     def __enter__(self):
         self.strip.on = True
@@ -310,8 +356,8 @@ class Home(object):
             self.show()
     
     def clear_relays(self):
-        for relay in self.relays:
-            relay.set(False)
+        for remote in self.remotes.values():
+            remote.all(False)
 
     def print_fps(self):
         now = time.time()
