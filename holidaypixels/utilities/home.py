@@ -160,11 +160,10 @@ class Remote(dict):
         self.socket.settimeout(0.1)
     
     def send(self, *msgs):
-        print(msgs)
         if msgs:
-            logger.info(b';'.join(msgs))
+            print(b';'.join(msgs))
             # self.socket.send(b';'.join(msgs))
-        logger.info(f'{self.name}: {len(msgs)} relays toggled')
+        print(f'{self.name}: {len(msgs)} relays toggled')
 
     def show(self):
         msgs = []
