@@ -175,11 +175,11 @@ class Remote(dict):
                 msgs.append(relay.msg)
         self.send(*msgs)
     
-    def all(self, state):
+    def all(self, value):
         for relay in self.values():
-            relay.state = state
+            relay.value = value
             relay.changed = False
-        self.send(b'all1' if state else b'all0')
+        self.send(b'all1' if value else b'all0')
 
 class Relay(object):
     def __init__(self, remote, name, index):
