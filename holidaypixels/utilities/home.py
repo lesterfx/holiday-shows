@@ -152,6 +152,9 @@ class Remote(dict):
             self[relay_name] = relay
         # self.connect()
         self.all(0)
+    
+    def __hash__(self):
+        return hash(self.name)
 
     def connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
