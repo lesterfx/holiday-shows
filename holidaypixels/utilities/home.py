@@ -292,6 +292,17 @@ class Home(object):
             remote = Remote(name, config)
             self.remotes[name] = remote
             self.relays.update(remote)
+        self.relays_in_order = []
+        self.remotes_used_in_order = set()
+        for name in self.globals.relay_order:
+            self.relays_in_order.append(self.relays[name])
+            self.remotes_used_in_order.add(self.relays[name].remote)
+    
+    def set_relays_in_order(self, value):
+        for relay in self.relays_in_order:
+            relay.set(value)
+        for remote in self.remotes_used_in_order:
+            remote.show()
 
     def __enter__(self):
         self.strip.on = True

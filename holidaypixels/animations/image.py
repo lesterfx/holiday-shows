@@ -81,7 +81,7 @@ class Animation(object):
             time.sleep(30)
 
     def activate_relays(self, active=True):
-        for relay in self.home.relays:
+        for relay in self.home.relays_in_order:
             relay.set(active)
 
     def validate_relays(self):
