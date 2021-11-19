@@ -164,7 +164,7 @@ class Remote(dict):
     
     def send(self, *msgs):
         if msgs:
-            msg = b';'.join(msgs)
+            msg = b' '.join(msgs)
             # self.socket.send(msg)
         print(f'{self.name}: {msg.decode()}')
 
