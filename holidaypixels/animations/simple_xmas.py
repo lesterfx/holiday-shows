@@ -21,8 +21,8 @@ class Animation(object):
     
     def set_relays(self):
         offset = self.timer // 30
-        num_relays = len(self.home.relays)
-        for i, relay in enumerate(self.home.relays):
+        num_relays = len(self.home.relays_in_order)
+        for i, relay in enumerate(self.home.relays_in_order):
             if offset % num_relays == i:
                 relay.set(False)
             else:
