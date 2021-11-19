@@ -189,8 +189,9 @@ class Relay(object):
         self.value = 0
 
     def set(self, value):
-        self.value = int(bool(value))
-        self.changed = True
+        if self.value != value:
+            self.value = int(bool(value))
+            self.changed = True
     
     @property
     def msg(self):
@@ -258,7 +259,7 @@ class StripWrapper(object):
     def show(self):
         need_to_wait = self.next_available - time.time()
         if need_to_wait > 0:
-            print('need to wait', need_to_wait)
+            # print('need to wait', need_to_wait)
             time.sleep(need_to_wait)
         # self.real_strip.show()
         self.next_available = time.time() + self.delay
