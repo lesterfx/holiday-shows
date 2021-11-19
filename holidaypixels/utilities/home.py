@@ -189,8 +189,9 @@ class Relay(object):
         self.value = 0
 
     def set(self, value):
+        value = int(bool(value))
         if self.value != value:
-            self.value = int(bool(value))
+            self.value = value
             self.changed = True
     
     @property
