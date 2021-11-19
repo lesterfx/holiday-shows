@@ -179,7 +179,7 @@ class Remote(dict):
         for relay in self.values():
             relay.state = state
             relay.changed = False
-        self.send(b'all0' if state else b'all1')
+        self.send(b'all1' if state else b'all0')
 
 class Relay(object):
     def __init__(self, remote, name, index):
@@ -305,6 +305,9 @@ class Home(object):
     def set_relays_in_order(self, value):
         for relay in self.relays_in_order:
             relay.set(value)
+        self.show_relays()
+    
+    def show_relays(self):
         for remote in self.remotes_used_in_order:
             remote.show()
 

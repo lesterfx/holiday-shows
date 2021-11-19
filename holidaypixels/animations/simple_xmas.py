@@ -27,6 +27,7 @@ class Animation(object):
                 relay.set(False)
             else:
                 relay.set(True)
+        self.home.show_relays()
 
     def set_pixels(self):
         offset = self.timer // 2
