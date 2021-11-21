@@ -171,6 +171,7 @@ class Remote(dict):
             received = ''
             while 'OK' not in received:
                 received+= self.sock.recv(1024).decode()
+                print(received)
             print('<', received)
 
     def show(self):
