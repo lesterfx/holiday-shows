@@ -171,7 +171,7 @@ class Remote(dict):
             print(f'{self.name} > {msg.decode()}')
             received = b''
             sys.stdout.flush()
-            while False: # b'OK' not in received:
+            while b'OK' not in received:
                 received += self.sock.recv(1024)
                 print(received)
                 sys.stdout.flush()
