@@ -9,6 +9,7 @@ class ArduinoTest:
     def __init__(self):
         self.setup()
         self.cycle()
+
     def cycle(self):
         start = time.time()
         counted = 0
@@ -25,13 +26,14 @@ class ArduinoTest:
             for sock in self.socks:
                 # i = 0
                 msg = f'all0,{(i % 16):02d}:1\n'
-                # print('>', msg, end='')
+                print('>', msg, end='')
                 sock.send(msg.encode())
                 received = ''
                 while 'OK' not in received:
                     data = sock.recv(1024)
                     received += data.decode()
-                # print('<', received, end='')
+                print('<', received, end='')
+
     def setup(self):
         ips = ['192.168.1.240'] # , '192.168.1.241', '192.168.1.242']
         self.socks = []
