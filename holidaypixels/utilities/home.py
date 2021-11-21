@@ -150,7 +150,7 @@ class Remote(dict):
         for i, relay_name in enumerate(config.relays):
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
-        # self.connect()
+        self.connect()
         self.all(0)
     
     def __hash__(self):
