@@ -174,6 +174,7 @@ class Remote(dict):
         for relay in self.values():
             if relay.changed:
                 msgs.append(relay.msg)
+                relay.changed = False
         self.send(*msgs)
     
     def all(self, value):
