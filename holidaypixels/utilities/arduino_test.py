@@ -20,7 +20,7 @@ class ArduinoTest:
                 fps = counted / (now - start)
                 if fps < 3:
                     raise Exception('FPS is too low: {}'.format(fps))
-                print(f'{fps:.5f} fps')
+                print(f'                     {fps:.5f} fps')
                 start = now
                 counted = 0
             for sock in self.socks:
