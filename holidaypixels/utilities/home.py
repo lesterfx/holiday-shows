@@ -157,6 +157,9 @@ class Remote(dict):
         return hash(self.name)
 
     def connect(self):
+        if self.ip != '192.168.1.240':
+            self.send = lambda *msgs: None
+            return
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = self.sock.connect((self.ip, self.port))
     
