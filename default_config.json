@@ -21,12 +21,9 @@
         "audio_delay": 0.1,
         "remotes": {
             "side_yard": {
-                "ip": "192.168.1.231",
-                "port": 23,
+                "ip": "192.168.1.241",
+                "port": 270,
                 "relays": [
-                    "wreath",
-                    "speakers",
-                    "strip",
                     null,
                     null,
                     null,
@@ -43,8 +40,8 @@
                 ]
             },
             "porch": {
-                "ip": "192.168.1.232",
-                "port": 23,
+                "ip": "192.168.1.242",
+                "port": 270,
                 "relays": [
                     "candycanes",
                     "tree_right",
@@ -58,6 +55,9 @@
                     "presents",
                     "truck",
                     "icicles",
+                    "wreath",
+                    "speakers",
+                    "strip",
                     null,
                     null,
                     null,
@@ -65,8 +65,8 @@
                 ]
             },
             "upstairs": {
-                "ip": "192.168.1.230",
-                "port": 23,
+                "ip": "192.168.1.240",
+                "port": 270,
                 "relays": [
                     null,
                     null,

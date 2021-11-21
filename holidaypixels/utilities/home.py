@@ -157,15 +157,13 @@ class Remote(dict):
         return hash(self.name)
 
     def connect(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn = self.socket.connect((self.ip, self.port))
-        self.socket.setblocking(False)
-        self.socket.settimeout(0.1)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.conn = self.sock.connect((self.ip, self.port))
     
     def send(self, *msgs):
         if msgs:
             msg = b' '.join(msgs)
-            # self.socket.send(msg)
+            self.sock.send(msg)
         print(f'{self.name}: {msg.decode()}')
 
     def show(self):
