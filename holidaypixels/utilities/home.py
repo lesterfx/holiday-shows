@@ -167,7 +167,7 @@ class Remote(dict):
         if msgs:
             msg = b' '.join(msgs)
             self.sock.send(msg)
-        print(f'{self.name}: {msg.decode()}')
+            print(f'{self.name}: {msg.decode()}')
 
     def show(self):
         msgs = []
@@ -194,6 +194,7 @@ class Relay(object):
         if self.value != value:
             self.value = value
             self.changed = True
+            print(f'{self.name} {self.value}')
     
     @property
     def msg(self):
