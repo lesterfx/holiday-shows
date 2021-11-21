@@ -30,6 +30,7 @@ class ArduinoTest:
                 sock.send(msg.encode())
                 received = ''
                 while 'OK' not in received:
+                    print('waiting for response')
                     data = sock.recv(1024)
                     received += data.decode()
                 print('<', received, end='')
