@@ -338,10 +338,10 @@ class Home(object):
             self.relays_in_order.append(self.relays[name])
             self.remotes_used_in_order.add(self.relays[name].remote)
     
-    def set_relays_in_order(self, value):
+    def set_relays_in_order(self, value, wait_if_busy=False):
         for relay in self.relays_in_order:
             relay.set(value)
-        self.show_relays()
+        self.show_relays(wait_if_busy)
     
     def show_relays(self, wait_if_busy=False):
         for remote in self.remotes.values():

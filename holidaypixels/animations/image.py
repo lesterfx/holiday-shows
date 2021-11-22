@@ -108,7 +108,7 @@ class Animation(object):
             time.sleep(30)
 
     def activate_relays(self, active=True):
-        self.home.set_relays_in_order(active)
+        self.home.set_relays_in_order(active, True)
 
     def validate_relays(self):
         for y in range(self.height):
