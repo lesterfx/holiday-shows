@@ -89,7 +89,7 @@ class Animation(object):
                     return
                 else:
                     print(animation, 'until', until)
-                    waiting.main(until - datetime.timedelta(seconds=2))
+                    waiting.main(until - datetime.timedelta(seconds=5))
             else:
                 print(animation, 'until night time:', end_by)
                 waiting.main(end_by)
