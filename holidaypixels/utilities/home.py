@@ -165,11 +165,11 @@ class Remote(dict):
         self.conn = self.sock.connect((self.ip, self.port))
         self.sock.setblocking(False)
     
-    def send(self, *msgs):
+    def send(self, *msgs, force=False):
         if msgs:
             msg = b' '.join(msgs) + b'\n'
             msg_str = msg.decode().strip()
-            if self.ok_to_send:
+            if self.ok_to_send or force:
                 self.sock.send(msg)
                 print(f'{self.name} ({self.ip}) > {msg_str}')
                 self.ok_to_send = False
@@ -195,7 +195,7 @@ class Remote(dict):
         self.response = b''
         self._ok_to_send = value
 
-    def show(self, wait_if_busy=False):
+    def show(self, wait_if_busy=False, force=False):
         msgs = []
         for relay in self.values():
             if relay.changed:
@@ -203,7 +203,7 @@ class Remote(dict):
         if wait_if_busy:
             while not self.ok_to_send:
                 time.sleep(0.001)
-        if self.send(*msgs):
+        if self.send(*msgs, force=force):
             for relay in self.values():
                 if relay.changed:
                     relay.changed = False
@@ -342,9 +342,9 @@ class Home(object):
             relay.set(value)
         self.show_relays(wait_if_busy)
     
-    def show_relays(self, wait_if_busy=False):
+    def show_relays(self, wait_if_busy=False, force=False):
         for remote in self.remotes.values():
-            remote.show(wait_if_busy)
+            remote.show(wait_if_busy, force)
 
     def __enter__(self):
         self.strip.on = True
