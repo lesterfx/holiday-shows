@@ -220,7 +220,7 @@
         },
         "flag_image": {
             "module": "image",
-            "image": "/home/pi/pixels/holidaypixels/images/flag/flag.png",
+            "image": "images/flag/flag.png",
             "repeat": 0,
             "fps": 24
         },
@@ -258,7 +258,7 @@
             "single": 6
         },
         "random_walker": {
-            "image": "/home/pi/pixels/holidaypixels/images/fairy/nuke/fairy.{}.png",
+            "image": "images/fairy/nuke/fairy.{}.png",
             "variations": 4,
             "fps": 24,
             "spawn_speed_max": 30,
@@ -269,7 +269,7 @@
             "module": "image",
             "elements": [
                 {
-                    "image": "/home/pi/pixels/holidaypixels/images/xmas/nuke/xmas.png",
+                    "image": "images/xmas/nuke/xmas.png",
                     "music": "/home/pi/xmas.mp3",
                     "fps": 24
                 }
@@ -287,7 +287,7 @@
         },
         "newyears": {
             "module": "image",
-            "image": "/home/pi/pixels/holidaypixels/images/newyears.png",
+            "image": "images/newyears.png",
             "intermediate_animation": "blank",
             "fps": 24,
             "relays": 0,
@@ -295,7 +295,7 @@
         },
         "heartbeat": {
             "module": "image",
-            "image": "/home/pi/pixels/holidaypixels/images/heartbeat/heartbeat.png",
+            "image": "images/heartbeat/heartbeat.png",
             "fps": 24,
             "repeat": 0
         },

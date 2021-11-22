@@ -31,9 +31,10 @@ class Animation(object):
     
     def load_resources(self, element):
         path = element['image']
+        path = os.path.join(os.path.dirname(__name__), '..', path)
+        path = os.path.realpath(path)
         if 'variations' in self.settings:
             path = path.format(randint(1, self.settings['variations']))
-        path = os.path.expanduser(path)
         print('Opening', path)
         image = Image.open(path)
         self.image = image.getdata()
