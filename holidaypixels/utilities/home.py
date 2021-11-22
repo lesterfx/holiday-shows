@@ -4,7 +4,6 @@ from __future__ import print_function, division
 
 import logging
 import socket
-import sys
 import time
 
 import board
@@ -177,6 +176,7 @@ class Remote(dict):
                 return True
             else:
                 print(f'{self.name} ({self.ip}) > {msg_str} (not ready)')
+                raise Exception('Not ready to send')
                 return False
 
     @property
