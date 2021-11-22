@@ -98,8 +98,8 @@ class Animation(object):
             if self.settings.get('shuffle'):
                 shuffle(self.settings['elements'])
             for element in self.settings['elements']:
-                self.activate_relays(False)
                 self.load_resources(element)
+                self.activate_relays(False)
                 try:
                     self.present(end_by, epoch=until.timestamp())
                 finally:
