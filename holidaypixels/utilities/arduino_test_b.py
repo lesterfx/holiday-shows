@@ -30,7 +30,7 @@ class ArduinoTest:
                     print('>', msg, end='')
                     sock.send(msg.encode())
                 else:
-                    print('skip')
+                    pass
                 
     def ready_to_receive(self, sock):
         try:
