@@ -187,12 +187,13 @@ class Remote(dict):
             except BlockingIOError:
                 self._ok_to_send = False
             else:
-                print(resp)
+                # print(resp)
                 self._ok_to_send = True
         return self._ok_to_send
     
     @ok_to_send.setter
     def ok_to_send(self, value):
+        self.response = b''
         self._ok_to_send = value
 
     def show(self):
