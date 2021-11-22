@@ -62,21 +62,25 @@ class Animation(object):
         animation = self.settings['intermediate_animation']
         waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
 
-        if self.settings['minute']:
-            waitfor_minute = int(self.settings['minute'])
-        else:
-            waitfor_minute = datetime.datetime.now().minute + 1
         if 'days' in self.settings:
             days = set(self.settings['days'])
         else:
             days = None
+        if self.settings['minute']:
+            waitfor_minute = int(self.settings['minute'])
+            waitfor_second = int(self.settings.get('second', 0))
+        else:
+            now = datetime.datetime.now()
+            now += datetime.timedelta(seconds=1)
+            waitfor_minute = now.minute
+            waitfor_second = now.second
 
         while True:
             now = datetime.datetime.now().replace(second=0, microsecond=0)
             self.activate_relays(True)
             waiting = waiting_module.Animation(self.home, self.globals, self.settings)
             if days is None or now.strftime('%A') in days:
-                until = now.replace(minute=waitfor_minute, hour=now.hour, second=0, microsecond=0)
+                until = now.replace(minute=waitfor_minute, hour=now.hour, second=waitfor_second, microsecond=0)
                 if until < now:
                     until += datetime.timedelta(hours=1)
                 if until > end_by:
