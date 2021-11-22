@@ -196,11 +196,14 @@ class Remote(dict):
         self.response = b''
         self._ok_to_send = value
 
-    def show(self):
+    def show(self, wait_if_busy=False):
         msgs = []
         for relay in self.values():
             if relay.changed:
                 msgs.append(relay.msg)
+        if wait_if_busy:
+            while not self.ok_to_send:
+                time.sleep(0.001)
         if self.send(*msgs):
             for relay in self.values():
                 if relay.changed:
@@ -342,7 +345,7 @@ class Home(object):
     
     def show_relays(self):
         for remote in self.remotes.values():
-            remote.show()
+            remote.show(True)
 
     def __enter__(self):
         self.strip.on = True

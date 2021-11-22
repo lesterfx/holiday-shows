@@ -126,7 +126,7 @@ class Animation(object):
         self.home.strip.on = True
         self.home.clear()
         self.home.show()
-        self.home.show_relays()
+        self.home.show_relays(True)
 
         countdown = self.settings.get('countdown', 0)
         if countdown:
