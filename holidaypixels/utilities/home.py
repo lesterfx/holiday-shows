@@ -151,6 +151,7 @@ class Remote(dict):
         for i, relay_name in enumerate(config.relays):
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
+        self._ok_to_send = True
         self.connect()
         self.all(0)
     
@@ -169,21 +170,29 @@ class Remote(dict):
         if msgs:
             msg = b' '.join(msgs) + b'\n'
             msg_str = msg.decode().strip()
-            if self.ready_to_receive():
+            if self.ok_to_send:
                 self.sock.send(msg)
                 print(f'{self.name} ({self.ip}) > {msg_str}')
             else:
                 print(f'{self.name} ({self.ip}) > {msg_str} (not ready)')
-            # received = b''
-            # while b'OK' not in received:
-            #     received += self.sock.recv(1024)
-            # print(f'{self.name} < {received.decode()}')
+            self.ok_to_send = False
 
-    def ready_to_receive(self):
+    @property
+    def ok_to_send(self):
+        if not self._ok_to_send:
+            self._ok_to_send = self.check_ok_to_send()
+        return self._ok_to_send
+    
+    @ok_to_send.setter
+    def ok_to_send(self, value):
+        self._ok_to_send = value
+
+    def check_ok_to_send(self):
         try:
-            self.sock.recv(1024)
+            resp = self.sock.recv(1024)
         except BlockingIOError:
             return False
+        print(resp)
         return True
 
     def show(self):
