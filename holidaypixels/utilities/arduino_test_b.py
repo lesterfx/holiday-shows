@@ -26,18 +26,21 @@ class ArduinoTest:
             for sock in self.socks:
                 # i = 0
                 msg = f'all0,{(i % 16):02d}:1\n'
+                
+                self.wait_for_ready(sock)
                 print('>', msg, end='')
                 sock.send(msg.encode())
-                received = ''
-                while 'OK' not in received:
-                    # time.sleep(1)
-                    try:
-                        data = sock.recv(1024)
-                    except BlockingIOError:
-                        continue
-                    print(data)
-                    received += data.decode()
-                print('<', received, end='')
+                
+    def ready_to_receive(self, sock):
+        try:
+            data = sock.recv(1024)
+        except BlockingIOError:
+            return False
+        return True
+    
+    def wait_for_ready(self, sock):
+        while not self.ready_to_receive(sock):
+            time.sleep(0.001)
 
     def setup(self):
         ips = ['192.168.1.240'] # , '192.168.1.241', '192.168.1.242']
