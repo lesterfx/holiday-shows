@@ -163,16 +163,27 @@ class Remote(dict):
             return
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = self.sock.connect((self.ip, self.port))
+        self.sock.setblocking(False)
     
     def send(self, *msgs):
         if msgs:
             msg = b' '.join(msgs) + b'\n'
-            self.sock.send(msg)
-            print(f'{self.name} ({self.ip}) > {msg.decode()}', end='')
-            received = b''
-            while b'OK' not in received:
-                received += self.sock.recv(1024)
+            if self.ready_to_receive():
+                self.sock.send(msg)
+                print(f'{self.name} ({self.ip}) > {msg.decode()}', end='')
+            else:
+                print(f'{self.name} ({self.ip}) > {msg.decode()} (not ready)', end='')
+            # received = b''
+            # while b'OK' not in received:
+            #     received += self.sock.recv(1024)
             # print(f'{self.name} < {received.decode()}', end='')
+
+    def ready_to_receive(self):
+        try:
+            self.sock.recv(1024)
+        except BlockingIOError:
+            return False
+        return True
 
     def show(self):
         msgs = []
