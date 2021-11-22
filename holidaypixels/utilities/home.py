@@ -159,13 +159,14 @@ class Remote(dict):
 
     def connect(self):
         if self.ip != '192.168.1.240':
-            self.send = lambda *msgs: True
+            self.sock = None
             return
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = self.sock.connect((self.ip, self.port))
         self.sock.setblocking(False)
     
     def send(self, *msgs, force=False):
+        if not self.sock: return
         if msgs:
             msg = b' '.join(msgs) + b'\n'
             msg_str = msg.decode().strip()
