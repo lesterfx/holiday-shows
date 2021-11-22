@@ -269,8 +269,8 @@
             "module": "image",
             "elements": [
                 {
-                    "image": "images/xmas/nuke/xmas.png",
-                    "music": "/home/pi/xmas.mp3",
+                    "image": "images/sarajevo/nuke/sarajevo.png",
+                    "music": "/home/pi/sarajevo.mp3",
                     "fps": 24
                 }
             ],
