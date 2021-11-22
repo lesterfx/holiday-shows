@@ -172,7 +172,7 @@ class Remote(dict):
                 self.sock.send(msg)
                 print(f'{self.name} ({self.ip}) > {msg.decode()}', end='')
             else:
-                print(f'{self.name} ({self.ip}) > {msg.decode()} (not ready)', end='')
+                print(f'(not ready) {self.name} ({self.ip}) > {msg.decode()}', end='')
             # received = b''
             # while b'OK' not in received:
             #     received += self.sock.recv(1024)
