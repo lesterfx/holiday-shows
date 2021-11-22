@@ -71,7 +71,7 @@ class Animation(object):
             waitfor_second = int(self.settings.get('second', 0))
         else:
             now = datetime.datetime.now()
-            now += datetime.timedelta(seconds=1)
+            now += datetime.timedelta(seconds=2)
             waitfor_minute = now.minute
             waitfor_second = now.second
 
