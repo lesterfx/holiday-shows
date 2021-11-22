@@ -18,8 +18,8 @@ class ArduinoTest:
             now = time.time()
             if now - start > 1:
                 fps = counted / (now - start)
-                if fps < 3:
-                    raise Exception('FPS is too low: {}'.format(fps))
+                # if fps < 3:
+                #     raise Exception('FPS is too low: {}'.format(fps))
                 print(f'                     {fps:.5f} fps')
                 start = now
                 counted = 0
