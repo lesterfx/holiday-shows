@@ -168,11 +168,12 @@ class Remote(dict):
     def send(self, *msgs):
         if msgs:
             msg = b' '.join(msgs) + b'\n'
+            msg_str = msg.decode().strip()
             if self.ready_to_receive():
                 self.sock.send(msg)
-                print(f'{self.name} ({self.ip}) > {msg.decode()}', end='')
+                print(f'{self.name} ({self.ip}) > {msg_str}', end='')
             else:
-                print(f'(not ready) {self.name} ({self.ip}) > {msg.decode()}', end='')
+                print(f'{self.name} ({self.ip}) > {msg_str} (not ready)', end='')
             # received = b''
             # while b'OK' not in received:
             #     received += self.sock.recv(1024)
