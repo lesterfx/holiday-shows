@@ -33,7 +33,7 @@ class ArduinoTest:
                     # time.sleep(1)
                     try:
                         data = sock.recv(1024)
-                    except socket.BlockingIOError:
+                    except BlockingIOError:
                         continue
                     print(data)
                     received += data.decode()
