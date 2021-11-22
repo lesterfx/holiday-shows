@@ -166,14 +166,12 @@ class Remote(dict):
     
     def send(self, *msgs):
         if msgs:
-            msg = b' '.join(msgs) 
+            msg = b' '.join(msgs) + b'\n'
             self.sock.send(msg)
             print(f'{self.name} ({self.ip}) > {msg.decode()}')
             received = b''
-            sys.stdout.flush()
             while b'OK' not in received:
                 received += self.sock.recv(1024)
-                sys.stdout.flush()
             print(f'{self.name} < {received.decode()}')
 
     def show(self):
