@@ -31,7 +31,10 @@ class ArduinoTest:
                 received = ''
                 while 'OK' not in received:
                     # time.sleep(1)
-                    data = sock.recv(1024)
+                    try:
+                        data = sock.recv(1024)
+                    except socket.BlockingIOError:
+                        continue
                     print(data)
                     received += data.decode()
                 print('<', received, end='')
