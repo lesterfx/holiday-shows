@@ -26,10 +26,11 @@ class ArduinoTest:
             for sock in self.socks:
                 # i = 0
                 msg = f'all0,{(i % 16):02d}:1\n'
-                
-                self.wait_for_ready(sock)
-                print('>', msg, end='')
-                sock.send(msg.encode())
+                if self.ready_to_receive(sock):
+                    print('>', msg, end='')
+                    sock.send(msg.encode())
+                else:
+                    print('skip')
                 
     def ready_to_receive(self, sock):
         try:
