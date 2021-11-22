@@ -343,9 +343,9 @@ class Home(object):
             relay.set(value)
         self.show_relays()
     
-    def show_relays(self):
+    def show_relays(self, wait_if_busy=False):
         for remote in self.remotes.values():
-            remote.show(True)
+            remote.show(wait_if_busy)
 
     def __enter__(self):
         self.strip.on = True
