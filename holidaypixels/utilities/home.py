@@ -233,9 +233,9 @@ class Relay(object):
     def msg(self):
         return (f'{self.index:02d}:{self.value}').encode()
     
-    def show(self):
+    def show(self, wait_if_busy=False):
         logger.debug(f'inefficient relay showing: {self.name} {self.value}')
-        self.remote.show()
+        self.remote.show(wait_if_busy)
 
 class StripWrapper(object):
     def __init__(self, led_count, strip_prefs, relay):
@@ -266,7 +266,7 @@ class StripWrapper(object):
     @on.setter
     def on(self, value):
         self.relay.set(value)
-        self.relay.show()  # TODO: potentially inefficient
+        self.relay.show(True)  # TODO: potentially inefficient
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
