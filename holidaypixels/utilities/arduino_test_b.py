@@ -43,7 +43,7 @@ class ArduinoTest:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print('connecting to', ip)
             sock.connect((ip, 270))
-            # sock.setblocking(False)
+            sock.setblocking(False)
             self.socks.append(sock)
             # time.sleep(0.03)
 
