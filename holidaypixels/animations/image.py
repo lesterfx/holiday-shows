@@ -3,7 +3,7 @@
 import datetime
 import importlib
 import os
-from random import randint
+from random import randint, shuffle
 import time
 
 from PIL import Image
@@ -28,25 +28,36 @@ class Animation(object):
 
     def __str__(self):
         return 'Image'
+    
+    def load_resources(self, element):
+        path = element['image']
+        if 'variations' in self.settings:
+            path = path.format(randint(1, self.settings['variations']))
+        path = os.path.expanduser(path)
+        print('Opening', path)
+        image = Image.open(path)
+        self.image = image.getdata()
+        self.width = image.width
+        self.height = image.height
+        self.validate_relays()
+
+        music = element['music']
+        if music:
+            self.sound = mixer.Sound(music)
+            self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
+        else:
+            self.sound = None
+            self.silence = None
+
+        self.fps = element['fps']
+
 
     def main(self, end_by):
         self.num_relays = self.settings.get('relays', 0)
-        path = self.settings['image']
-        self.fps = self.settings['fps']
-        path = os.path.expanduser(path)
         self.repeat = self.settings.get('repeat', 1)
-        if 'variations' in self.settings:
-            path = path.format(randint(1, self.settings['variations']))
-        print('Opening', path)
-        image = Image.open(path)
-        self.data = image.getdata()
-        self.width = image.width
-        self.height = image.height
 
         animation = self.settings['intermediate_animation']
         waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
-
-        self.validate_relays()
 
         waitfor_minute = int(self.settings['minute'])
         if 'days' in self.settings:
@@ -72,26 +83,28 @@ class Animation(object):
                 print(animation, 'until night time:', end_by)
                 waiting.main(end_by)
                 return
-            self.activate_relays(False)
-            try:
-                self.present(end_by, epoch=until.timestamp())
-            finally:
-                if self.sound:
-                    self.sound.stop()
+            
+            if self.settings.get('shuffle'):
+                shuffle(self.settings['elements'])
+            for element in self.settings['elements']:
+                self.activate_relays(False)
+                self.load_resources(element)
+                try:
+                    self.present(end_by, epoch=until.timestamp())
+                finally:
+                    if self.sound:
+                        self.sound.stop()
             time.sleep(30)
 
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active)
 
     def validate_relays(self):
-        try:
-            for y in range(self.height):
-                for x, relay in zip(range(self.num_relays), self.home.relays):
-                    color = self.data[self.width * y + x]
-                    assert color[0] == color[1] == color[2]
-                    assert color[0] in (0, 255)
-        except AssertionError:
-            raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
+        for y in range(self.height):
+            for x in range(self.num_relays):
+                color = self.image[self.width * y + x]
+                if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
+                    raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
 
     def present(self, end_by, epoch=None):
         previous_y = None
@@ -127,11 +140,11 @@ class Animation(object):
             im_y = y % height
 
             for x, relay in zip(range(self.num_relays), self.home.relays_in_order):
-                color = self.data[width * im_y + x]
+                color = self.image[width * im_y + x]
                 relay.set(bool(color[0]))
 
             for x in range(self.num_relays, width):
-                color = self.data[width * im_y + x]
+                color = self.image[width * im_y + x]
                 color_tup = color[0], color[1], color[2]
                 self.home[x-self.num_relays] = color_tup
             self.home.show_relays()
