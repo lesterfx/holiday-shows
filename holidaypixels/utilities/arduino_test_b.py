@@ -51,6 +51,7 @@ class ArduinoTest:
             sock.connect((ip, 270))
             sock.setblocking(False)
             self.socks.append(sock)
+            sock.send(b'all0\n')
             # time.sleep(0.03)
 
 ArduinoTest()
