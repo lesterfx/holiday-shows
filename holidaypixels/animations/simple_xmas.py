@@ -18,7 +18,7 @@ class Animation(object):
             self.set_pixels()
             self.set_relays()
             self.timer += 1
-    
+
     def set_relays(self):
         offset = self.timer // 30
         num_relays = len(self.home.relays_in_order)
