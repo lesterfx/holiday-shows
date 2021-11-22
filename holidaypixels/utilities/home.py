@@ -222,6 +222,7 @@ class Relay(object):
         self.name = name
         self.index = index
         self.value = 0
+        self.changed = False
 
     def set(self, value):
         value = int(bool(value))
