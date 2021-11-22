@@ -171,13 +171,13 @@ class Remote(dict):
             msg_str = msg.decode().strip()
             if self.ready_to_receive():
                 self.sock.send(msg)
-                print(f'{self.name} ({self.ip}) > {msg_str}', end='')
+                print(f'{self.name} ({self.ip}) > {msg_str}')
             else:
-                print(f'{self.name} ({self.ip}) > {msg_str} (not ready)', end='')
+                print(f'{self.name} ({self.ip}) > {msg_str} (not ready)')
             # received = b''
             # while b'OK' not in received:
             #     received += self.sock.recv(1024)
-            # print(f'{self.name} < {received.decode()}', end='')
+            # print(f'{self.name} < {received.decode()}')
 
     def ready_to_receive(self):
         try:
@@ -400,7 +400,7 @@ class Home(object):
     def print_fps(self):
         now = time.time()
         if now - self.fps_timer >= 1:
-            print(f'\r{self.fps_count} fps (on: {self.strip.on})', end='')
+            print(f'\r{self.fps_count} fps (on: {self.strip.on})')
             self.fps_count = 0
             self.fps_timer = now
         self.fps_count += 1
