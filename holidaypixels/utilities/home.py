@@ -160,7 +160,7 @@ class Remote(dict):
 
     def connect(self):
         if self.ip != '192.168.1.240':
-            self.send = lambda *msgs: None
+            self.send = lambda *msgs: True
             return
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn = self.sock.connect((self.ip, self.port))
@@ -173,41 +173,44 @@ class Remote(dict):
             if self.ok_to_send:
                 self.sock.send(msg)
                 print(f'{self.name} ({self.ip}) > {msg_str}')
+                self.ok_to_send = False
+                return True
             else:
                 print(f'{self.name} ({self.ip}) > {msg_str} (not ready)')
-            self.ok_to_send = False
+                return False
 
     @property
     def ok_to_send(self):
         if not self._ok_to_send:
-            self._ok_to_send = self.check_ok_to_send()
+            try:
+                resp = self.sock.recv(1024)
+            except BlockingIOError:
+                self._ok_to_send = False
+            else:
+                print(resp)
+                self._ok_to_send = True
         return self._ok_to_send
     
     @ok_to_send.setter
     def ok_to_send(self, value):
         self._ok_to_send = value
 
-    def check_ok_to_send(self):
-        try:
-            resp = self.sock.recv(1024)
-        except BlockingIOError:
-            return False
-        print(resp)
-        return True
-
     def show(self):
         msgs = []
         for relay in self.values():
             if relay.changed:
                 msgs.append(relay.msg)
-                relay.changed = False
-        self.send(*msgs)
+        if self.send(*msgs):
+            for relay in self.values():
+                if relay.changed:
+                    relay.changed = False
     
     def all(self, value):
         for relay in self.values():
             relay.value = value
-            relay.changed = False
-        self.send(b'all1' if value else b'all0')
+        if self.send(b'all1' if value else b'all0'):
+            for relay in self.values():
+                relay.changed = False
 
 class Relay(object):
     def __init__(self, remote, name, index):
