@@ -63,7 +63,7 @@ class Animation(object):
         if self.settings['minute']:
             waitfor_minute = int(self.settings['minute'])
         else:
-            waitfor_minute = datetime.datetime.now().minute() + 1
+            waitfor_minute = datetime.datetime.now().minute + 1
         if 'days' in self.settings:
             days = set(self.settings['days'])
         else:
