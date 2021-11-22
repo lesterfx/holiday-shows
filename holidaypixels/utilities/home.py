@@ -316,7 +316,7 @@ class Home(object):
         self.show_relays()
     
     def show_relays(self):
-        for remote in self.remotes_used_in_order:
+        for remote in self.remotes.values():
             remote.show()
 
     def __enter__(self):

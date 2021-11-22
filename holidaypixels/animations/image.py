@@ -102,6 +102,7 @@ class Animation(object):
         self.home.strip.on = True
         self.home.clear()
         self.home.show()
+        self.home.show_relays()
 
         countdown = self.settings.get('countdown', 0)
         if countdown:
@@ -124,14 +125,18 @@ class Animation(object):
 
         while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):
             im_y = y % height
-            # for x, relay in zip(range(self.num_relays), self.home.relays):
-            #     color = self.data[width * im_y + x]
-            #     relay.set(bool(color[0]))
+
+            for x, relay in zip(range(self.num_relays), self.home.relays_in_order):
+                color = self.data[width * im_y + x]
+                relay.set(bool(color[0]))
+
             for x in range(self.num_relays, width):
                 color = self.data[width * im_y + x]
                 color_tup = color[0], color[1], color[2]
                 self.home[x-self.num_relays] = color_tup
+            self.home.show_relays()
             self.home.show()
+
             while True:
                 previous_y = y
                 y = int((time.time() - epoch) * self.fps)
