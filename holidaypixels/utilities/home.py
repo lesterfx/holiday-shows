@@ -151,26 +151,35 @@ class Remote(dict):
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
         self._ok_to_send = True
-        self.connect()
+        self.sock = self.connect()
+        self.deficit = 0
         self.all(0)
-    
+
     def __hash__(self):
         return hash(self.name)
 
     def connect(self):
-        if self.ip != '192.168.1.240':
-            self.sock = None
-            return
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn = self.sock.connect((self.ip, self.port))
-        self.sock.setblocking(False)
-    
+        if len(self):
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                self.conn = sock.connect((self.ip, self.port))
+            except ConnectionRefusedError:
+                self.sock = None
+                logger.error(f'{self.name} ({self.ip}) refused connection')
+                return
+            except socket.gaierror:
+                self.sock = None
+                logger.error(f'{self.name} ({self.ip}) not found')
+                return
+            sock.setblocking(False)
+
     def send(self, *msgs, force=False):
         if not self.sock: return
         if msgs:
             msg = b' '.join(msgs) + b'\n'
             msg_str = msg.decode().strip()
             if self.ok_to_send or force:
+                self.deficit += 1
                 self.sock.send(msg)
                 print(f'{self.name} ({self.ip}) > {msg_str}')
                 self.ok_to_send = False
@@ -187,7 +196,10 @@ class Remote(dict):
             except BlockingIOError:
                 self._ok_to_send = False
             else:
-                # print(resp)
+                self.deficit -= resp.count('\n')
+                print(self.deficit)
+                # if self.deficit <= 0:
+                #     self._ok_to_send = True  # maybe? untested
                 self._ok_to_send = True
         return self._ok_to_send
     
