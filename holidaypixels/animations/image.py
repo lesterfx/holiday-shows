@@ -36,7 +36,7 @@ class Animation(object):
         if 'variations' in self.settings:
             path = path.format(randint(1, self.settings['variations']))
         print()
-        print('Opening', path)
+        print('Loading image:', path)
         print()
         image = Image.open(path)
         self.image = image.getdata()
@@ -46,9 +46,11 @@ class Animation(object):
 
         music = element['music']
         if music:
+            print('Loading music:', music)
             self.sound = mixer.Sound(music)
             self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
         else:
+            print('No music')
             self.sound = None
             self.silence = None
 
