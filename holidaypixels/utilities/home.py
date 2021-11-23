@@ -166,6 +166,8 @@ class Remote(dict):
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
                 print(f'{self.name} ({self.ip}) connection error: {e}')
                 return
+            else:
+                print(f'{self.name} ({self.ip}) connected')
             sock.setblocking(False)
             return sock
 
