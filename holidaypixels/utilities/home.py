@@ -161,17 +161,13 @@ class Remote(dict):
     def connect(self):
         if len(self):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.setblocking(False)
             try:
                 self.conn = sock.connect((self.ip, self.port))
-            except ConnectionRefusedError:
-                self.sock = None
-                logger.error(f'{self.name} ({self.ip}) refused connection')
+            except (ConnectionRefusedError, socket.gaierror, OSError) as e:
+                print(f'{self.name} ({self.ip}) connection error: {e}')
                 return
-            except socket.gaierror:
-                self.sock = None
-                logger.error(f'{self.name} ({self.ip}) not found')
-                return
-            sock.setblocking(False)
+            return sock
 
     def send(self, *msgs, force=False):
         if not self.sock: return
