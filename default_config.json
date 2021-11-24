@@ -20,7 +20,29 @@
         "ranges": [[17, 810]],
         "audio_delay": 0.1,
         "remotes": {
-            "side_yard": {
+            "porch": {
+                "ip": "192.168.1.240",
+                "port": 270,
+                "relays": [
+                    "snowflake",
+                    "cane_r",
+                    "cane_rc",
+                    "cane_c",
+                    "cane_lc",
+                    "cane_l",
+                    "deer_right",
+                    "deer_center",
+                    "deer_left",
+                    "truck",
+                    "icicles",
+                    null,
+                    "pillar_right",
+                    "pillar_left",
+                    "presents",
+                    null,
+                ]
+            },
+            "upstairs": {
                 "ip": "192.168.1.241",
                 "port": 270,
                 "relays": [
@@ -36,43 +58,21 @@
                     null,
                     null,
                     null,
+                    null,
+                    null,
+                    null,
                     null
                 ]
             },
-            "porch": {
-                "ip": "192.168.1.240",
+            "side_yard": {
+                "ip": "192.168.1.242",
                 "port": 270,
                 "relays": [
-                    "candycanes",
                     "tree_right",
                     "tree_left",
-                    "pillar_right",
-                    "pillar_left",
-                    "snowflake",
-                    "deer_right",
-                    "deer_center",
-                    "deer_left",
-                    "presents",
-                    "truck",
-                    "icicles",
                     "wreath",
                     "speakers",
                     "strip",
-                    null,
-                    null,
-                    null,
-                    null
-                ]
-            },
-            "upstairs": {
-                "ip": "192.168.1.240",
-                "port": 270,
-                "relays": [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
                     null,
                     null,
                     null,
