@@ -148,6 +148,7 @@ class Remote(dict):
         self.ip = config.ip
         self.port = config.port
         for i, relay_name in enumerate(config.relays):
+            if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
         self._ok_to_send = True
