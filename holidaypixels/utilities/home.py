@@ -172,6 +172,8 @@ class Remote(dict):
                 print(f'{self.name} ({self.ip}) connected')
             sock.setblocking(False)
             return sock
+        else:
+            print(f'{self.name} has no relays')
 
     def send(self, *msgs, force=False):
         if not self.sock: return
