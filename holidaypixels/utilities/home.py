@@ -160,6 +160,7 @@ class Remote(dict):
 
     def connect(self):
         if len(self):
+            print(f'{self.name} {len(self)} relays: {", ".join(self.keys())}')
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.conn = sock.connect((self.ip, self.port))
