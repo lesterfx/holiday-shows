@@ -42,7 +42,7 @@ class ArduinoTest:
             time.sleep(0.001)
 
     def setup(self):
-        ips = ['192.168.1.240', '192.168.1.242']
+        ips = ['192.168.1.240']#, '192.168.1.242']
         self.socks = []
         for ip in ips:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
