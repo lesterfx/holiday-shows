@@ -18,9 +18,7 @@ class ArduinoTest:
             now = time.time()
             if now - start > 1:
                 fps = counted / (now - start)
-                # if fps < 3:
-                #     raise Exception('FPS is too low: {}'.format(fps))
-                print(f'                     {fps:.5f} fps')
+                print(f'{fps:.5f} fps')
                 start = now
                 counted = 0
             for sock in self.socks:
@@ -44,7 +42,7 @@ class ArduinoTest:
             time.sleep(0.001)
 
     def setup(self):
-        ips = ['192.168.1.240'] # , '192.168.1.241', '192.168.1.242']
+        ips = ['192.168.1.240', '192.168.1.242']
         self.socks = []
         for ip in ips:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
