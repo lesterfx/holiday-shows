@@ -25,6 +25,7 @@ class ArduinoTest:
                 # i = 0
                 msg = f'all0,{(i % 16):02d}:1\n'
                 while not self.ready_to_receive(sock):
+                    print('waiting')
                     time.sleep(0.01)
                 print('>', msg, end='')
                 sock.send(msg.encode())
