@@ -100,6 +100,7 @@ class Animation(object):
             if self.settings.get('shuffle'):
                 shuffle(self.settings['elements'])
             for element in self.settings['elements']:
+                self.activate_relays(True)
                 self.load_resources(element)
                 self.activate_relays(False)
                 try:
@@ -160,7 +161,7 @@ class Animation(object):
                 color = self.image[width * im_y + x]
                 color_tup = color[0], color[1], color[2]
                 self.home[x-self.num_relays] = color_tup
-            self.home.show_relays(force=True)
+            self.home.show_relays(force=False)
             self.home.show()
 
             while True:
