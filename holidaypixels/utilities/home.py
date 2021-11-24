@@ -194,7 +194,7 @@ class Remote(dict):
             except BlockingIOError:
                 self._ok_to_send = False
             else:
-                self.deficit -= resp.count('\n')
+                self.deficit -= resp.count(b'\n')
                 print(self.deficit)
                 # if self.deficit <= 0:
                 #     self._ok_to_send = True  # maybe? untested
