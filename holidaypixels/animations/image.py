@@ -64,7 +64,7 @@ class Animation(object):
         animation = self.settings['intermediate_animation']
         waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
 
-        if 'days' in self.settings:
+        if self.settings.get('days'):
             days = set(self.settings['days'])
         else:
             days = None
