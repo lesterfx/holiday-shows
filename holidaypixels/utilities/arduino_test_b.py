@@ -23,7 +23,7 @@ class ArduinoTest:
                 counted = 0
             for sock in self.socks:
                 # i = 0
-                msg = f'all0,{(i % 16):02d}:1\n'
+                msg = f'{(i % 16):02d}:0,{((i+1) % 16):02d}:1\n'
                 while not self.ready_to_receive(sock):
                     print('waiting')
                     time.sleep(0.01)
@@ -42,13 +42,13 @@ class ArduinoTest:
             time.sleep(0.001)
 
     def setup(self):
-        ips = ['192.168.3.241']#, '192.168.3.242']
+        ips = ['192.168.3.241']#, '192.168.3.240', '192.168.3.242']
         self.socks = []
         for ip in ips:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print('connecting to', ip)
             sock.connect((ip, 270))
-            sock.setblocking(False)
+            # sock.setblocking(False)
             self.socks.append(sock)
             sock.send(b'all0\n')
             # time.sleep(0.03)
