@@ -195,7 +195,7 @@ class Remote(dict):
                 self._ok_to_send = False
             else:
                 self.deficit -= resp.count(b'\n')
-                print(self.deficit)
+                print(f'                           deficit: {self.deficit}')
                 # if self.deficit <= 0:
                 #     self._ok_to_send = True  # maybe? untested
                 self._ok_to_send = True

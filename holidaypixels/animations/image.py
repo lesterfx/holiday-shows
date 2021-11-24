@@ -97,10 +97,10 @@ class Animation(object):
                 waiting.main(end_by)
                 return
             
+            self.activate_relays(True)
             if self.settings.get('shuffle'):
                 shuffle(self.settings['elements'])
             for element in self.settings['elements']:
-                self.activate_relays(True)
                 self.load_resources(element)
                 self.activate_relays(False)
                 try:
@@ -108,7 +108,8 @@ class Animation(object):
                 finally:
                     if self.sound:
                         self.sound.stop()
-            time.sleep(30)
+                time.sleep(10)
+            time.sleep(20)
 
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active, True)
