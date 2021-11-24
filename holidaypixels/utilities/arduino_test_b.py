@@ -29,20 +29,20 @@ class ArduinoTest:
                     time.sleep(0.01)
                 print('>', msg, end='')
                 sock.send(msg.encode())
-                
+
     def ready_to_receive(self, sock):
         try:
             data = sock.recv(1024)
         except BlockingIOError:
             return False
         return True
-    
+
     def wait_for_ready(self, sock):
         while not self.ready_to_receive(sock):
             time.sleep(0.001)
 
     def setup(self):
-        ips = ['192.168.3.240']#, '192.168.3.242']
+        ips = ['192.168.3.241']#, '192.168.3.242']
         self.socks = []
         for ip in ips:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
