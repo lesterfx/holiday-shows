@@ -222,9 +222,9 @@ class Remote(dict):
         for relay in self.values():
             # if relay.changed:
                 msgs.append(relay.msg)
-        if wait_if_busy:
-            while not self.ok_to_send:
-                time.sleep(0.001)
+        # if wait_if_busy:
+        #     while not self.ok_to_send:
+        #         time.sleep(0.001)
         self.send(*msgs, force=force)
             # for relay in self.values():
                 # if relay.changed:
