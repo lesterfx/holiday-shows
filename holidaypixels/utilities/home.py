@@ -144,6 +144,7 @@ class Pixel(object):
 
 class Remote(dict):
     def __init__(self, name, config, client):
+        self.client = client
         self.name = name
         ip = config.ip
         port = config.port
