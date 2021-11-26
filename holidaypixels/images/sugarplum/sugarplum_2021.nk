@@ -1,0 +1,582 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"sugarplum/sugarplum.png" format:"827 3850 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4650" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="813"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.2"/>
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="229"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/sugarplum/sugarplum_2021.nk
+ project_directory "\[python \{nuke.script_directory()\}]/../"
+ frame 16
+ last_frame 4650
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x8e388e00
+ label "relays (b/w only)"
+ note_font_size 42
+ xpos -160
+ ypos -115
+ bdwidth 372
+ bdheight 527
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x71c67100
+ label "first floor"
+ note_font_size 42
+ xpos 303
+ ypos -115
+ bdwidth 409
+ bdheight 502
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x8e8e3800
+ label "second floor"
+ note_font_size 42
+ xpos 832
+ ypos -74
+ bdwidth 228
+ bdheight 508
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 1054
+ ypos 638
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {-height+frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Reformat {
+  type "to box"
+  box_width {{input.width}}
+  box_height 10
+  box_fixed true
+  resize none
+  center false
+  name Reformat1
+  selected true
+  xpos 237
+  ypos 161
+ }
+ Rectangle {
+  invert true
+  area {0 0 {width} 1}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 185
+ }
+set Ndc9ccc00 [stack 0]
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+push $Ndc9ccc00
+ Viewer {
+  frame_range 1-841
+  frame_range_lock true
+  name Viewer1
+  xpos 347
+  ypos 161
+ }
+end_group
+Read {
+ inputs 0
+ file_type exr
+ file sugarplum/sugarplum.exr
+ format "450 4650 0 0 450 4650 1 "
+ origset true
+ version 38
+ name Read1
+ xpos 557
+ ypos -436
+}
+Crop {
+ box {0 800 1500 4650}
+ reformat true
+ crop false
+ name Crop3
+ xpos 557
+ ypos -356
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat3
+ xpos 557
+ ypos -308
+}
+set N7cb49c00 [stack 0]
+Crop {
+ box {0 0 516 {height}}
+ reformat true
+ crop false
+ name Crop14
+ xpos -18
+ ypos -57
+}
+set N17e41800 [stack 0]
+push $N7cb49c00
+Crop {
+ box {1286 0 1491 {input.height}}
+ reformat true
+ crop false
+ name Crop2
+ xpos 970
+ ypos 6
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat2
+ xpos 970
+ ypos 30
+}
+push $N7cb49c00
+Crop {
+ box {1065 0 1270 {input.height}}
+ reformat true
+ crop false
+ name Crop1
+ xpos 847
+ ypos 8
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat1
+ xpos 847
+ ypos 32
+}
+Group {
+ inputs 2
+ name stack3
+ xpos 899
+ ypos 111
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N636f4c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N636f4c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+push $N7cb49c00
+Crop {
+ box {550 0 979 {input.height}}
+ reformat true
+ crop false
+ name Crop11
+ xpos 557
+ ypos -83
+}
+push $N17e41800
+Group {
+ name relays
+ xpos -18
+ ypos 337
+ addUserKnob {20 User}
+ addUserKnob {3 first l "Frame Range"}
+ first 1
+ addUserKnob {3 last l "" -STARTLINE}
+ last 17
+ addUserKnob {12 column}
+ column {{curve L x1 37 179 234 x15 449 x16 485 503} {curve L x1 99}}
+ addUserKnob {6 colorize l "colors (disable to render)" +STARTLINE}
+ addUserKnob {18 colors l "" -STARTLINE}
+ colors {{curve L x1 0.1883620024 0.9594305754 1 x5 1 x6 1 1 0.866764307 1 x13 1 x14 0.01930963993 0.866764 0} {curve L x1 1 1 0.8049124479 x5 0.8049124479 x6 0.1372603178 0 1 0.02075606585 x13 0.02075606585 x14 0.184407413 1 0.9110612869} {curve L x1 0.01355260611 0.5859570503 0.02151793242 x5 0.02151793242 x6 0 0.5233769417 0 0 x13 0 x14 1 0 1}}
+ addUserKnob {6 colors_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 threshold}
+ threshold 0.485
+ addUserKnob {26 ""}
+ addUserKnob {6 expand l "re-expand (disable to render)" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 0
+ }
+ Transform {
+  translate {{parent.column.x} 0}
+  center {250 2325}
+  invert_matrix true
+  name Transform1
+  xpos 0
+  ypos 24
+ }
+ Crop {
+  box {0 0 1 {height}}
+  reformat true
+  name Crop1
+  xpos 0
+  ypos 48
+ }
+ Crop {
+  box {0 0 {parent.last-parent.first+1} {height}}
+  reformat true
+  crop false
+  name Crop2
+  xpos 0
+  ypos 72
+ }
+ Transform {
+  translate {{frame-parent.first} 0}
+  center {0.5 2325}
+  name Transform2
+  xpos 0
+  ypos 96
+ }
+ Expression {
+  expr0 "r > threshold"
+  expr1 "g > threshold"
+  expr2 "b > threshold"
+  expr3 "a > threshold"
+  name Expression1
+  xpos 0
+  ypos 120
+  addUserKnob {20 User}
+  addUserKnob {7 threshold l "" +STARTLINE}
+  threshold {{parent.threshold}}
+ }
+ Grade {
+  white {{parent.colors} {parent.colors} {parent.colors} {parent.colors}}
+  name Grade1
+  xpos 0
+  ypos 144
+  disable {{!parent.colorize}}
+ }
+set N5e101000 [stack 0]
+ Multiply {
+  value {{parent.last-parent.first+1}}
+  name Multiply1
+  xpos 0
+  ypos 168
+ }
+ FrameBlend {
+  numframes 17
+  startframe {{parent.first}}
+  endframe {{parent.last}}
+  userange true
+  name FrameBlend1
+  xpos 0
+  ypos 200
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.input.width}}
+  box_height {{parent.input.height}}
+  box_fixed true
+  resize distort
+  center false
+  filter Impulse
+  name Reformat1
+  xpos 0
+  ypos 232
+  disable {{!parent.expand}}
+ }
+set N1885a400 [stack 0]
+push $N5e101000
+ Viewer {
+  inputs 2
+  frame_range 1-4650
+  zoom_lock true
+  input_process false
+  name Viewer1
+  xpos 135
+  ypos 102
+ }
+push $N1885a400
+ Output {
+  name Output1
+  xpos 0
+  ypos 256
+ }
+end_group
+Group {
+ inputs 2
+ name stack4
+ xpos 557
+ ypos 337
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 17
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N63731400 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N63731400
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Group {
+ inputs 2
+ name stack5
+ xpos 899
+ ypos 407
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N5e13a800 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N5e13a800
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+set N5e4ee680 [stack 0]
+Viewer {
+ inputs 2
+ frame 16
+ frame_range 1-42
+ frame_range_lock true
+ channels rgb
+ zoom_lock true
+ colour_sample_bbox {5.117647171 168.5882416 5.235294342 168.7058868}
+ samplepoints {{-0.8687499762 -0.05104166642}
+   }
+ input_process false
+ name Viewer1
+ xpos 1118
+ ypos 578
+}
+push $N5e4ee680
+Write {
+ file sugarplum/sugarplum.png
+ raw true
+ file_type png
+ use_limit true
+ checkHashOnRead false
+ version 42
+ name Write1
+ xpos 899
+ ypos 624
+}

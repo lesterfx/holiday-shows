@@ -1,0 +1,931 @@
+#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#write_info Write1 file:"sarajevo/nuke/sarajevo_2021.png" format:"827 4650 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4650" fps:"0" colorspace:"default" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 12.0 v3
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="813"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                    <page id="Viewer.2"/>
+                </dock>
+                <split size="229"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/sarajevo/nuke/sarajevo_2021.nk
+ project_directory "\[python \{nuke.script_directory()\}]/../"
+ frame 13
+ last_frame 4650
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x8e388e00
+ label "relays (b/w only)"
+ note_font_size 42
+ xpos -160
+ ypos -115
+ bdwidth 372
+ bdheight 527
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x71c67100
+ label "first floor"
+ note_font_size 42
+ xpos 303
+ ypos -115
+ bdwidth 409
+ bdheight 502
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x8e8e3800
+ label "second floor"
+ note_font_size 42
+ xpos 832
+ ypos -74
+ bdwidth 228
+ bdheight 508
+}
+Group {
+ inputs 0
+ name VIEWER_INPUT
+ xpos 1054
+ ypos 638
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 97
+ }
+ Transform {
+  translate {0 {-height+frame-1}}
+  center {225 12}
+  name Transform1
+  xpos 237
+  ypos 137
+ }
+ Reformat {
+  type "to box"
+  box_width {{input.width}}
+  box_height 10
+  box_fixed true
+  resize none
+  center false
+  name Reformat1
+  selected true
+  xpos 237
+  ypos 161
+ }
+ Rectangle {
+  invert true
+  area {0 0 {width} 1}
+  color 0
+  name Rectangle1
+  xpos 237
+  ypos 185
+ }
+set N5e20bc00 [stack 0]
+ Output {
+  name Output1
+  xpos 237
+  ypos 261
+ }
+push $N5e20bc00
+ Viewer {
+  frame_range 1-841
+  frame_range_lock true
+  name Viewer1
+  xpos 347
+  ypos 161
+ }
+end_group
+Read {
+ inputs 0
+ file_type exr
+ file "blender/xmas 2021.exr"
+ format "1500 4650 0 0 1500 4650 1 "
+ origset true
+ version 37
+ name Read2
+ selected true
+ xpos 557
+ ypos -435
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat3
+ xpos 557
+ ypos -308
+}
+set N63731400 [stack 0]
+Crop {
+ box {1286 0 1491 {input.height}}
+ reformat true
+ crop false
+ name Crop2
+ xpos 970
+ ypos 6
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat2
+ xpos 970
+ ypos 30
+}
+push $N63731400
+Crop {
+ box {1065 0 1270 {input.height}}
+ reformat true
+ crop false
+ name Crop1
+ xpos 847
+ ypos 8
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat1
+ xpos 847
+ ypos 32
+}
+Group {
+ inputs 2
+ name stack3
+ xpos 899
+ ypos 111
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N5e100c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N5e100c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Grade {
+ white 0.25
+ name Grade12
+ xpos 899
+ ypos 135
+}
+push $N63731400
+Crop {
+ box {550 0 979 {input.height}}
+ reformat true
+ crop false
+ name Crop11
+ xpos 557
+ ypos -83
+}
+set N17e41c00 [stack 0]
+Rectangle {
+ replace true
+ area {0 3862 450 4650}
+ name Rectangle2
+ xpos 605
+ ypos 83
+}
+push $N17e41c00
+Grid {
+ replace true
+ number {{(width-size)/every} 0}
+ translate {3 0}
+ color {0.5 0.5 0.5 1}
+ name Grid2
+ xpos 393
+ ypos -48
+ addUserKnob {20 User}
+ addUserKnob {3 every l "" +STARTLINE}
+ every 12
+}
+set N17e41400 [stack 0]
+Roto {
+ replace true
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x41600000 x45115000 0 0 0 0 0 0 0 x40000000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier3 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x43588882 x457b6dd9}
+        {0 0}
+        {0 0}
+        {x431f3400 x4580695e}
+        {0 0}
+        {0 0}
+        {x431c0c08 x458045da}
+        {0 0}
+        {0 0}
+        {x431c809f x456f469b}
+        {0 0}
+        {0 0}
+        {x4357ed98 x456f6256}
+        {0 0}}}     idem}
+     {tx 1 x438723d6 x458fe3d6}
+     {a osw x41200000 osf 0 str 1 spx x43610000 spy x45115000 sb 1 tt x40800000}}
+    {curvegroup Bezier2 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x431cd1a3 x4582425c}
+        {0 0}
+        {0 0}
+        {x42c6fa43 x4584f4ce}
+        {0 0}
+        {0 0}
+        {x42c0aa52 x4584d149}
+        {0 0}
+        {0 0}
+        {x42c01380 x456f2d7b}
+        {0 0}
+        {0 0}
+        {x431b76b8 x456f4936}
+        {0 0}}}     idem}
+     {tx 1 x438723d6 x458fe3d6}
+     {a osw x41200000 osf 0 str 1 spx x43610000 spy x45115000 sb 1 tt x40800000}}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x42c2358a x4588bdc9}
+        {0 0}
+        {0 0}
+        {x414ead79 x458cadf2}
+        {0 0}
+        {0 0}
+        {x41437761 x456f03c2}
+        {0 0}
+        {0 0}
+        {x42c0c8d7 x456f2b7d}
+        {0 0}}}     idem}
+     {tx 1 x438723d6 x458fe3d6}
+     {a osw x41200000 osf 0 str 1 spx x43610000 spy x45115000 sb 1 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {225 2325}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ view {}
+ motionblur_on true
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name Roto2
+ xpos 327
+ ypos -22
+}
+Expression {
+ expr0 "r > threshold"
+ expr1 "g > threshold"
+ expr2 "b > threshold"
+ expr3 "a > threshold"
+ name Expression4
+ xpos 327
+ ypos 2
+ addUserKnob {20 User}
+ addUserKnob {7 threshold l "" +STARTLINE}
+ threshold 0.55
+}
+set N5e47d800 [stack 0]
+FilterErode {
+ size {0 10}
+ filter triangle
+ name FilterErode1
+ xpos 327
+ ypos 64
+}
+push $N5e47d800
+push $N17e41400
+Merge2 {
+ inputs 2
+ operation mask
+ name Merge21
+ xpos 393
+ ypos 42
+}
+Grade {
+ inputs 1+1
+ white 2
+ invert_mask true
+ name Grade9
+ xpos 393
+ ypos 104
+}
+push $N17e41c00
+Grid {
+ replace true
+ number {{(width-size)/every} 0}
+ color {1 0 0 1}
+ name Grid1
+ xpos 493
+ ypos -48
+ addUserKnob {20 User}
+ addUserKnob {3 every l "" +STARTLINE}
+ every 6
+}
+set N5e2d8800 [stack 0]
+Roto {
+ replace true
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x43610000 x45115000 0 xc1880000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {p
+        {}
+        {x414d8545 x4579f44b}
+        {0 x39800000}
+        {}
+        {x41166666 x4579eccd}
+        {0 xb9800000}
+        {}
+        {x41122226 x456f0351}
+        {}
+        {}
+        {x43e1f3a2 x456fcc34}
+        {}
+        {}
+        {x43e58129 x4591aac2}
+        {}}}
+      {cc
+       {f 8192}
+       {p
+        {}
+        {}
+        {0 x39800000}
+        {}
+        {}
+        {0 xb9800000}
+        {}
+        {}
+        {}
+        {}
+        {}
+        {}
+        {}
+        {}
+        {}}}}
+     {tx 1 x438723d6 x458fe3d6}
+     {a osw x41200000 osf 0 str 1 spx x43610000 spy x45115000 sb 1 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {225 2325}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ view {}
+ motionblur_on true
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name Roto1
+ xpos 442
+ ypos -23
+}
+Expression {
+ expr0 "r > threshold"
+ expr1 "g > threshold"
+ expr2 "b > threshold"
+ expr3 "a > threshold"
+ name Expression5
+ xpos 442
+ ypos 1
+ addUserKnob {20 User}
+ addUserKnob {7 threshold l "" +STARTLINE}
+ threshold 0.55
+}
+set N5e2d8000 [stack 0]
+FilterErode {
+ size {0 10}
+ filter triangle
+ name FilterErode2
+ xpos 442
+ ypos 66
+}
+push $N5e2d8000
+push $N5e2d8800
+Merge2 {
+ inputs 2
+ operation mask
+ name Merge20
+ xpos 493
+ ypos 42
+}
+ColorCorrect {
+ inputs 1+1
+ saturation 0.5
+ gain 2
+ invert_mask true
+ name ColorCorrect1
+ xpos 493
+ ypos 104
+}
+Merge2 {
+ inputs 2
+ operation max
+ name Merge4
+ xpos 493
+ ypos 136
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat10
+ xpos 493
+ ypos 160
+}
+push $N17e41c00
+Keymix {
+ inputs 3
+ name Keymix1
+ xpos 557
+ ypos 193
+}
+set N5e13b800 [stack 0]
+Reformat {
+ type scale
+ flop true
+ name Reformat4
+ xpos 557
+ ypos 225
+}
+Grade {
+ white 0.25
+ name Grade10
+ xpos 557
+ ypos 249
+}
+set N5e13a000 [stack 0]
+Rectangle {
+ replace true
+ area {-402 -78 1536 617}
+ name Rectangle4
+ xpos 418
+ ypos 249
+}
+Rectangle {
+ area {-402 1070 1536 1642}
+ name Rectangle5
+ xpos 418
+ ypos 273
+}
+Rectangle {
+ area {-402 1822 1536 2842}
+ name Rectangle6
+ xpos 418
+ ypos 297
+}
+push $N5e13a000
+Grade {
+ inputs 1+1
+ white 0.7
+ name Grade11
+ xpos 557
+ ypos 297
+}
+push $N63731400
+Crop {
+ box {0 0 500 {height}}
+ reformat true
+ crop false
+ name Crop14
+ xpos -18
+ ypos -57
+}
+Group {
+ name relays
+ xpos -18
+ ypos 337
+ addUserKnob {20 User}
+ addUserKnob {3 first l "Frame Range"}
+ first -3
+ addUserKnob {3 last l "" -STARTLINE}
+ last 13
+ addUserKnob {12 column}
+ column {{curve L x1 22 x6 199.6923064 x7 270 x13 484.5} {curve L x1 3888 x6 3811.076923 x7 3787.5 x13 3699}}
+ addUserKnob {6 colorize l "colors (disable to render)" +STARTLINE}
+ addUserKnob {18 colors l "" -STARTLINE}
+ colors {{curve x1 1 0.2461363077 0.2461363077 0.9784381986 0.3073941469 0.9784381986 1 x9 1 x10 0.7718302011 1 0.940297842 0.03688645363} {curve x1 0 0.4460279942 0.4460279942 1 0.2883335948 1 0.3155526519 x9 0.3155526519 x10 0.1080521941 0.04500000179 1 1} {curve x1 0 1 1 0.3288211823 1 0.3288211823 0 x9 0 x10 1 0 0.1675271392 0}}
+ addUserKnob {6 colors_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 threshold}
+ threshold 0.55
+ addUserKnob {26 ""}
+ addUserKnob {6 expand l "re-expand (disable to render)" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 0
+ }
+ Transform {
+  translate {{parent.column.x} 0}
+  center {250 2325}
+  invert_matrix true
+  name Transform1
+  xpos 0
+  ypos 24
+ }
+ Crop {
+  box {0 0 1 {height}}
+  reformat true
+  name Crop1
+  xpos 0
+  ypos 48
+ }
+ Crop {
+  box {0 0 {parent.last-parent.first+1} {height}}
+  reformat true
+  crop false
+  name Crop2
+  xpos 0
+  ypos 72
+ }
+ Transform {
+  translate {{frame-parent.first} 0}
+  center {0.5 2325}
+  name Transform2
+  xpos 0
+  ypos 96
+ }
+ Expression {
+  expr0 "r > threshold"
+  expr1 "g > threshold"
+  expr2 "b > threshold"
+  expr3 "a > threshold"
+  name Expression1
+  xpos 0
+  ypos 120
+  addUserKnob {20 User}
+  addUserKnob {7 threshold l "" +STARTLINE}
+  threshold {{parent.threshold}}
+ }
+ Grade {
+  white {{parent.colors} {parent.colors} {parent.colors} {parent.colors}}
+  name Grade1
+  xpos 0
+  ypos 144
+  disable {{!parent.colorize}}
+ }
+set N636f4800 [stack 0]
+ Multiply {
+  value {{parent.last-parent.first+1}}
+  name Multiply1
+  xpos 0
+  ypos 168
+ }
+ FrameBlend {
+  numframes 17
+  startframe {{parent.first}}
+  endframe {{parent.last}}
+  userange true
+  name FrameBlend1
+  xpos 0
+  ypos 200
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.input.width}}
+  box_height {{parent.input.height}}
+  box_fixed true
+  resize distort
+  center false
+  filter Impulse
+  name Reformat1
+  xpos 0
+  ypos 232
+  disable {{!parent.expand}}
+ }
+set Ncc546400 [stack 0]
+push $N636f4800
+ Viewer {
+  inputs 2
+  frame_range 1-4650
+  zoom_lock true
+  input_process false
+  name Viewer1
+  xpos 135
+  ypos 102
+ }
+push $Ncc546400
+ Output {
+  name Output1
+  xpos 0
+  ypos 256
+ }
+end_group
+Group {
+ inputs 2
+ name stack4
+ xpos 557
+ ypos 337
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 17
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set Nbe65e000 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $Nbe65e000
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+Group {
+ inputs 2
+ name stack5
+ xpos 899
+ ypos 407
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 22
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N76491c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N76491c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+set Nb625700 [stack 0]
+Write {
+ file sarajevo/nuke/sarajevo_2021.png
+ raw true
+ file_type png
+ use_limit true
+ checkHashOnRead false
+ version 41
+ name Write1
+ xpos 899
+ ypos 624
+}
+push $N5e13b800
+push $Nb625700
+Viewer {
+ inputs 2
+ frame_range 1-42
+ frame_range_lock true
+ gain 1.4
+ zoom_lock true
+ colour_sample_bbox {5.117647171 168.5882416 5.235294342 168.7058868}
+ samplepoints {{-0.8687499762 -0.05104166642}
+   }
+ input_process false
+ name Viewer1
+ xpos 1118
+ ypos 578
+}

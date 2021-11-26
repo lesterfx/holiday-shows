@@ -197,7 +197,7 @@
             "end": "December 29",
             "name": "Christmas",
             "animation": [
-                "xmas1"
+                "xmas"
             ]
         },
         {
@@ -269,12 +269,17 @@
             "speed_effect_max": 3000,
             "intensity_effect_range": [-0.01, 0.007]
         },
-        "xmas1": {
+        "xmas": {
             "module": "image",
             "elements": [
                 {
-                    "image": "images/sarajevo/nuke/sarajevo.png",
+                    "image": "images/sarajevo/nuke/sarajevo_2021.png",
                     "music": "/home/pi/sarajevo.mp3",
+                    "fps": 24
+                },
+                {
+                    "image": "images/sugarplum/sugarplum.png",
+                    "music": "/home/pi/sugarplum.mp3",
                     "fps": 24
                 }
             ],
