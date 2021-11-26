@@ -179,7 +179,7 @@ class Remote(dict):
 
     def send(self, *msgs, force=False):
         for relay in self:
-            self.client.set_relays(self.client_index, relay.index, relay.state)
+            self.client.set_relay(self.client_index, relay.index, relay.state)
         self.client.send_state(self.client_index)
         return
         if not self.sock: return
