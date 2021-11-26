@@ -152,6 +152,7 @@ class Remote(dict):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
+        if not ip.endswith('240'): return
         self.client_index = client.append(ip, port)
         # self._ok_to_send = True
         # self.sock = self.connect()
