@@ -274,18 +274,55 @@
             "elements": [
                 {
                     "image": "images/sarajevo/nuke/sarajevo_2021.png",
-                    "music": "/home/pi/sarajevo.mp3",
-                    "fps": 24
+                    "music": "/home/pi/xmas-songs/sarajevo.mp3",
+                    "fps": 24,
+                    "relay-order": [
+                        "cane_r",
+                        "cane_rc",
+                        "cane_c",
+                        "cane_lc",
+                        "cane_l",
+                        "tree_right",
+                        "tree_left",
+                        "pillar_right",
+                        "snowflake",
+                        "pillar_left",
+                        "deer_r",
+                        "deer_c",
+                        "deer_l",
+                        "presents",
+                        "truck",
+                        "icicles",
+                        "wreath"
+                    ]
                 },
                 {
                     "image": "images/sugarplum/sugarplum.png",
-                    "music": "/home/pi/sugarplum.mp3",
-                    "fps": 24
+                    "music": "/home/pi/xmas-songs/sugarplum.mp3",
+                    "fps": 24,
+                    "relay-order": [
+                        "wreath",
+                        "icicles",
+                        "deer_r",
+                        "deer_c",
+                        "deer_l",
+                        "truck",
+                        "presents",
+                        "pillar_left",
+                        "cane_r",
+                        "cane_rc",
+                        "cane_c",
+                        "cane_lc",
+                        "cane_l",
+                        "snowflake",
+                        "pillar_right",
+                        "tree_left",
+                        "tree_right"
+                    ]
                 }
             ],
             "shuffle": true,
             "countdown": 10,
-            "relays": 12,
             "minute": 1,
             "intermediate_animation": "simple_xmas",
             "days": [

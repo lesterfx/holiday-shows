@@ -31,6 +31,10 @@ class Animation(object):
     
     def load_resources(self, element):
         path = element['image']
+        self.relays = element['relays']
+        for relay in self.relays:
+            if relay not in self.home.relays:
+                raise ValueError(f'Relay {relay} is not defined in the home.')
         path = os.path.join(os.path.dirname(__file__), '..', path)
         path = os.path.realpath(path)
         if 'variations' in self.settings:
@@ -58,7 +62,6 @@ class Animation(object):
 
 
     def main(self, end_by):
-        self.num_relays = self.settings.get('relays', 0)
         self.repeat = self.settings.get('repeat', 1)
 
         animation = self.settings['intermediate_animation']
@@ -116,10 +119,10 @@ class Animation(object):
 
     def validate_relays(self):
         for y in range(self.height):
-            for x in range(self.num_relays):
+            for x, name in enumerate(self.relays):
                 color = self.image[self.width * y + x]
                 if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
-                    raise ValueError(f'Relay data at Row {y}, Col {x} is not black or white.')
+                    raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is not black or white.')
 
     def present(self, end_by, epoch=None):
         previous_y = None
@@ -154,9 +157,9 @@ class Animation(object):
         while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):
             im_y = y % height
 
-            for x, relay in zip(range(self.num_relays), self.home.relays_in_order):
+            for x, name in enumerate(self.relays):
                 color = self.image[width * im_y + x]
-                relay.set(bool(color[0]))
+                self.home.relays[name].set(bool(color[0]))
 
             for x in range(self.num_relays, width):
                 color = self.image[width * im_y + x]
