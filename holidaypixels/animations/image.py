@@ -161,7 +161,7 @@ class Animation(object):
                 color = self.image[width * im_y + x]
                 self.home.relays[name].set(bool(color[0]))
 
-            for x in range(self.num_relays, width):
+            for x in range(len(self.relays), width):
                 color = self.image[width * im_y + x]
                 color_tup = color[0], color[1], color[2]
                 self.home[x-self.num_relays] = color_tup
