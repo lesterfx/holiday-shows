@@ -10,7 +10,7 @@ import board
 import digitalio
 from rpi_ws281x import Adafruit_NeoPixel, Color as WS_Color
 
-from . import consolepixel, imagepixel
+from . import consolepixel, imagepixel, relay_client
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -143,39 +143,44 @@ class Pixel(object):
         return self.position < other.position
 
 class Remote(dict):
-    def __init__(self, name, config):
+    def __init__(self, name, config, client):
         self.name = name
-        self.ip = config.ip
-        self.port = config.port
+        ip = config.ip
+        port = config.port
         for i, relay_name in enumerate(config.relays):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
-        self._ok_to_send = True
-        self.sock = self.connect()
-        self.deficit = 0
+        self.client_index = client.append(ip, port)
+        # self._ok_to_send = True
+        # self.sock = self.connect()
+        # self.deficit = 0
         self.all(0)
 
     def __hash__(self):
         return hash(self.name)
 
-    def connect(self):
-        if len(self):
-            print(f'{self.name} {len(self)} relays: {", ".join(self.keys())}')
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
-                self.conn = sock.connect((self.ip, self.port))
-            except (ConnectionRefusedError, socket.gaierror, OSError) as e:
-                print(f'{self.name} ({self.ip}) connection error: {e}')
-                return
-            else:
-                print(f'{self.name} ({self.ip}) connected')
-            sock.setblocking(False)
-            return sock
-        else:
-            print(f'{self.name} has no relays')
+    # def connect(self):
+    #     if len(self):
+    #         print(f'{self.name} {len(self)} relays: {", ".join(self.keys())}')
+    #         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #         try:
+    #             self.conn = sock.connect((self.ip, self.port))
+    #         except (ConnectionRefusedError, socket.gaierror, OSError) as e:
+    #             print(f'{self.name} ({self.ip}) connection error: {e}')
+    #             return
+    #         else:
+    #             print(f'{self.name} ({self.ip}) connected')
+    #         sock.setblocking(False)
+    #         return sock
+    #     else:
+    #         print(f'{self.name} has no relays')
 
     def send(self, *msgs, force=False):
+        for relay in self.relays:
+            self.client.set_relays(self.client_index, relay.index, relay.state)
+        self.client.send_state(self.client_index)
+        return
         if not self.sock: return
         if msgs:
             msg = b' '.join(msgs) + b'\n'
@@ -190,45 +195,45 @@ class Remote(dict):
                 print(f'{self.name} ({self.ip}) > {msg_str} (not ready)')
                 return False
 
-    @property
-    def ok_to_send(self):
-        if not self._ok_to_send:
-            try:
-                resp = self.sock.recv(1024)
-            except BlockingIOError:
-                self._ok_to_send = False
-            else:
-                self.deficit -= resp.count(b'\n')
-                print(f'                           deficit: {self.deficit}')
-                # if self.deficit <= 0:
-                #     self._ok_to_send = True  # maybe? untested
-                self._ok_to_send = True
-        return self._ok_to_send
+    # @property
+    # def ok_to_send(self):
+    #     if not self._ok_to_send:
+    #         try:
+    #             resp = self.sock.recv(1024)
+    #         except BlockingIOError:
+    #             self._ok_to_send = False
+    #         else:
+    #             self.deficit -= resp.count(b'\n')
+    #             print(f'                           deficit: {self.deficit}')
+    #             # if self.deficit <= 0:
+    #             #     self._ok_to_send = True  # maybe? untested
+    #             self._ok_to_send = True
+    #     return self._ok_to_send
     
-    @ok_to_send.setter
-    def ok_to_send(self, value):
-        self.response = b''
-        self._ok_to_send = value
+    # @ok_to_send.setter
+    # def ok_to_send(self, value):
+    #     self.response = b''
+    #     self._ok_to_send = value
 
     def show(self, wait_if_busy=False, force=False):
         msgs = []
         for relay in self.values():
-            if relay.changed:
+            # if relay.changed:
                 msgs.append(relay.msg)
         if wait_if_busy:
             while not self.ok_to_send:
                 time.sleep(0.001)
-        if self.send(*msgs, force=force):
-            for relay in self.values():
-                if relay.changed:
-                    relay.changed = False
+        self.send(*msgs, force=force)
+            # for relay in self.values():
+                # if relay.changed:
+                    # relay.changed = False
     
     def all(self, value):
         for relay in self.values():
             relay.value = value
-        if self.send(b'all1' if value else b'all0'):
-            for relay in self.values():
-                relay.changed = False
+        self.send(b'all1' if value else b'all0')
+            # for relay in self.values():
+                # relay.changed = False
 
 class Relay(object):
     def __init__(self, remote, name, index):
@@ -341,12 +346,15 @@ class Home(object):
             return imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
 
     def init_relays(self):
+        self.relay_client = relay_client.RelayClient()
+
         self.relays = {}
         self.remotes = {}
         for name, config in self.globals.remotes.items():
-            remote = Remote(name, config)
+            remote = Remote(name, config, self.relay_client)
             self.remotes[name] = remote
             self.relays.update(remote)
+        self.relay_client.handshake_all()
         self.relays_in_order = []
         self.remotes_used_in_order = set()
         for name in self.globals.relay_order:
