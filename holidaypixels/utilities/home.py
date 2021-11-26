@@ -178,7 +178,7 @@ class Remote(dict):
     #         print(f'{self.name} has no relays')
 
     def send(self, *msgs, force=False):
-        for relay in self:
+        for relay in self.values():
             self.client.set_relay(self.client_index, relay.index, relay.state)
         self.client.send_state(self.client_index)
         return
