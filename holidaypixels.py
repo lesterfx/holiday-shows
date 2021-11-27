@@ -59,23 +59,28 @@ class CalendarEntry(object):
                 else:
                     yield day
                 day += datetime.timedelta(1)
-
 class Holiday_Pixels(object):
     def __init__(self):
         self.sun = sun.Sun()
         self.load_args()
-        config = self.load_config()
-        self.process_config(config)
-        self.init_strip()
-        try:
-            if self.args.demo:
-                self.demo(self.args.demo)
-            else:
-                self.main()
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self.strip.on = False
+        if self.args.remote:
+            self.run_remote()
+        else:
+            config = self.load_config()
+            self.process_config(config)
+            self.init_strip()
+            try:
+                if self.args.demo:
+                    self.demo(self.args.demo)
+                else:
+                    self.main()
+            except KeyboardInterrupt:
+                pass
+            finally:
+                self.strip.on = False
+
+    def run_remote(self):
+        home.run_remote()
 
     def init_strip(self):
         try:
@@ -283,9 +288,9 @@ class Holiday_Pixels(object):
         parser.add_argument('--until', default='', help='When to stop demo')
         parser.add_argument('--minutes', default=0, type=int, help='How many minutes to run demo')
         parser.add_argument('--seconds', default=0, type=int, help='How many seconds to run demo')
-        parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
         parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
+        parser.add_argument('--remote', help="Run a remote pixel server. All other options are ignored.")
         self.args = parser.parse_args()
         print(self.args)
 

@@ -682,3 +682,8 @@ class Home(object):
         for pixel in self.strip:
             pixel -= other
         return self
+
+def run_remote():
+    HOST, PORT = "localhost", 2700
+    with socketserver.TCPServer((HOST, PORT), Strip_Remote_Server) as server:
+        server.serve_forever()
