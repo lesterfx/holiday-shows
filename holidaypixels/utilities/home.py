@@ -204,7 +204,7 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
             b'load_image': self.load_image
         }
         for key in options:
-            if data.startswith(key + ':'):
+            if data.startswith(key + b':'):
                 response = options[key](data[len(key)+1:])
                 self.request.sendall(response)
                 return
