@@ -216,7 +216,8 @@ class Strip_Remote_Client():
 
         self.connected = False
         # self.connect()
-        # self.synchronize()
+        self.synchronize()
+        # self.socket.setblocking(False)
         self.init_strip()
 
     def load_relays(self, relay_data):
@@ -225,11 +226,14 @@ class Strip_Remote_Client():
         self.player.load_relays(relay_data)
 
     def synchronize(self):
-        client_time = time.time()
-        self.socket.send(b'synchronize:' + struct.pack('d', client_time) + b'\n')
-        server_time = struct.unpack('d', self.socket.recv(1024))[0]
-        print(f'{self.ip}: server_time - client_time:', server_time - client_time)
-        self.socket.setblocking(False)
+        if self.ip:
+            client_time = time.time()
+            self.socket.send(b'synchronize:' + struct.pack('d', client_time) + b'\n')
+            server_time = struct.unpack('d', self.socket.recv(1024))[0]
+            self.time_offset = server_time - client_time
+            print(f'{self.ip}: time offset:', self.time_offset)
+        else:
+            self.time_offset = 0
 
     def init_strip(self):
         if self.ip:
@@ -265,7 +269,7 @@ class Strip_Remote_Client():
 
     def play(self, end_by, epoch, repeat):
         if self.ip:
-            self.send(b'play:' + struct.pack('ddi', end_by, epoch, repeat) + b'\n')
+            self.send(b'play:' + struct.pack('ddb', end_by, epoch, repeat) + b'\n')
         else:
             self.player.play(end_by, epoch, repeat)
 

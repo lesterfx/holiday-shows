@@ -175,6 +175,7 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
+            
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
                 self.home.strips[key].play(self.repeat, end_by, epoch)
@@ -183,7 +184,8 @@ class Animation(object):
             self.sound.play()
             time.sleep(self.globals.audio_delay)
 
-        self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
+        self.home.local_strip.play(self.repeat, end_by, epoch)
+        # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
 
     def show_loop(self, image_slice, relays, repeat, end_by, epoch):
         height = len(image_slice)
