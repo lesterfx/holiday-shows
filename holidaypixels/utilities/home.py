@@ -169,27 +169,27 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         options = {
             b'init_strip': self.init_strip,
             b'synchronize': self.synchronize,
-            b'load_image': self.load_image,
-            b'init_strip': self.init_strip
+            b'load_image': self.load_image
         }
         for key in options:
             if data.startswith(key + ':'):
-                options[key](data[len(key)+1:])
+                response = options[key](data[len(key)+1:])
+                self.request.sendall(response)
                 return
         else:
             raise NotImplementedError(data)
 
+    def init_strip(self, data):
+        strip_data = json.loads(data)
+        self.player = Strip_Cache_Player(strip_data)
+        return b'ok'
+    
     def synchronize(self, data):
         client_time = struct.unpack('d', data)[0]
         server_time = time.time()
         self.time_offset = server_time - client_time
-        self.request.sendall(struct.pack('d', server_time) + b'\n')
+        return struct.pack('d', server_time)
 
-    def init_strip(self, data):
-        strip_data = json.loads(data)
-        self.strip = StripWrapper(strip_data)
-        self.request.sendall(b'ok\n')
-    
     def load_image(self, data):
         width, height = struct.unpack('ii', data[:8])
         data = data[8:]
@@ -200,8 +200,11 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
             for x in range(width):
                 row.append(flat_pixel_data[y*width + x])
             self.image_data.append(row)
-        self.request.sendall(b'ok\n')
+        return b'ok'
 
+    def play(self, data):
+        end_by, epoch, repeat = struct.unpack('ddb', data)
+        self.player.play(end_by, epoch, repeat)
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -216,7 +219,7 @@ class Strip_Remote_Client():
 
         self.connected = False
         # self.connect()
-        self.synchronize()
+        # self.synchronize()
         # self.socket.setblocking(False)
         self.init_strip()
 
@@ -228,8 +231,8 @@ class Strip_Remote_Client():
     def synchronize(self):
         if self.ip:
             client_time = time.time()
-            self.socket.send(b'synchronize:' + struct.pack('d', client_time) + b'\n')
-            server_time = struct.unpack('d', self.socket.recv(1024))[0]
+            response = self.send(b'synchronize:' + struct.pack('d', client_time))
+            server_time = struct.unpack('d', response)[0]
             self.time_offset = server_time - client_time
             print(f'{self.ip}: time offset:', self.time_offset)
         else:
@@ -237,7 +240,8 @@ class Strip_Remote_Client():
 
     def init_strip(self):
         if self.ip:
-            self.send(b'init_strip:' + json.dumps(self.config).encode())
+            response = self.send(b'init_strip:' + json.dumps(self.config).encode(), expected_response=b'ok')
+            print(response)
         else:
             self.player = Strip_Cache_Player(self.config)
 
@@ -263,20 +267,26 @@ class Strip_Remote_Client():
                     data += pixel
                     structure += 'BBB'
             message = struct.pack(structure, *data)
-            self.send(b'load_image:' + message + b'\n')
+            response = self.send(b'load_image:' + message, expected_response=b'ok')
+            print(response)
         else:
             self.player.load_image(image_data)
 
     def play(self, end_by, epoch, repeat):
         if self.ip:
-            self.send(b'play:' + struct.pack('ddb', end_by, epoch, repeat) + b'\n')
+            self.send(b'play:' + struct.pack('ddb', end_by, epoch, repeat), expected_response=b'ok')
         else:
             self.player.play(end_by, epoch, repeat)
 
-    def send(self, data):
-        print(f'{self.name} ({self.ip}) sending something')
+    def send(self, data, expected_response=None):
+        print(f'{self.name} ({self.ip}) sending {data[:100]}')
         if self.connected:
             self.socket.sendall(data)
+            response = self.socket.recv(1024)
+            if expected_response is not None:
+                if response != expected_response:
+                    raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')
+            return response
 
 
 
