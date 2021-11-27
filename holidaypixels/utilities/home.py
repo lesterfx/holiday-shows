@@ -233,7 +233,7 @@ class Strip_Remote_Client():
 
     def init_strip(self):
         if self.ip:
-            self.send(b'init_strip:' + json.dumps(self.config))
+            self.send(b'init_strip:' + json.dumps(self.config).encode())
         else:
             self.player = Strip_Cache_Player(self.config)
 
