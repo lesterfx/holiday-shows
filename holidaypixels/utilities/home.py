@@ -319,7 +319,7 @@ class Strip_Remote_Client():
             self.player.play(repeat, end_by, epoch, fps)
 
     def send(self, data, expected_response=None):
-        print(f'{self.name} ({self.ip}) sending {data[:24]}')
+        print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({data[:24]}...)')
         if self.connected:
             self.socket.sendall(data)
             response = self.socket.recv(1024)
