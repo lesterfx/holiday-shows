@@ -258,6 +258,7 @@ class Strip_Remote_Client():
         self.connected = False
         self.connect()
         self.synchronize()
+        time.sleep(1)
         # self.socket.setblocking(False)
         self.init_strip()
 
