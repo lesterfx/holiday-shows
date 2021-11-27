@@ -157,7 +157,7 @@ class Strip_Cache_Player():
     def load_relays(self, relay_data):
         self.relay_data = relay_data
 
-    def play(self, repeat, end_by, epoch):
+    def play(self, repeat, end_by, epoch, fps):
         height = len(self.image_data)
         abs_y = 0
         while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
@@ -186,7 +186,7 @@ class Strip_Cache_Player():
 
             while True:
                 previous_y = abs_y
-                abs_y = int((time.time() - epoch) * self.fps)
+                abs_y = int((time.time() - epoch) * fps)
                 if abs_y != previous_y:
                     break
 
@@ -235,8 +235,8 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         return b'ok'
 
     def play(self, data):
-        repeat, end_by, epoch = struct.unpack('bdd', data)
-        self.player.play(repeat, end_by, epoch)
+        repeat, end_by, epoch, fps = struct.unpack('bddb', data)
+        self.player.play(repeat, end_by, epoch, fps)
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -304,15 +304,16 @@ class Strip_Remote_Client():
         else:
             self.player.load_image(image_data)
 
-    def play(self, repeat, end_by, epoch):
+    def play(self, repeat, end_by, epoch, fps):
         print(f'{self.name} ({self.ip}) play:')
         print('repeat:', repeat)
         print('end by:', end_by)
         print('epoch:', epoch)
+        print('fps:', fps)
         if self.ip:
-            self.send(b'play:' + struct.pack('bdd', repeat, end_by, epoch), expected_response=b'ok')
+            self.send(b'play:' + struct.pack('bddb', repeat, end_by, epoch, fps), expected_response=b'ok')
         else:
-            self.player.play(repeat, end_by, epoch)
+            self.player.play(repeat, end_by, epoch, fps)
 
     def send(self, data, expected_response=None):
         print(f'{self.name} ({self.ip}) sending {data[:25]}')
