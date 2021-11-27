@@ -3,6 +3,7 @@
 import datetime
 import importlib
 import os
+from pprint import pprint
 from random import randint, shuffle
 import time
 
@@ -137,6 +138,7 @@ class Animation(object):
             for x, name in enumerate(self.relays):
                 color = self.image[self.width * y + x]
                 if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
+                    pprint(relay_data)
                     raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
                 elif color[0] == 0:
                     row.append(True)
