@@ -5,6 +5,7 @@ from __future__ import print_function, division
 import logging
 import socket
 import socketserver
+import struct
 import time
 
 import board
@@ -166,10 +167,10 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
             raise NotImplementedError(data)
     
     def sync(self, data):
-        client_time = float.from_bytes(data, 'big')
+        client_time = struct.unpack('d', data)[0]
         server_time = time.time()
         self.time_offset = server_time - client_time
-        self.request.sendall(server_time.to_bytes(8, 'big'))
+        self.request.sendall(struct.pack('d', server_time))
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -193,8 +194,8 @@ class Strip_Remote_Client():
             else:
                 print(f'{self.name} ({self.ip}) connected')
                 client_time = time.time()
-                self.socket.send(b'sync:' + client_time.to_bytes(8, 'big'))
-                server_time = float.from_bytes(self.socket.recv(1024), 'big')
+                self.socket.send(b'sync:' + struct.pack('d', client_time))
+                server_time = struct.unpack('d', self.socket.recv(1024))[0]
                 print(f'{self.ip}: server_time - client_time:', server_time - client_time)
                 self.socket.setblocking(False)
                 self.connected = True
