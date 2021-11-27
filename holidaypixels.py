@@ -21,7 +21,7 @@ from holidaypixels.utilities import sun, home
 GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'remotes', 'relay_order', 'strip', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
-RemotePrefs = namedtuple('RemotePrefs', ['name', 'ip', 'port', 'relays'])
+RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
 class CalendarEntry(object):
     def __init__(self, entry):
         today = datetime.date.today()
@@ -178,7 +178,7 @@ class Holiday_Pixels(object):
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
         # strip = self.process_strip(globals_['strip'])
-        remotes = self.process_remotes(globals_['remotes'])
+        remotes = self.process_relay_remotes(globals_['relay_remotes'])
         black = globals_['black']
         max_ = globals_['max']
         audio_delay = globals_['audio_delay']
@@ -193,8 +193,8 @@ class Holiday_Pixels(object):
             audio_delay=audio_delay
         )
 
-    def process_remotes(self, remotes):
-        return {name: RemotePrefs(name=name, ip=remote['ip'], port=remote['port'], relays=remote['relays']) for name, remote in remotes.items()}
+    def process_relay_remotes(self, remotes):
+        return {name: RelayRemotePrefs(name=name, ip=remote['ip'], port=remote['port'], relays=remote['relays']) for name, remote in remotes.items()}
 
     def process_strip(self, strip):
         pin = int(strip['pin'])
