@@ -345,12 +345,15 @@ class StripWrapper(object):
 
     @property
     def on(self):
-        return self.relay.value
+        # return self.relay.value
+        print('Deprecated strip relay getter called!')
+        return True
 
     @on.setter
     def on(self, value):
-        self.relay.set(value)
-        self.relay.show(True)  # TODO: potentially inefficient
+        print('Deprecated strip relay setter called!')
+        # self.relay.set(value)
+        # self.relay.show(True)  # TODO: potentially inefficient
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
