@@ -55,6 +55,8 @@ class Animation(object):
             print('Slice loaded:', key)
             if self.home.strips[key].ip is None:
                 key = '_image'
+            else:
+                self.home.strips[key].load_image(slice)
             self.data[key] = slice
 
         music = element['music']

@@ -192,8 +192,8 @@ class Strip_Remote_Client():
             assert self.ip
             self.ip = config.ip
             self.port = config.port
-            # self.connect()
-            # self.synchronize()
+        # self.connect()
+        # self.synchronize()
 
     def synchronize(self):
         client_time = time.time()
@@ -213,8 +213,15 @@ class Strip_Remote_Client():
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
 
-    def load(self, data):
-        pass
+    def load_image(self, image_data):
+        data = []
+        structure = ''
+        for row in image_data:
+            for pixel in row:
+                data.append(pixel)
+                structure += 'BBB'
+        message = struct.pack(structure, data)
+        print(message)
 
     def play(self, end_by, epoch, repeat):
         pass
