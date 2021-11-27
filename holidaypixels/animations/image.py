@@ -176,7 +176,7 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
-            self.home.local_strip.relays = self.relays
+            self.home.local_strip.player.relays = self.relays
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
                 self.home.strips[key].play(self.repeat, end_by_float, epoch)

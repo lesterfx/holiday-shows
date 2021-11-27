@@ -533,7 +533,7 @@ class Home(object):
             self.strips[strip.name] = strip
             if strip.ip is None:
                 self.local_strip = strip
-                self.local_strip.home = self
+                self.local_strip.player.home = self
                 # shortcut for "old code" that doesn't use severs
                 self.strip = self.strips[strip_config.name].player.strip
 
