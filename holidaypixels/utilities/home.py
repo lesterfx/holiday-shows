@@ -684,6 +684,8 @@ class Home(object):
         return self
 
 def run_remote():
+    print('Running Remote')
     HOST, PORT = "localhost", 2700
     with socketserver.TCPServer((HOST, PORT), Strip_Remote_Server) as server:
+        print(f'Serving on {HOST}:{PORT}')
         server.serve_forever()
