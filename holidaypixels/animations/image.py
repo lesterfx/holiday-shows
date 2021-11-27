@@ -42,14 +42,20 @@ class Animation(object):
             path = path.format(randint(1, self.settings['variations']))
         print()
         print('Loading image:', path)
-        print()
         image = Image.open(path)
         self.image = image.getdata()
         self.width = image.width
         self.height = image.height
         self.data = {}
         self.data['_relays'] = self.validate_relays()
-        self.data['_image'] = self.slice_image(len(self.relays), self.width)
+        for key, options in element.strips.items():
+            start = len(self.relays) + options['start']
+            end = len(self.relays) + options['end']
+            slice = self.slice_image(start, end)
+            print('Slice loaded:', key)
+            if self.home.strips[key].ip is None:
+                key = '_image'
+            self.data[key] = slice
 
         music = element['music']
         if music:
@@ -60,6 +66,7 @@ class Animation(object):
             print('No music')
             self.sound = None
             self.silence = None
+        print()
 
         self.fps = element['fps']
 

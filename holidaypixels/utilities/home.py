@@ -195,14 +195,14 @@ class Strip_Remote_Client():
             self.connect()
             self.synchronize()
 
-    def _synchronize(self):
+    def synchronize(self):
         client_time = time.time()
         self.socket.send(b'sync:' + struct.pack('d', client_time))
         server_time = struct.unpack('d', self.socket.recv(1024))[0]
         print(f'{self.ip}: server_time - client_time:', server_time - client_time)
         self.socket.setblocking(False)
 
-    def _connect(self):
+    def connect(self):
         if self.ip:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
