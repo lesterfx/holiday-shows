@@ -367,15 +367,15 @@ class StripWrapper(object):
         )
 
     def __setitem__(self, x, rgb):
-        self.cached[x] = rgb
+        # self.cached[x] = rgb
         if rgb:
             value = self.map(*rgb)
         else:
             value = 0
         self.real_strip.setPixelColor(x, value)
 
-    def __getitem__(self, x):
-        return self.cached[x]
+    # def __getitem__(self, x):
+    #     return self.cached[x]
 
     def show(self):
         need_to_wait = self.next_available - time.time()
