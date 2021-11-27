@@ -24,6 +24,7 @@
             },
             "first_floor": {
                 "ip": null,
+                "port": null,
                 "pin": 18,
                 "pixel_order": "RGB",
                 "frequency": 800000,
