@@ -152,7 +152,7 @@ class Remote(dict):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
-        if ip.endswith('241'): return
+        if not len(self): return
         self.client_index = client.append(ip, port)
         # self._ok_to_send = True
         # self.sock = self.connect()
@@ -357,7 +357,7 @@ class Home(object):
             remote = Remote(name, config, self.relay_client)
             self.remotes[name] = remote
             self.relays.update(remote)
-        # self.relay_client.handshake_all()
+        self.relay_client.handshake_all()
         self.relays_in_order = []
         self.remotes_used_in_order = set()
         for name in self.globals.relay_order:
