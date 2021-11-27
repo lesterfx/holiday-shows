@@ -206,7 +206,9 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         }
         for key in options:
             if data.startswith(key + b':'):
-                response = options[key](data[len(key)+1:])
+                handler = options[key]
+                response = handler(data[len(key)+1:])
+                print(f'handled in {handler}. replying with', response)
                 self.request.sendall(response)
                 return
         else:
