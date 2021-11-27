@@ -274,6 +274,7 @@ class Strip_Remote_Client():
 
     def play(self, end_by, epoch, repeat):
         if self.ip:
+            print(end_by, epoch, repeat)
             self.send(b'play:' + struct.pack('ddb', end_by, epoch, repeat), expected_response=b'ok')
         else:
             self.player.play(end_by, epoch, repeat)
