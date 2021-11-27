@@ -179,7 +179,7 @@ class Holiday_Pixels(object):
         corners = [int(corner) for corner in globals_['corners']]
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
-        strips = self.process_strips(globals_['strip'])
+        strips = self.process_strips(globals_['strips'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         black = globals_['black']
         max_ = globals_['max']
