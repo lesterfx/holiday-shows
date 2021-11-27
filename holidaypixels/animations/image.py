@@ -138,7 +138,8 @@ class Animation(object):
             for x, name in enumerate(self.relays):
                 color = self.image[self.width * y + x]
                 if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
-                    pprint(relay_data)
+                    for row in relay_data:
+                        print(''.join(['-','X'][c] for c in row))
                     raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
                 elif color[0] == 0:
                     row.append(True)
