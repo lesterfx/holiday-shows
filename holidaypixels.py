@@ -77,7 +77,7 @@ class Holiday_Pixels(object):
 
     def init_strip(self):
         try:
-            self.strip = home.Home(self.globals, display=self.args.display, outfile=self.args.save)
+            self.strip = home.Home(self.globals)
         except RuntimeError as err:
             print(err)
             print('To preview in console, run with flag "--display console"')
