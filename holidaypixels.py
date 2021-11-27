@@ -18,10 +18,12 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relay_remotes', 'relay_order', 'strip', 'audio_delay'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relay_remotes', 'relay_order', 'strips', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
+StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length'])
+
 class CalendarEntry(object):
     def __init__(self, entry):
         today = datetime.date.today()
@@ -177,7 +179,7 @@ class Holiday_Pixels(object):
         corners = [int(corner) for corner in globals_['corners']]
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
-        # strip = self.process_strip(globals_['strip'])
+        strips = self.process_strips(globals_['strip'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         black = globals_['black']
         max_ = globals_['max']
@@ -189,12 +191,30 @@ class Holiday_Pixels(object):
             black=black,
             relay_remotes=relay_remotes,
             relay_order=relay_order,
-            strip=None,
+            strips=strips,
             audio_delay=audio_delay
         )
 
     def process_relay_remotes(self, remotes):
         return {name: RelayRemotePrefs(name=name, ip=remote['ip'], port=remote['port'], relays=remote['relays']) for name, remote in remotes.items()}
+
+    def process_strips(self, strips):
+        processed_strips = []
+        for name, strip in strips.items():
+            processed_strips.append(StripRemotePrefs(
+                name=name,
+                ip=strip['ip'],
+                port=strip['port'],
+                pin=strip['pin'],
+                pixel_order=strip['pixel_order'],
+                frequency=strip['frequency'],
+                dma=strip['dma'],
+                invert=strip['invert'],
+                pin_channel=strip['pin_channel'],
+                brightness=strip['brightness'],
+                length=strip['length']
+            ))
+        return processed_strips
 
     def process_strip(self, strip):
         pin = int(strip['pin'])
