@@ -25,6 +25,7 @@ class Animation(object):
         for i, relay in enumerate(self.home.relays_in_order):
             if offset % num_relays == i:
                 relay.set(False)
+                print(relay)
             else:
                 relay.set(True)
         self.home.show_relays(True)
