@@ -220,7 +220,7 @@ class Strip_Remote_Client():
             for pixel in row:
                 data.append(pixel)
                 structure += 'BBB'
-        message = struct.pack(structure, data)
+        message = struct.pack(structure, *data)
         print(message)
 
     def play(self, end_by, epoch, repeat):
