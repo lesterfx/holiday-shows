@@ -163,11 +163,12 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
 
         options = {
             b'init_strip': self.init_strip,
-            b'synchronize': self.synchronize
+            b'synchronize': self.synchronize,
+            b'load_image': self.load_image
         }
         for key in options:
-            if data.startswith(key):
-                options[key](data[len(key):])
+            if data.startswith(key + ':'):
+                options[key](data[len(key)+1:])
                 return
         else:
             raise NotImplementedError(data)
@@ -181,6 +182,18 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
     def init_strip(self, data):
         self.strip = StripWrapper(data)
         self.request.sendall(b'ok\n')
+    
+    def load_image(self, data):
+        width, height = struct.unpack('ii', data[:8])
+        data = data[8:]
+        flat_pixel_data = struct.unpack('BBB'*width*height, data)
+        self.image_data = []
+        for y in range(height):
+            row = []
+            for x in range(width):
+                row.append(flat_pixel_data[y*width + x])
+            self.image_data.append(row)
+
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -214,14 +227,16 @@ class Strip_Remote_Client():
                 self.connected = True
 
     def load_image(self, image_data):
-        data = []
-        structure = ''
+        width = len(image_data[0])
+        height = len(image_data)
+        data = [width, height]
+        structure = 'ii'
         for row in image_data:
             for pixel in row:
                 data += pixel
                 structure += 'BBB'
         message = struct.pack(structure, *data)
-        print(message)
+        self.send(b'load_image:')
 
     def play(self, end_by, epoch, repeat):
         pass
