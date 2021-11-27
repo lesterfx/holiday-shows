@@ -195,6 +195,7 @@ class Strip_Cache_Player():
 class Strip_Remote_Server(socketserver.BaseRequestHandler):
     allow_reuse_address = True
     def handle(self):
+        print('------------')
         data = self.request.recv(1024)
         print("{} wrote:".format(self.client_address[0]))
         print(data[:24])
@@ -208,11 +209,13 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
             if data.startswith(key + b':'):
                 handler = options[key]
                 response = handler(data[len(key)+1:])
-                print(f'handled in {handler}. replying with', response)
+                print(f'successfully handled {key}. replying with:', response)
                 self.request.sendall(response)
-                return
+                break
         else:
             raise NotImplementedError(data)
+        print('------------')
+
 
     def init_strip(self, data):
         strip_data = json.loads(data)
@@ -275,8 +278,7 @@ class Strip_Remote_Client():
 
     def init_strip(self):
         if self.ip:
-            response = self.send(b'init_strip:' + json.dumps(self.config).encode(), expected_response=b'ok')
-            print(response)
+            self.send(b'init_strip:' + json.dumps(self.config).encode(), expected_response=b'ok')
         else:
             self.player = Strip_Cache_Player(self.config)
 
@@ -321,9 +323,8 @@ class Strip_Remote_Client():
         if self.connected:
             self.socket.sendall(data)
             response = self.socket.recv(1024)
-            if expected_response is not None:
-                if response != expected_response:
-                    raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')
+            if expected_response is not None and response != expected_response:
+                raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')
             return response
 
 
