@@ -161,16 +161,26 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         print("{} wrote:".format(self.client_address[0]))
         print(self.data)
 
-        if data.startswith(b'sync:'):
-            self.sync(data[5:])
+        options = {
+            b'init_strip': self.init_strip,
+            b'synchronize': self.synchronize
+        }
+        for key in options:
+            if data.startswith(key):
+                options[key](data[len(key):])
+                return
         else:
             raise NotImplementedError(data)
-    
-    def sync(self, data):
+
+    def synchronize(self, data):
         client_time = struct.unpack('d', data)[0]
         server_time = time.time()
         self.time_offset = server_time - client_time
-        self.request.sendall(struct.pack('d', server_time))
+        self.request.sendall(struct.pack('d', server_time) + b'\n')
+
+    def init_strip(self, data):
+        self.strip = StripWrapper(data)
+        self.request.sendall(b'ok\n')
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -182,8 +192,17 @@ class Strip_Remote_Client():
             assert self.ip
             self.ip = config.ip
             self.port = config.port
+            self.connect()
+            self.synchronize()
 
-    def connect(self):
+    def _synchronize(self):
+        client_time = time.time()
+        self.socket.send(b'sync:' + struct.pack('d', client_time))
+        server_time = struct.unpack('d', self.socket.recv(1024))[0]
+        print(f'{self.ip}: server_time - client_time:', server_time - client_time)
+        self.socket.setblocking(False)
+
+    def _connect(self):
         if self.ip:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
@@ -193,11 +212,6 @@ class Strip_Remote_Client():
                 return
             else:
                 print(f'{self.name} ({self.ip}) connected')
-                client_time = time.time()
-                self.socket.send(b'sync:' + struct.pack('d', client_time))
-                server_time = struct.unpack('d', self.socket.recv(1024))[0]
-                print(f'{self.ip}: server_time - client_time:', server_time - client_time)
-                self.socket.setblocking(False)
                 self.connected = True
 
     def load(self, data):

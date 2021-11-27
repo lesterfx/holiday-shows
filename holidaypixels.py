@@ -80,10 +80,7 @@ class Holiday_Pixels(object):
             self.strip = home.Home(self.globals)
         except RuntimeError as err:
             print(err)
-            print('To preview in console, run with flag "--display console"')
             return
-        if self.args.fps:
-            strip.fps = self.args.fps
             
     def main(self):
         for event_start, event in self.iter():

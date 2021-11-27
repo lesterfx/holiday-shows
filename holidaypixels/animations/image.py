@@ -172,7 +172,7 @@ class Animation(object):
                 time.sleep(early)
             else:
                 print('not early. late by', early, 'seconds')
-        
+
         self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
 
     def show_loop(self, image_slice, relays, repeat, end_by, epoch):
