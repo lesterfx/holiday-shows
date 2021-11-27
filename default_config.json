@@ -289,30 +289,6 @@
             "module": "image",
             "elements": [
                 {
-                    "image": "images/sarajevo/nuke/sarajevo_2021.png",
-                    "music": "/home/pi/xmas-songs/sarajevo.mp3",
-                    "fps": 24,
-                    "relays": [
-                        "cane_r",
-                        "cane_rc",
-                        "cane_c",
-                        "cane_lc",
-                        "cane_l",
-                        "tree_right",
-                        "tree_left",
-                        "pillar_right",
-                        "snowflake",
-                        "pillar_left",
-                        "deer_r",
-                        "deer_c",
-                        "deer_l",
-                        "presents",
-                        "truck",
-                        "icicles",
-                        "wreath"
-                    ]
-                },
-                {
                     "image": "images/sugarplum/sugarplum.png",
                     "music": "/home/pi/xmas-songs/sugarplum.mp3",
                     "fps": 24,
@@ -335,9 +311,33 @@
                         "tree_left",
                         "tree_right"
                     ]
+                },
+                {
+                    "image": "images/sarajevo/nuke/sarajevo_2021.png",
+                    "music": "/home/pi/xmas-songs/sarajevo.mp3",
+                    "fps": 24,
+                    "relays": [
+                        "cane_r",
+                        "cane_rc",
+                        "cane_c",
+                        "cane_lc",
+                        "cane_l",
+                        "tree_right",
+                        "tree_left",
+                        "pillar_right",
+                        "snowflake",
+                        "pillar_left",
+                        "deer_r",
+                        "deer_c",
+                        "deer_l",
+                        "presents",
+                        "truck",
+                        "icicles",
+                        "wreath"
+                    ]
                 }
             ],
-            "shuffle": true,
+            "shuffle": false,
             "countdown": 3,
             "minute": 1,
             "intermediate_animation": "simple_xmas",

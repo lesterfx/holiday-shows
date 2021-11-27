@@ -177,7 +177,7 @@ class Animation(object):
 
     def show_loop(self, image_slice, relays, repeat, end_by, epoch):
         height = len(image_slice)
-
+        abs_y = 0
         while (repeat and (abs_y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
             y = abs_y % height
 
