@@ -46,7 +46,9 @@ class Animation(object):
         self.image = image.getdata()
         self.width = image.width
         self.height = image.height
-        self.validate_relays()
+        self.data = {}
+        self.data['_relays'] = self.validate_relays()
+        self.data['_image'] = self.slice_image(len(self.relays), self.width)
 
         music = element['music']
         if music:
@@ -117,19 +119,33 @@ class Animation(object):
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active, True)
 
-    def validate_relays(self):
+    def slice_image(self, start, end):
+        image_slice = []
         for y in range(self.height):
+            row = []
+            for x in range(start, end):
+                color = self.image[self.width * y + x]
+                color_rgb = color[0], color[1], color[2]
+                row.append(color_rgb)
+            image_slice.append(row)
+        return image_slice
+
+    def validate_relays(self):
+        relay_data = []
+        for y in range(self.height):
+            row = []
             for x, name in enumerate(self.relays):
                 color = self.image[self.width * y + x]
                 if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
                     raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is not black or white.')
+                elif color[0] == 0:
+                    row.append(True)
+                else:
+                    row.append(False)
+            relay_data.append(row)
+        return relay_data
 
     def present(self, end_by, epoch=None):
-        previous_y = None
-        y = 0
-        width = self.width
-        height = self.height
-
         self.home.strip.on = True
         self.home.clear()
         self.home.show()
@@ -153,24 +169,40 @@ class Animation(object):
                 time.sleep(early)
             else:
                 print('not early. late by', early, 'seconds')
+        
+        self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
 
-        while (self.repeat and (y < height * self.repeat)) or (not self.repeat and datetime.datetime.now() < end_by):
-            im_y = y % height
+    def show_loop(self, image_slice, relays, repeat, end_by, epoch):
+        height = len(image_slice)
 
-            for x, name in enumerate(self.relays):
-                color = self.image[width * im_y + x]
-                self.home.relays[name].set(bool(color[0]))
+        while (repeat and (abs_y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
+            y = abs_y % height
 
-            for x in range(len(self.relays), width):
-                color = self.image[width * im_y + x]
-                color_tup = color[0], color[1], color[2]
-                self.home[x-len(self.relays)] = color_tup
+            if relays:
+                relay_row = relays[y]
+                for x, name in enumerate(self.relays):
+                    self.home.relays[name].set(relay_row[x])
+
+            # for x, name in enumerate(self.relays):
+            #     color = self.image[width * im_y + x]
+            #     self.home.relays[name].set(bool(color[0]))
+
+            image_row = image_slice[y]
+            for x, color in enumerate(image_row):
+                self.home[x] = color
+
+            # for x in range(len(self.relays), width):
+            #     color = self.image[width * im_y + x]
+            #     color_tup = color[0], color[1], color[2]
+            #     self.home[x-len(self.relays)] = color_tup
+
             self.home.show_relays(force=True)
             self.home.show()
 
             while True:
-                previous_y = y
-                y = int((time.time() - epoch) * self.fps)
-                if y != previous_y:
+                previous_y = abs_y
+                abs_y = int((time.time() - epoch) * self.fps)
+                if abs_y != previous_y:
                     break
+
         print('image complete')

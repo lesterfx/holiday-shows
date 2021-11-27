@@ -4,6 +4,7 @@ from __future__ import print_function, division
 
 import logging
 import socket
+import socketserver
 import time
 
 import board
@@ -142,7 +143,68 @@ class Pixel(object):
     def __lt__(self, other):
         return self.position < other.position
 
-class Remote(dict):
+class Strip_Cache_Player():
+    def __init__(self, strip):
+        self.strip = strip
+        self.cache = []
+    
+    def load(self, data):
+        self.cache = data
+        
+    def play(self, end_by, epoch, repeat):
+        pass
+        
+
+
+class Strip_Remote_Server(socketserver.BaseRequestHandler):
+    def handle(self):
+        # self.request is the TCP socket connected to the client
+        self.data = self.request.recv(1024).strip()
+        print("{} wrote:".format(self.client_address[0]))
+        print(self.data)
+        # just send back the same data, but upper-cased
+        self.request.sendall(self.data.upper())
+
+class Strip_Remote_Client():
+    def __init__(self, name, config):
+        self.name = name
+        self.ip = config.ip
+        if self.ip is None:
+            self.strip = StripWrapper(led_count, config)
+        elif self.ip:
+            assert self.ip
+            self.ip = config.ip
+            self.port = config.port
+
+    def connect(self):
+        if self.ip:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                self.socket.connect((self.ip, self.port))
+            except (ConnectionRefusedError, socket.gaierror, OSError) as e:
+                print(f'{self.name} ({self.ip}) connection error: {e}')
+                return
+            else:
+                print(f'{self.name} ({self.ip}) connected')
+                self.socket.setblocking(False)
+                self.connected = True
+
+    def send_image(self, image):
+        if self.connected:
+            self.send('image', image)
+
+    def sync(self, preroll=0):
+        if self.connected:
+            self.send('sync', preroll)
+
+    def send(self, kind, body):
+        if self.connected:
+            self.socket.send(f'{kind}:{body}\n'.encode())
+
+
+
+
+class Relay_Remote(dict):
     def __init__(self, name, config, client):
         self.client = client
         self.name = name
@@ -293,6 +355,7 @@ class StripWrapper(object):
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
+        # 100 bytes == 33 pixels
         # 1ms per 33 pixels
         return 0.001 * pixels/33 * 1.3
         # 1.3 multiplier just in case
@@ -353,8 +416,8 @@ class Home(object):
 
         self.relays = {}
         self.remotes = {}
-        for name, config in self.globals.remotes.items():
-            remote = Remote(name, config, self.relay_client)
+        for name, config in self.globals.relay_remotes.items():
+            remote = Relay_Remote(name, config, self.relay_client)
             self.remotes[name] = remote
             self.relays.update(remote)
         self.relay_client.handshake_all()
@@ -462,10 +525,8 @@ class Home(object):
                 self.strip[key] += value
             elif value.mode == 'max':
                 self.strip[key] = (self.strip[key] | value).color
-        elif value:
-            self.strip[key] = value
         else:
-            self.strip[key] = 0
+            self.strip[key] = value or 0
 
     def __contains__(self, key):
         key = int(key)

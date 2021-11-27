@@ -1,16 +1,6 @@
 {
     "globals": {
         "corners": [160, 214, 446, 550, 728],
-        "strip": {
-            "pin": 18,
-            "pixel_order": "RGB",
-            "frequency": 800000,
-            "dma": 10,
-            "invert": false,
-            "pin_channel": 0,
-            "brightness": 255,
-            "relay": "strip"
-        },
         "black": [
             [0, 17],
             [446, 469],
@@ -19,7 +9,30 @@
         "max": 810,
         "ranges": [[17, 810]],
         "audio_delay": 0.1,
-        "remotes": {
+        "strip_remotes": {
+            "upstairs": {
+                "ip": "192.168.3.243",
+                "port": 2700,
+                "pin": 18,
+                "pixel_order": "RGB",
+                "frequency": 800000,
+                "dma": 10,
+                "invert": false,
+                "pin_channel": 0,
+                "brightness": 255
+            },
+            "first_floor": {
+                "ip": null,
+                "pin": 18,
+                "pixel_order": "RGB",
+                "frequency": 800000,
+                "dma": 10,
+                "invert": false,
+                "pin_channel": 0,
+                "brightness": 255
+            }
+        },
+        "relay_remotes": {
             "porch": {
                 "ip": "192.168.3.240",
                 "port": 2700,
@@ -322,7 +335,7 @@
                 }
             ],
             "shuffle": true,
-            "countdown": 10,
+            "countdown": 3,
             "minute": 1,
             "intermediate_animation": "simple_xmas",
             "days": [
