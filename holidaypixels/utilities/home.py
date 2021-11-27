@@ -205,6 +205,7 @@ class Strip_Remote_Client():
             assert self.ip
             self.ip = config.ip
             self.port = config.port
+        self.connected = False
         # self.connect()
         # self.synchronize()
 
@@ -242,6 +243,7 @@ class Strip_Remote_Client():
         pass
 
     def send(self, data):
+        print(f'{self.name} ({self.ip}) sending something')
         if self.connected:
             self.socket.sendall(data)
 
