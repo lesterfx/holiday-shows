@@ -165,8 +165,8 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         self.request.sendall(self.data.upper())
 
 class Strip_Remote_Client():
-    def __init__(self, name, config):
-        self.name = name
+    def __init__(self, config):
+        self.name = config.name
         self.ip = config.ip
         if self.ip is None:
             self.strip = StripWrapper(config)
@@ -402,11 +402,9 @@ class Home(object):
         print('Initializing Strip')
         self.strips = {}
         for strip in self.globals.strips:
+            self.strips[strip.name] = Strip_Remote_Client(strip)
             if strip.ip is None:
-                self.strip = StripWrapper(strip)
-                self.strips[strip.name] = self.strip
-            else:
-                self.strips[strip.name] = Strip_Remote_Client(strip)
+                self.strip = self.strips[strip.name].strip
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
