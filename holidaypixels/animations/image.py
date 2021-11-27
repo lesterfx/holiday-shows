@@ -155,6 +155,7 @@ class Animation(object):
         return relay_data
 
     def present(self, end_by, epoch=None):
+        end_by_float = end_by.timestamp()
         self.home.strip.on = True
         self.home.clear()
         self.home.show()
@@ -178,19 +179,19 @@ class Animation(object):
             
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
-                self.home.strips[key].play(self.repeat, end_by, epoch)
+                self.home.strips[key].play(self.repeat, end_by_float, epoch)
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
             self.sound.play()
             time.sleep(self.globals.audio_delay)
 
-        self.home.local_strip.play(self.repeat, end_by, epoch)
-        # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
+        self.home.local_strip.play(self.repeat, end_by_float, epoch)
+        # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by_float, epoch)
 
-    def show_loop(self, image_slice, relays, repeat, end_by, epoch):
+    def show_loop(self, image_slice, relays, repeat, end_by_float, epoch):
         height = len(image_slice)
         abs_y = 0
-        while (repeat and (abs_y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
+        while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by_float):
             y = abs_y % height
 
             # for x, name in enumerate(self.relays):
