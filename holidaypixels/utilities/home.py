@@ -218,7 +218,7 @@ class Strip_Remote_Client():
         structure = ''
         for row in image_data:
             for pixel in row:
-                data.append(pixel)
+                data += pixel
                 structure += 'BBB'
         message = struct.pack(structure, *data)
         print(message)
