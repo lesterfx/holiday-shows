@@ -402,7 +402,7 @@ class Home(object):
         print('Initializing Strip')
         self.strips = {}
         for strip in self.globals.strips:
-            if strip['ip'] is None:
+            if strip.ip is None:
                 self.strip = StripWrapper(strip)
                 self.strips[strip.name] = self.strip
             else:
