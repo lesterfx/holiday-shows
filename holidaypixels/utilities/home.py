@@ -192,8 +192,8 @@ class Strip_Remote_Client():
             assert self.ip
             self.ip = config.ip
             self.port = config.port
-            self.connect()
-            self.synchronize()
+            # self.connect()
+            # self.synchronize()
 
     def synchronize(self):
         client_time = time.time()
@@ -209,7 +209,6 @@ class Strip_Remote_Client():
                 self.socket.connect((self.ip, self.port))
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
                 print(f'{self.name} ({self.ip}) connection error: {e}')
-                return
             else:
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
