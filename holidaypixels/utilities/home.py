@@ -158,7 +158,39 @@ class Strip_Cache_Player():
         self.relay_data = relay_data
 
     def play(self, repeat, end_by, epoch):
-        pass
+        height = len(self.image_data)
+        abs_y = 0
+        while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
+            y = abs_y % height
+
+            # for x, name in enumerate(self.relays):
+            #     color = self.image[width * im_y + x]
+            #     self.home.relays[name].set(bool(color[0]))
+
+            # for x in range(len(self.relays), width):
+            #     color = self.image[width * im_y + x]
+            #     color_tup = color[0], color[1], color[2]
+            #     self.home[x-len(self.relays)] = color_tup
+
+            if self.relay_data:
+                relay_row = self.relay_data[y]
+                for x, name in enumerate(self.relays):
+                    self.home.relays[name].set(relay_row[x])
+                self.home.show_relays(force=True)
+
+            image_row = self.image_data[y]
+            for x, color in enumerate(image_row):
+                self.strip[x] = color
+
+            self.strip.show()
+
+            while True:
+                previous_y = abs_y
+                abs_y = int((time.time() - epoch) * self.fps)
+                if abs_y != previous_y:
+                    break
+
+        print('image complete')
 
 class Strip_Remote_Server(socketserver.BaseRequestHandler):
     def handle(self):
@@ -283,7 +315,7 @@ class Strip_Remote_Client():
             self.player.play(repeat, end_by, epoch)
 
     def send(self, data, expected_response=None):
-        print(f'{self.name} ({self.ip}) sending {data[:20]}')
+        print(f'{self.name} ({self.ip}) sending {data[:25]}')
         if self.connected:
             self.socket.sendall(data)
             response = self.socket.recv(1024)

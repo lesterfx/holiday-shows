@@ -326,6 +326,16 @@
                     "image": "images/sarajevo/nuke/sarajevo_2021.png",
                     "music": "/home/pi/xmas-songs/sarajevo.mp3",
                     "fps": 24,
+                    "strips": {
+                        "first_floor": {
+                            "start": 0,
+                            "end": 450
+                        },
+                        "upstairs": {
+                            "start": 450,
+                            "end": 810
+                        }
+                    },
                     "relays": [
                         "cane_r",
                         "cane_rc",
