@@ -279,6 +279,7 @@ class Strip_Remote_Client():
 
     def connect(self):
         if self.ip:
+            print(f'{self.name}: connecting to {self.ip}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.socket.connect((self.ip, self.port))
@@ -306,10 +307,6 @@ class Strip_Remote_Client():
 
     def play(self, repeat, end_by, epoch, fps):
         print(f'{self.name} ({self.ip}) play:')
-        print('repeat:', repeat)
-        print('end by:', end_by)
-        print('epoch:', epoch)
-        print('fps:', fps)
         if self.ip:
             self.send(b'play:' + struct.pack('bddb', repeat, end_by, epoch, fps), expected_response=b'ok')
         else:
