@@ -23,7 +23,10 @@ class RelayClient:
 
         while len(ips_remaining) > 0:
             self.socket.settimeout(1)
-            msg, (returnIP, returnPort) = self.socket.recvfrom(3)
+            try:
+                msg, (returnIP, returnPort) = self.socket.recvfrom(3)
+            except socket.timeout:
+                raise Exception(f'Timeout on handshake. Not connected: {",".join(ips_remaining)}')
             if (msg != b'\xbb\x00\x00'):
                 print(msg)
                 raise Exception("Invalid Handshake Msg: {}".format(msg))
