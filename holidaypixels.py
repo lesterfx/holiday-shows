@@ -290,7 +290,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--seconds', default=0, type=int, help='How many seconds to run demo')
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
         parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
-        parser.add_argument('--remote', help="Run a remote pixel server. All other options are ignored.")
+        parser.add_argument('--remote', action='store_true', help="Run a remote pixel server. All other options are ignored.")
         self.args = parser.parse_args()
         print(self.args)
 
