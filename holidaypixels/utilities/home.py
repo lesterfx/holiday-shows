@@ -170,7 +170,7 @@ class Strip_Remote_Client():
         self.name = name
         self.ip = config.ip
         if self.ip is None:
-            self.strip = StripWrapper(led_count, config)
+            self.strip = StripWrapper(config)
         elif self.ip:
             assert self.ip
             self.ip = config.ip
@@ -323,7 +323,8 @@ class Relay(object):
         self.remote.show(wait_if_busy)
 
 class StripWrapper(object):
-    def __init__(self, led_count, strip_prefs, relay):
+    def __init__(self, strip_prefs):
+        length = strip_prefs.length
         pin = strip_prefs.pin
         frequency = strip_prefs.frequency
         dma = strip_prefs.dma
@@ -331,11 +332,10 @@ class StripWrapper(object):
         brightness = strip_prefs.brightness
         pin_channel = strip_prefs.pin_channel
 
-        self.real_strip = Adafruit_NeoPixel(led_count, pin, frequency, dma, invert, brightness, pin_channel)
+        self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
 
         pixel_order = strip_prefs.pixel_order
-        self.relay = relay
 
         self.cached = [(0, 0, 0)] * led_count
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
@@ -387,11 +387,11 @@ class StripWrapper(object):
         self.next_available = time.time() + self.delay
 
 class Home(object):
-    def __init__(self, globals_, display='gpio', outfile=None):
+    def __init__(self, globals_):
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
         self.init_relays()
-        self.strip = self.init_strip(display, outfile)
+        self.strip = self.init_strip()
         # self.cache = [None] * len(self)
         # self.previous = None
         self.clear()
@@ -399,17 +399,12 @@ class Home(object):
         self.fps_timer = time.time()
         self.show()
 
-    def init_strip(self, display, outfile):
+    def init_strip(self):
         print('Initializing Strip')
-        if display == 'gpio':
-            led_count = self.max + 1
-            return StripWrapper(led_count, self.globals.strip, self.relays[self.globals.strip.relay])
-        elif display == 'console':
-            self.max = consolepixel.LED_COUNT
-            return consolepixel.ConsolePixel(n=self.max+1)
-        else:
-            assert display == 'image'
-            return imagepixel.ImagePixel(n=self.max+1, outfile=outfile)
+        strips = []
+        for strip in self.globals.strips:
+            strips.append(StripWrapper(strip))
+        return strips
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
