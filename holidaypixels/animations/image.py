@@ -179,13 +179,13 @@ class Animation(object):
             self.home.local_strip.player.relays = self.relays
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
-                self.home.strips[key].play(self.repeat, end_by_float, epoch)
+                self.home.strips[key].play(self.repeat, end_by_float, epoch, self.fps)
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
             self.sound.play()
             time.sleep(self.globals.audio_delay)
 
-        self.home.local_strip.play(self.repeat, end_by_float, epoch)
+        self.home.local_strip.play(self.repeat, end_by_float, epoch, self.fps)
         # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by_float, epoch)
 
     def show_loop(self, image_slice, relays, repeat, end_by_float, epoch):
