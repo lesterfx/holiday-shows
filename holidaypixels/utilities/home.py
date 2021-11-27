@@ -334,7 +334,7 @@ class StripWrapper(object):
         self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
 
-        pixel_order = strip_prefs.pixel_order
+        pixel_order = strip_prefs.pixel_order.lower()
 
         self.cached = [(0, 0, 0)] * length
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
