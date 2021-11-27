@@ -9,7 +9,7 @@
         "max": 810,
         "ranges": [[17, 810]],
         "audio_delay": 0.1,
-        "strip_remotes": {
+        "strips": {
             "upstairs": {
                 "ip": "192.168.3.243",
                 "port": 2700,
@@ -19,7 +19,8 @@
                 "dma": 10,
                 "invert": false,
                 "pin_channel": 0,
-                "brightness": 255
+                "brightness": 255,
+                "length": 450
             },
             "first_floor": {
                 "ip": null,
@@ -29,7 +30,8 @@
                 "dma": 10,
                 "invert": false,
                 "pin_channel": 0,
-                "brightness": 255
+                "brightness": 255,
+                "length": 360
             }
         },
         "relay_remotes": {

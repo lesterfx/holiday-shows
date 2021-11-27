@@ -177,7 +177,7 @@ class Holiday_Pixels(object):
         corners = [int(corner) for corner in globals_['corners']]
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
-        strip = self.process_strip(globals_['strip'])
+        # strip = self.process_strip(globals_['strip'])
         remotes = self.process_remotes(globals_['remotes'])
         black = globals_['black']
         max_ = globals_['max']
@@ -189,7 +189,7 @@ class Holiday_Pixels(object):
             black=black,
             remotes=remotes,
             relay_order=relay_order,
-            strip=strip,
+            strip=None,
             audio_delay=audio_delay
         )
 
@@ -226,11 +226,9 @@ class Holiday_Pixels(object):
             sign = offset[0]
             hours, minutes = map(int, offset[1:].split(':'))
             sunset_offset = datetime.timedelta(hours=hours, minutes=minutes)
-            if sign == '+':
-                pass
-            elif sign == '-':
+            if sign == '-':
                 sunset_offset = -sunset_offset
-            else:
+            elif sign != '+':
                 raise ValueError("First digit of sunset_offset must be + or -")
         else:
             hour, minute = map(int, start_time.split(':'))
