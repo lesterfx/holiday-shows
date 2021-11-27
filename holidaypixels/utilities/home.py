@@ -144,8 +144,8 @@ class Pixel(object):
         return self.position < other.position
 
 class Strip_Cache_Player():
-    def __init__(self, strip):
-        self.strip = strip
+    def __init__(self, config):
+        self.strip = StripWrapper(config)
         self.cache = []
     
     def load(self, data):
@@ -154,23 +154,30 @@ class Strip_Cache_Player():
     def play(self, end_by, epoch, repeat):
         pass
 
-
 class Strip_Remote_Server(socketserver.BaseRequestHandler):
     def handle(self):
-        # self.request is the TCP socket connected to the client
-        self.data = self.request.recv(1024).strip()
+        data = self.request.recv(1024)
         print("{} wrote:".format(self.client_address[0]))
         print(self.data)
-        # just send back the same data, but upper-cased
-        self.request.sendall(self.data.upper())
+
+        if data.startswith(b'sync:'):
+            self.sync(data[5:])
+        else:
+            raise NotImplementedError(data)
+    
+    def sync(self, data):
+        client_time = float.from_bytes(data, 'big')
+        server_time = time.time()
+        self.time_offset = server_time - client_time
+        self.request.sendall(server_time.to_bytes(8, 'big'))
 
 class Strip_Remote_Client():
     def __init__(self, config):
         self.name = config.name
         self.ip = config.ip
         if self.ip is None:
-            self.strip = StripWrapper(config)
-        elif self.ip:
+            self.player = Strip_Cache_Player(config)
+        else:
             assert self.ip
             self.ip = config.ip
             self.port = config.port
@@ -185,20 +192,22 @@ class Strip_Remote_Client():
                 return
             else:
                 print(f'{self.name} ({self.ip}) connected')
+                client_time = time.time()
+                self.socket.send(b'sync:' + client_time.to_bytes(8, 'big'))
+                server_time = float.from_bytes(self.socket.recv(1024), 'big')
+                print(f'{self.ip}: server_time - client_time:', server_time - client_time)
                 self.socket.setblocking(False)
                 self.connected = True
 
-    def send_image(self, image):
-        if self.connected:
-            self.send('image', image)
+    def load(self, data):
+        pass
 
-    def sync(self, preroll=0):
-        if self.connected:
-            self.send('sync', preroll)
+    def play(self, end_by, epoch, repeat):
+        pass
 
-    def send(self, kind, body):
+    def send(self, data):
         if self.connected:
-            self.socket.send(f'{kind}:{body}\n'.encode())
+            self.socket.sendall(data)
 
 
 
@@ -407,7 +416,8 @@ class Home(object):
         for strip in self.globals.strips:
             self.strips[strip.name] = Strip_Remote_Client(strip)
             if strip.ip is None:
-                self.strip = self.strips[strip.name].strip
+                # shortcut for "old code" that doesn't use severs
+                self.strip = self.strips[strip.name].player.strip
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
