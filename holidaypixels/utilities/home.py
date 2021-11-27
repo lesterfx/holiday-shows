@@ -684,6 +684,12 @@ class Home(object):
 def run_remote():
     print('Running Remote')
     HOST, PORT = "192.168.3.209", 2700
-    with socketserver.TCPServer((HOST, PORT), Strip_Remote_Server) as server:
-        print(f'Serving on {HOST}:{PORT}')
+    server = socketserver.TCPServer((HOST, PORT), Strip_Remote_Server)
+    print(f'Serving on {HOST}:{PORT}')
+    try:
         server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    server.server_close()
+    server.server_close()
+    server.shutdown()
