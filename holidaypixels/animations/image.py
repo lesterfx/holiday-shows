@@ -142,9 +142,9 @@ class Animation(object):
                         print(''.join(['-','X'][c] for c in row))
                     raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
                 elif color[0] == 0:
-                    row.append(True)
-                else:
                     row.append(False)
+                else:
+                    row.append(True)
             relay_data.append(row)
         return relay_data
 
