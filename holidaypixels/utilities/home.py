@@ -153,7 +153,6 @@ class Strip_Cache_Player():
         
     def play(self, end_by, epoch, repeat):
         pass
-        
 
 
 class Strip_Remote_Server(socketserver.BaseRequestHandler):
@@ -337,10 +336,10 @@ class StripWrapper(object):
 
         pixel_order = strip_prefs.pixel_order
 
-        self.cached = [(0, 0, 0)] * led_count
+        self.cached = [(0, 0, 0)] * length
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         print('rgb shift:', self.shift)
-        self.delay = self.calculate_delay(led_count)
+        self.delay = self.calculate_delay(length)
         print('minimum time between frames:', self.delay)
         self.next_available = 0
 
@@ -391,7 +390,7 @@ class Home(object):
         self.globals = globals_
         self.max = self.globals.ranges[-1][-1]
         self.init_relays()
-        self.strip = self.init_strip()
+        self.init_strip()
         # self.cache = [None] * len(self)
         # self.previous = None
         self.clear()
@@ -401,10 +400,13 @@ class Home(object):
 
     def init_strip(self):
         print('Initializing Strip')
-        strips = []
+        self.strips = {}
         for strip in self.globals.strips:
-            strips.append(StripWrapper(strip))
-        return strips
+            if strip['ip'] is None:
+                self.strip = StripWrapper(strip)
+                self.strips[strip.name] = self.strip
+            else:
+                self.strips[strip.name] = Strip_Remote_Client(strip)
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
