@@ -178,7 +178,7 @@ class Holiday_Pixels(object):
         ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
         # strip = self.process_strip(globals_['strip'])
-        remotes = self.process_relay_remotes(globals_['relay_remotes'])
+        relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         black = globals_['black']
         max_ = globals_['max']
         audio_delay = globals_['audio_delay']
@@ -187,7 +187,7 @@ class Holiday_Pixels(object):
             ranges=ranges,
             max=max_,
             black=black,
-            remotes=remotes,
+            relay_remotes=relay_remotes,
             relay_order=relay_order,
             strip=None,
             audio_delay=audio_delay
