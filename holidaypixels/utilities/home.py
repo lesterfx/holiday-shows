@@ -273,14 +273,16 @@ class Strip_Remote_Client():
             self.player.load_image(image_data)
 
     def play(self, end_by, epoch, repeat):
+        print('end by:', end_by)
+        print('epoch:', epoch)
+        print('repeat:', repeat)
         if self.ip:
-            print(end_by, epoch, repeat)
             self.send(b'play:' + struct.pack('ddb', end_by, epoch, repeat), expected_response=b'ok')
         else:
             self.player.play(end_by, epoch, repeat)
 
     def send(self, data, expected_response=None):
-        print(f'{self.name} ({self.ip}) sending {data[:100]}')
+        print(f'{self.name} ({self.ip}) sending {data[:20]}')
         if self.connected:
             self.socket.sendall(data)
             response = self.socket.recv(1024)
