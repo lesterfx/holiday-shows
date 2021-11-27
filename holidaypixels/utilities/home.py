@@ -2,6 +2,7 @@
 
 from __future__ import print_function, division
 
+import json
 import logging
 import socket
 import socketserver
@@ -147,11 +148,15 @@ class Pixel(object):
 class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = StripWrapper(config)
-        self.cache = []
-    
-    def load(self, data):
-        self.cache = data
+        self.image_data = None
+        self.relay_data = None
         
+    def load_image(self, image_data):
+        self.image_data = image_data
+
+    def load_relays(self, relay_data):
+        self.relay_data = relay_data
+
     def play(self, end_by, epoch, repeat):
         pass
 
@@ -164,7 +169,8 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         options = {
             b'init_strip': self.init_strip,
             b'synchronize': self.synchronize,
-            b'load_image': self.load_image
+            b'load_image': self.load_image,
+            b'init_strip': self.init_strip
         }
         for key in options:
             if data.startswith(key + ':'):
@@ -180,7 +186,8 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
         self.request.sendall(struct.pack('d', server_time) + b'\n')
 
     def init_strip(self, data):
-        self.strip = StripWrapper(data)
+        strip_data = json.loads(data)
+        self.strip = StripWrapper(strip_data)
         self.request.sendall(b'ok\n')
     
     def load_image(self, data):
@@ -193,6 +200,7 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
             for x in range(width):
                 row.append(flat_pixel_data[y*width + x])
             self.image_data.append(row)
+        self.request.sendall(b'ok\n')
 
 
 class Strip_Remote_Client():
@@ -205,16 +213,27 @@ class Strip_Remote_Client():
             assert self.ip
             self.ip = config.ip
             self.port = config.port
+            self.strip_config = config
+
         self.connected = False
         # self.connect()
         # self.synchronize()
+        # self.init_strip()
+
+    def load_relays(self, relay_data):
+        if self.ip:
+            raise ValueError('Cannot play back relays on remote client')
+        self.player.load_relays(relay_data)
 
     def synchronize(self):
         client_time = time.time()
-        self.socket.send(b'sync:' + struct.pack('d', client_time))
+        self.socket.send(b'synchronize:' + struct.pack('d', client_time) + b'\n')
         server_time = struct.unpack('d', self.socket.recv(1024))[0]
         print(f'{self.ip}: server_time - client_time:', server_time - client_time)
         self.socket.setblocking(False)
+
+    def init_strip(self):
+        self.send(b'init_strip:' + json.dumps(self.config))
 
     def connect(self):
         if self.ip:
@@ -228,19 +247,25 @@ class Strip_Remote_Client():
                 self.connected = True
 
     def load_image(self, image_data):
-        width = len(image_data[0])
-        height = len(image_data)
-        data = [width, height]
-        structure = 'ii'
-        for row in image_data:
-            for pixel in row:
-                data += pixel
-                structure += 'BBB'
-        message = struct.pack(structure, *data)
-        self.send(b'load_image:')
+        if self.ip:
+            width = len(image_data[0])
+            height = len(image_data)
+            data = [width, height]
+            structure = 'ii'
+            for row in image_data:
+                for pixel in row:
+                    data += pixel
+                    structure += 'BBB'
+            message = struct.pack(structure, *data)
+            self.send(b'load_image:' + message + b'\n')
+        else:
+            self.player.load_image(image_data)
 
     def play(self, end_by, epoch, repeat):
-        pass
+        if self.ip:
+            self.send(b'play:' + struct.pack('ddi', end_by, epoch, repeat) + b'\n')
+        else:
+            self.player.play(end_by, epoch, repeat)
 
     def send(self, data):
         print(f'{self.name} ({self.ip}) sending something')
@@ -451,11 +476,13 @@ class Home(object):
     def init_strip(self):
         print('Initializing Strip')
         self.strips = {}
-        for strip in self.globals.strips:
-            self.strips[strip.name] = Strip_Remote_Client(strip)
+        for strip_config in self.globals.strips:
+            strip = Strip_Remote_Client(strip_config)
+            self.strips[strip.name] = strip
             if strip.ip is None:
+                self.local_strip = strip
                 # shortcut for "old code" that doesn't use severs
-                self.strip = self.strips[strip.name].player.strip
+                self.strip = self.strips[strip_config.name].player.strip
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()

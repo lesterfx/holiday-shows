@@ -47,16 +47,13 @@ class Animation(object):
         self.width = image.width
         self.height = image.height
         self.data = {}
-        self.data['_relays'] = self.validate_relays()
+        self.home.local_strip.load_relays(self.validate_relays())
         for key, options in element['strips'].items():
             start = len(self.relays) + options['start']
             end = len(self.relays) + options['end']
             slice = self.slice_image(start, end)
             print('Slice loaded:', key)
-            if self.home.strips[key].ip is None:
-                key = '_image'
-            else:
-                self.home.strips[key].load_image(slice)
+            self.home.strips[key].load_image(slice)
             self.data[key] = slice
 
         music = element['music']
@@ -164,23 +161,27 @@ class Animation(object):
         self.home.show_relays(True)
 
         countdown = self.settings.get('countdown', 0)
-        if countdown:
+        if countdown > 3:
             if self.silence:
                 self.silence.play()
-            for i in range(countdown):
+            for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
-        if self.sound:
-            self.sound.play()
-            time.sleep(self.globals.audio_delay)
-            epoch = time.time()
-        else:
+        if not self.sound:
             early = epoch - time.time()
             if early > 0:
                 print('early by', early, 'seconds. sleeping')
                 time.sleep(early)
             else:
                 print('not early. late by', early, 'seconds')
+        else:
+            epoch = time.time() + 2 + self.globals.audio_delay
+            for key in self.data:
+                self.home.strips[key].play(self.repeat, end_by, epoch)
+            while time.time() < epoch - self.globals.audio_delay:
+                time.sleep(0.001)
+            self.sound.play()
+            time.sleep(self.globals.audio_delay)
 
         self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by, epoch)
 
@@ -190,25 +191,25 @@ class Animation(object):
         while (repeat and (abs_y < height * repeat)) or (not repeat and datetime.datetime.now() < end_by):
             y = abs_y % height
 
-            if relays:
-                relay_row = relays[y]
-                for x, name in enumerate(self.relays):
-                    self.home.relays[name].set(relay_row[x])
-
             # for x, name in enumerate(self.relays):
             #     color = self.image[width * im_y + x]
             #     self.home.relays[name].set(bool(color[0]))
-
-            image_row = image_slice[y]
-            for x, color in enumerate(image_row):
-                self.home[x] = color
 
             # for x in range(len(self.relays), width):
             #     color = self.image[width * im_y + x]
             #     color_tup = color[0], color[1], color[2]
             #     self.home[x-len(self.relays)] = color_tup
 
-            self.home.show_relays(force=True)
+            if relays:
+                relay_row = relays[y]
+                for x, name in enumerate(self.relays):
+                    self.home.relays[name].set(relay_row[x])
+                self.home.show_relays(force=True)
+
+            image_row = image_slice[y]
+            for x, color in enumerate(image_row):
+                self.home[x] = color
+
             self.home.show()
 
             while True:
