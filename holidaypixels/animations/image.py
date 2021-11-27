@@ -48,7 +48,7 @@ class Animation(object):
         self.height = image.height
         self.data = {}
         self.data['_relays'] = self.validate_relays()
-        for key, options in element.strips.items():
+        for key, options in element['strips'].items():
             start = len(self.relays) + options['start']
             end = len(self.relays) + options['end']
             slice = self.slice_image(start, end)
