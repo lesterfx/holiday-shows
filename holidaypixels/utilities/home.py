@@ -196,7 +196,7 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
     def handle(self):
         data = self.request.recv(1024)
         print("{} wrote:".format(self.client_address[0]))
-        print(self.data)
+        print(data[:24])
 
         options = {
             b'init_strip': self.init_strip,
