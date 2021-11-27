@@ -205,11 +205,10 @@ class Strip_Remote_Server(socketserver.BaseRequestHandler):
 
 class Strip_Remote_Client():
     def __init__(self, config):
+        self.config = config
         self.name = config.name
         self.ip = config.ip
-        if self.ip is None:
-            self.player = Strip_Cache_Player(config)
-        else:
+        if self.ip is not None:
             assert self.ip
             self.ip = config.ip
             self.port = config.port
@@ -218,7 +217,7 @@ class Strip_Remote_Client():
         self.connected = False
         # self.connect()
         # self.synchronize()
-        # self.init_strip()
+        self.init_strip()
 
     def load_relays(self, relay_data):
         if self.ip:
@@ -233,7 +232,10 @@ class Strip_Remote_Client():
         self.socket.setblocking(False)
 
     def init_strip(self):
-        self.send(b'init_strip:' + json.dumps(self.config))
+        if self.ip:
+            self.send(b'init_strip:' + json.dumps(self.config))
+        else:
+            self.player = Strip_Cache_Player(self.config)
 
     def connect(self):
         if self.ip:
