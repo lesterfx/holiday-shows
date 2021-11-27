@@ -284,8 +284,6 @@ class Holiday_Pixels(object):
         parser.add_argument('--until', default='', help='When to stop demo')
         parser.add_argument('--minutes', default=0, type=int, help='How many minutes to run demo')
         parser.add_argument('--seconds', default=0, type=int, help='How many seconds to run demo')
-        parser.add_argument('--display', choices=['gpio', 'console', 'image'], default='gpio', help='Where to render the animation')
-        parser.add_argument('--save', help='Where to save the rendered image')
         parser.add_argument('--fps', default=0, type=int, help='Force framerate instead of calculating realtime')
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
         parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
