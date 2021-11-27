@@ -193,6 +193,7 @@ class Strip_Cache_Player():
         print('image complete')
 
 class Strip_Remote_Server(socketserver.BaseRequestHandler):
+    allow_reuse_address = True
     def handle(self):
         data = self.request.recv(1024)
         print("{} wrote:".format(self.client_address[0]))
