@@ -329,8 +329,8 @@ class Strip_Remote_Client():
                     data += pixel
                     structure += 'BBB'
             message = struct.pack(structure, *data)
-            response = self.send(b'load_image:' + message, expected_response=b'ok')
-            print(response)
+            self.send(b'load_image:' + message, expected_response=b'ok')
+            self.player.load_image(data)
         else:
             self.player.load_image(image_data)
 
