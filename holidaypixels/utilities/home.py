@@ -270,6 +270,7 @@ class Strip_Remote_Server():
         repeat, end_by, epoch, fps = struct.unpack('bddb', data)
         print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
         self.player.play(repeat, end_by, epoch, fps)
+        return b'ok'
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -339,11 +340,14 @@ class Strip_Remote_Client():
             self.player.load_image(image_data)
 
     def play(self, repeat, end_by, epoch, fps):
-        print(f'{self.name} ({self.ip}) play:')
         if self.ip:
-            self.send(b'play:' + struct.pack('bddb', repeat, end_by, epoch, fps), expected_response=b'ok')
+            self.send(b'play:' + struct.pack('bddb', repeat, end_by, epoch, fps), expected_response=-1)
         else:
             self.player.play(repeat, end_by, epoch, fps)
+    
+    def get_response(self):
+        if self.ip:
+            return self.socket.recv(1024)
 
     def send(self, data, expected_response=None):
         print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
@@ -351,6 +355,9 @@ class Strip_Remote_Client():
         if self.connected:
             self.socket.sendall(data)
             time.sleep(0.1)
+            if expected_response == -1:
+                print('no response expected')
+                return
             response = self.socket.recv(1024)
             if expected_response is not None and response != expected_response:
                 raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')

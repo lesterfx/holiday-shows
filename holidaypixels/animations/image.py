@@ -181,7 +181,9 @@ class Animation(object):
             for key in self.data:
                 strip = self.home.strips[key]
                 if strip.ip:
+                    print('sending play command')
                     strip.play(self.repeat, end_by_float, epoch, self.fps)
+                    print('sent!')
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
             self.sound.play()
@@ -189,6 +191,11 @@ class Animation(object):
 
         print("PLAYING LOCALLY??????")
         self.home.local_strip.play(self.repeat, end_by_float, epoch, self.fps)
+
+        for key in self.data:
+            strip = self.home.strips[key]
+            if strip.ip:
+                print(strip.get_response())
         # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by_float, epoch)
 
     def show_loop(self, image_slice, relays, repeat, end_by_float, epoch):
