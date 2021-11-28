@@ -298,7 +298,8 @@ class Strip_Remote_Client():
     def synchronize(self):
         if self.ip:
             client_time = time.time()
-            response = self.send(b'synchronize:' + struct.pack('d', client_time))
+            packed = struct.pack('d', client_time)
+            response = self.send(b'synchronize:' + packed, fallback_response=packed)
             server_time = struct.unpack('d', response)[0]
             self.time_offset = server_time - client_time
             print(f'{self.ip}: time offset:', self.time_offset)
@@ -348,8 +349,8 @@ class Strip_Remote_Client():
         if self.ip:
             return self.socket.recv(1024)
 
-    def send(self, data, expected_response=None):
-        if not self.connected: return expected_response
+    def send(self, data, expected_response=None, fallback_response=None):
+        if not self.connected: return expected_response or fallback_response
         print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
