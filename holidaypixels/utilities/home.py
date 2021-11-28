@@ -213,7 +213,6 @@ class Strip_Remote_Server():
             message = b''
             while len(message) < message_length:
                 message += conn.recv(message_length - len(message))
-            print(message)
             response = self.handle(message)
             conn.sendall(response)
         conn.close()

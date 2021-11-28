@@ -179,7 +179,9 @@ class Animation(object):
             self.home.local_strip.player.relays = self.relays
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
-                self.home.strips[key].play(self.repeat, end_by_float, epoch, self.fps)
+                strip = self.home.strips[key]
+                if strip.ip:
+                    strip.play(self.repeat, end_by_float, epoch, self.fps)
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
             self.sound.play()
