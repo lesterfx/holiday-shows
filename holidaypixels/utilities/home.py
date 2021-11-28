@@ -206,8 +206,8 @@ class Strip_Remote_Server():
         conn, addr = self.sock.accept()
         while 1:
             message = b''
-            while len(message) < 4:
-                message += conn.recv(4 - len(message))
+            while len(message) < 8:
+                message += conn.recv(8 - len(message))
             message_length = struct.unpack('Q', message)[0]
             message = b''
             while len(message) < message_length:
