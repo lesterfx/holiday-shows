@@ -192,8 +192,28 @@ class Strip_Cache_Player():
 
         print('image complete')
 
-class Strip_Remote_Server(socketserver.BaseRequestHandler):
-    allow_reuse_address = True
+class Strip_Remote_Server():
+    def __init__(self):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind(('localhost', 2700))
+        self.listen()
+    
+    def listen(self):
+        self.sock.listen(1)
+        conn, addr = self.sock.accept()
+        while 1:
+            message = b''
+            while len(message) < 4:
+                message += conn.recv(4 - len(message))
+            message_length = struct.unpack('Q', message)[0]
+            message = b''
+            while len(message) < message_length:
+                message += conn.recv(message_length - len(message))
+            print(message)
+            self.handle(message)
+        conn.close()
+
     def handle(self):
         print('------------')
         data = self.request.recv(1024)
@@ -320,7 +340,8 @@ class Strip_Remote_Client():
             self.player.play(repeat, end_by, epoch, fps)
 
     def send(self, data, expected_response=None):
-        print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({data[:24]}...)')
+        print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
+        data = struct.pack('Q', len(data)) + data
         if self.connected:
             self.socket.sendall(data)
             time.sleep(0.1)
