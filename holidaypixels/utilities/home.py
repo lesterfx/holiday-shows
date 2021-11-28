@@ -238,7 +238,7 @@ class Strip_Remote_Server():
 
 
     def init_strip(self, data):
-        strip_data = self.StripRemotePrefs(json.loads(data))
+        strip_data = self.StripRemotePrefs(*json.loads(data))
         pprint(strip_data)
         self.player = Strip_Cache_Player(strip_data)
         return b'ok'
