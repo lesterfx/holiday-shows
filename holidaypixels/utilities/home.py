@@ -193,7 +193,8 @@ class Strip_Cache_Player():
         print('image complete')
 
 class Strip_Remote_Server():
-    def __init__(self, HOST, PORT):
+    def __init__(self, HOST, PORT, StripRemotePrefs):
+        self.StripRemotePrefs = StripRemotePrefs
         print(f'Serving on {HOST}:{PORT}')
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -237,7 +238,7 @@ class Strip_Remote_Server():
 
 
     def init_strip(self, data):
-        strip_data = json.loads(data)
+        strip_data = self.StripRemotePrefs(json.loads(data))
         pprint(strip_data)
         self.player = Strip_Cache_Player(strip_data)
         return b'ok'
@@ -708,7 +709,7 @@ class Home(object):
             pixel -= other
         return self
 
-def run_remote():
+def run_remote(StripRemotePrefs):
     print('Running Remote')
     HOST, PORT = "192.168.3.209", 2700
-    Strip_Remote_Server(HOST, PORT)
+    Strip_Remote_Server(HOST, PORT, StripRemotePrefs)
