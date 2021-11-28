@@ -256,8 +256,11 @@ class Strip_Remote_Server():
         image_data = []
         for y in range(height):
             row = []
+            rowstart = y * width * 3
             for x in range(width):
-                row.append(flat_pixel_data[y*width + x])
+                pixelstart = rowstart + x*3
+                pixel = flat_pixel_data[pixelstart:pixelstart+3]
+                row.append(pixel)
             image_data.append(row)
         self.player.load_image(image_data)
         return b'ok'
