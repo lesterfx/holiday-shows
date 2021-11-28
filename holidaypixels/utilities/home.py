@@ -319,7 +319,6 @@ class Strip_Remote_Client():
                 self.socket.connect((self.ip, self.port))
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
                 print(f'{self.name} ({self.ip}) connection error: {e}')
-                raise
             else:
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
@@ -350,6 +349,7 @@ class Strip_Remote_Client():
             return self.socket.recv(1024)
 
     def send(self, data, expected_response=None):
+        if not self.connected: return expected_response
         print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
