@@ -216,9 +216,8 @@ class Strip_Remote_Server():
             self.handle(message)
         conn.close()
 
-    def handle(self):
+    def handle(self, data):
         print('------------')
-        data = self.request.recv(1024)
         print("{} wrote:".format(self.client_address[0]))
         print(data[:24])
 
