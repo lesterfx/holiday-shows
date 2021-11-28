@@ -224,7 +224,8 @@ class Strip_Remote_Server():
         options = {
             b'init_strip': self.init_strip,
             b'synchronize': self.synchronize,
-            b'load_image': self.load_image
+            b'load_image': self.load_image,
+            b'play': self.play
         }
         for key in options:
             if data.startswith(key + b':'):
@@ -262,6 +263,7 @@ class Strip_Remote_Server():
 
     def play(self, data):
         repeat, end_by, epoch, fps = struct.unpack('bddb', data)
+        print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
         self.player.play(repeat, end_by, epoch, fps)
 
 class Strip_Remote_Client():
