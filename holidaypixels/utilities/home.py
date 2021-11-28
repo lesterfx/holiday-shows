@@ -4,8 +4,8 @@ from __future__ import print_function, division
 
 import json
 import logging
+from pprint import pprint
 import socket
-import socketserver
 import struct
 import time
 
@@ -238,6 +238,7 @@ class Strip_Remote_Server():
 
     def init_strip(self, data):
         strip_data = json.loads(data)
+        pprint(strip_data)
         self.player = Strip_Cache_Player(strip_data)
         return b'ok'
     
