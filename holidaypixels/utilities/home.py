@@ -323,6 +323,7 @@ class Strip_Remote_Client():
         print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({data[:24]}...)')
         if self.connected:
             self.socket.sendall(data)
+            time.sleep(0.1)
             response = self.socket.recv(1024)
             if expected_response is not None and response != expected_response:
                 raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')
