@@ -253,12 +253,13 @@ class Strip_Remote_Server():
         width, height = struct.unpack('ii', data[:8])
         data = data[8:]
         flat_pixel_data = struct.unpack('BBB'*width*height, data)
-        self.image_data = []
+        image_data = []
         for y in range(height):
             row = []
             for x in range(width):
                 row.append(flat_pixel_data[y*width + x])
-            self.image_data.append(row)
+            image_data.append(row)
+        self.player.load_image(image_data)
         return b'ok'
 
     def play(self, data):
@@ -330,7 +331,6 @@ class Strip_Remote_Client():
                     structure += 'BBB'
             message = struct.pack(structure, *data)
             self.send(b'load_image:' + message, expected_response=b'ok')
-            self.player.load_image(data)
         else:
             self.player.load_image(image_data)
 
