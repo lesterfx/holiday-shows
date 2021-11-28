@@ -213,12 +213,12 @@ class Strip_Remote_Server():
             while len(message) < message_length:
                 message += conn.recv(message_length - len(message))
             print(message)
-            self.handle(message)
+            response = self.handle(message)
+            conn.sendall(response)
         conn.close()
 
     def handle(self, data):
         print('------------')
-        print("{} wrote:".format(self.client_address[0]))
         print(data[:24])
 
         options = {
@@ -231,11 +231,9 @@ class Strip_Remote_Server():
                 handler = options[key]
                 response = handler(data[len(key)+1:])
                 print(f'successfully handled {key}. replying with:', response)
-                self.request.sendall(response)
-                break
+                return response
         else:
             raise NotImplementedError(data)
-        print('------------')
 
 
     def init_strip(self, data):
