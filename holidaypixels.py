@@ -64,7 +64,7 @@ class Holiday_Pixels(object):
         self.sun = sun.Sun()
         self.load_args()
         if self.args.remote:
-            self.run_remote(StripRemotePrefs)
+            self.run_remote()
         else:
             config = self.load_config()
             self.process_config(config)
