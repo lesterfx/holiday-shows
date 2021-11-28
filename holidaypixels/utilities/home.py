@@ -193,13 +193,15 @@ class Strip_Cache_Player():
         print('image complete')
 
 class Strip_Remote_Server():
-    def __init__(self):
+    def __init__(self, HOST, PORT):
+        print(f'Serving on {HOST}:{PORT}')
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.bind(('localhost', 2700))
+        self.sock.bind((HOST, PORT))
         self.listen()
     
     def listen(self):
+        print('Waiting for connection')
         self.sock.listen(1)
         conn, addr = self.sock.accept()
         while 1:
@@ -711,12 +713,4 @@ class Home(object):
 def run_remote():
     print('Running Remote')
     HOST, PORT = "192.168.3.209", 2700
-    server = socketserver.TCPServer((HOST, PORT), Strip_Remote_Server)
-    print(f'Serving on {HOST}:{PORT}')
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    server.server_close()
-    server.server_close()
-    server.shutdown()
+    Strip_Remote_Server(HOST, PORT)
