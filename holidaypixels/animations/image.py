@@ -187,6 +187,7 @@ class Animation(object):
             self.sound.play()
             time.sleep(self.globals.audio_delay)
 
+        print("PLAYING LOCALLY??????")
         self.home.local_strip.play(self.repeat, end_by_float, epoch, self.fps)
         # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by_float, epoch)
 
