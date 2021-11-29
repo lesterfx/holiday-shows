@@ -555,6 +555,9 @@ class StripWrapper(object):
     # def __getitem__(self, x):
     #     return self.cached[x]
 
+    def clear(self):
+        self.real_strip.fill(0)
+
     def show(self):
         need_to_wait = self.next_available - time.time()
         if need_to_wait > 0:
