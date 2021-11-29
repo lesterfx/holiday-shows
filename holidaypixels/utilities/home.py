@@ -193,6 +193,9 @@ class Strip_Cache_Player():
 
         print('image complete')
 
+    def stop(self):
+        self.strip.clear(True)
+
 class Strip_Remote_Server():
     def __init__(self, HOST, PORT, StripRemotePrefs):
         self.StripRemotePrefs = StripRemotePrefs
@@ -200,7 +203,15 @@ class Strip_Remote_Server():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((HOST, PORT))
-        self.listen()
+        try:
+            while True:
+                self.listen()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.sock.close()
+            self.player.stop()
+            print('Strip Remote Server closed.')
     
     def listen(self):
         print('Waiting for connection')
