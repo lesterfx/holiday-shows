@@ -210,7 +210,8 @@ class Strip_Remote_Server():
             pass
         finally:
             self.sock.close()
-            self.player.stop()
+            if hasattr(self, 'player'):
+                self.player.stop()
             print('Strip Remote Server closed.')
     
     def listen(self):
