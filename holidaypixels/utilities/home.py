@@ -556,7 +556,8 @@ class StripWrapper(object):
     #     return self.cached[x]
 
     def clear(self, show=False):
-        self.real_strip.fill(0)
+        for x in range(self.real_strip.numPixels()):
+            self.real_strip.setPixelColor(x, 0)
         if show:
             self.show()
 
