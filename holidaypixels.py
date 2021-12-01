@@ -74,8 +74,6 @@ class Holiday_Pixels(object):
                     self.demo(self.args.demo)
                 else:
                     self.main()
-            except KeyboardInterrupt:
-                pass
             finally:
                 self.strip.on = False
 
