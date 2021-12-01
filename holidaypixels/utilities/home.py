@@ -345,11 +345,15 @@ class Strip_Remote_Client():
             width = len(image_data[0])
             height = len(image_data)
             print(f'{self.name}: loading image {index} ({width}x{height})')
-            packed = struct.pack('iii', index, width, height)
+            data = [index, width, height]
+            pattern = 'iii'
             for row in image_data:
                 for pixel in row:
                     assert all(type(x) == int for x in pixel)
                     packed += struct.pack('BBB', *pixel)
+                    pattern += 'BBB'
+                    data += pixel
+            packed = struct.pack(pattern, *data)
             print('sending image to remote')
             self.send(b'load_image:' + packed, expected_response=b'ok')
             print('sent!')
