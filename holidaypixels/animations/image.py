@@ -18,7 +18,7 @@ class Animation(object):
         self.settings = settings
         self.element_indices = {}
         for i, element in enumerate(self.settings['elements']):
-            self.element_indices[element['image']] = element['image']
+            self.element_indices[element['image']] = i
         self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
 
     def __str__(self):
