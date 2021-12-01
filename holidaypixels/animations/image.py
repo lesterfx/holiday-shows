@@ -35,7 +35,7 @@ class Animation(object):
         resource['relays'] = element['relays']
 
         path = element['image']
-        for relay in self.relays:
+        for relay in resource['relays']:
             if relay not in self.home.relays:
                 raise ValueError(f'Relay {relay} is not defined in the home.')
         path = os.path.join(os.path.dirname(__file__), '..', path)
