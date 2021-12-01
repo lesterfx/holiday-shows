@@ -344,14 +344,12 @@ class Strip_Remote_Client():
         if self.ip:
             width = len(image_data[0])
             height = len(image_data)
-            data = [index, width, height]
-            structure = 'iii'
+            packed = struct.pack('iii', [index, width, height])
             for row in image_data:
                 for pixel in row:
-                    data += pixel
-                    structure += 'BBB'
-            message = struct.pack(structure, *data)
-            self.send(b'load_image:' + message, expected_response=b'ok')
+                    assert all(type(x) == int for x in pixel)
+                    packed += struct.pack('BBB', *pixel)
+            self.send(b'load_image:' + packed, expected_response=b'ok')
         else:
             self.player.load_image(index, image_data)
 
