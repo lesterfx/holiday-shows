@@ -328,12 +328,12 @@
                     "fps": 24,
                     "strips": {
                         "first_floor": {
-                            "start": 0,
-                            "end": 450
+                            "start": 17,
+                            "end": 467
                         },
                         "upstairs": {
-                            "start": 455,
-                            "end": 900
+                            "start": 472,
+                            "end": 917
                         }
                     },
                     "relays": [

@@ -55,8 +55,8 @@ class Animation(object):
         print('Relays loaded')
         for key, options in element['strips'].items():
             print(key, "processing")
-            start = len(resource['relays']) + options['start']
-            end = len(resource['relays']) + options['end']
+            start = options['start']
+            end = options['end']
             slice = self.slice_image(image_data, resource, start, end)
             resource['data'][key] = slice
             self.home.strips[key].load_image(index, slice)     # copy to other strip controller
@@ -144,9 +144,10 @@ class Animation(object):
         for y in range(resource['height']):
             row = []
             for x in range(start, end):
-                color = image[resource['width'] * y + x]
-                color_rgb = color[0], color[1], color[2]
-                if x >= resource['width']:
+                if x < resource['width']:
+                    color = image[resource['width'] * y + x]
+                    color_rgb = color[0], color[1], color[2]
+                else:
                     color_rgb = (0, 0, 0)
                 row.append(color_rgb)
             image_slice.append(row)
