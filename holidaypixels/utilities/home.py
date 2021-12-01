@@ -344,6 +344,7 @@ class Strip_Remote_Client():
         if self.ip:
             width = len(image_data[0])
             height = len(image_data)
+            print(f'{self.name}: loading image {index} ({width}x{height})')
             packed = struct.pack('iii', index, width, height)
             for row in image_data:
                 for pixel in row:
