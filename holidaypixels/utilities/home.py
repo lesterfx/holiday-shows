@@ -2,6 +2,7 @@
 
 from __future__ import print_function, division
 
+from collections import defaultdict
 import json
 import logging
 from pprint import pprint
@@ -148,18 +149,18 @@ class Pixel(object):
 class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = StripWrapper(config)
-        self.image_data = None
-        self.relay_data = None
+        self.image_data = defaultdict(lambda: None)
+        self.relay_data = defaultdict(lambda: None)
         
-    def load_image(self, image_data):
-        self.image_data = image_data
+    def load_image(self, index, image_data):
+        self.image_data[index] = image_data
 
-    def load_relays(self, relay_data):
-        self.relay_data = relay_data
+    def load_relays(self, index, relay_data):
+        self.relay_data[index] = relay_data
 
-    def play(self, repeat, end_by, epoch, fps):
+    def play(self, index, repeat, end_by, epoch, fps):
         print('player playing!')
-        height = len(self.image_data)
+        height = len(self.image_data[index])
         abs_y = 0
         while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
             y = abs_y % height
@@ -173,13 +174,13 @@ class Strip_Cache_Player():
             #     color_tup = color[0], color[1], color[2]
             #     self.home[x-len(self.relays)] = color_tup
 
-            if self.relay_data:
-                relay_row = self.relay_data[y]
+            if self.relay_data[index]:
+                relay_row = self.relay_data[index][y]
                 for x, name in enumerate(self.relays):
                     self.home.relays[name].set(relay_row[x])
                 self.home.show_relays(force=True)
 
-            image_row = self.image_data[y]
+            image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
                 self.strip[x] = color
 
@@ -227,7 +228,8 @@ class Strip_Remote_Server():
             while len(message) < message_length:
                 message += conn.recv(message_length - len(message))
             response = self.handle(message)
-            conn.sendall(response)
+            if response:
+                conn.sendall(response)
         conn.close()
 
     def handle(self, data):
@@ -263,8 +265,8 @@ class Strip_Remote_Server():
         return struct.pack('d', server_time)
 
     def load_image(self, data):
-        width, height = struct.unpack('ii', data[:8])
-        data = data[8:]
+        index, width, height = struct.unpack('iii', data[:12])
+        data = data[12:]
         flat_pixel_data = struct.unpack('BBB'*width*height, data)
         image_data = []
         for y in range(height):
@@ -275,14 +277,13 @@ class Strip_Remote_Server():
                 pixel = flat_pixel_data[pixelstart:pixelstart+3]
                 row.append(pixel)
             image_data.append(row)
-        self.player.load_image(image_data)
+        self.player.load_image(index, image_data)
         return b'ok'
 
-    def play(self, data):
+    def play(self, index, data):
         repeat, end_by, epoch, fps = struct.unpack('bddb', data)
         print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
-        self.player.play(repeat, end_by, epoch, fps)
-        return b'ok'
+        self.player.play(index, repeat, end_by, epoch, fps)
 
 class Strip_Remote_Client():
     def __init__(self, config):
@@ -301,11 +302,14 @@ class Strip_Remote_Client():
         time.sleep(1)
         # self.socket.setblocking(False)
         self.init_strip()
+    
+    def __del__(self):
+        self.socket.close()
 
-    def load_relays(self, relay_data):
+    def load_relays(self, index, relay_data):
         if self.ip:
             raise ValueError('Cannot play back relays on remote client')
-        self.player.load_relays(relay_data)
+        self.player.load_relays(index, relay_data)
 
     def synchronize(self):
         if self.ip:
@@ -351,11 +355,11 @@ class Strip_Remote_Client():
         else:
             self.player.load_image(image_data)
 
-    def play(self, repeat, end_by, epoch, fps):
+    def play(self, index, repeat, end_by, epoch, fps):
         if self.ip:
-            self.send(b'play:' + struct.pack('bddb', repeat, end_by, epoch, fps), expected_response=-1)
+            self.send(b'play:' + struct.pack('ibddb', index, repeat, end_by, epoch, fps), expected_response=-1)
         else:
-            self.player.play(repeat, end_by, epoch, fps)
+            self.player.play(index, repeat, end_by, epoch, fps)
     
     def get_response(self):
         if self.ip:
@@ -517,6 +521,7 @@ class StripWrapper(object):
         print('rgb shift:', self.shift)
         self.delay = self.calculate_delay(length)
         print('minimum time between frames:', self.delay)
+        print('maximum fps:', 1/self.delay)
         self.next_available = 0
 
     @property

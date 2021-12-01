@@ -3,36 +3,38 @@
 import datetime
 import importlib
 import os
-from pprint import pprint
 from random import randint, shuffle
 import time
 
 from PIL import Image
 from pygame import mixer
 
-from ..utilities.home import Color
-from . import simple_xmas
-
 class Animation(object):
     def __init__(self, home, globals_, settings):
         mixer.init()
+        self.resources_loaded = {}
         self.home = home
         self.globals = globals_
         self.settings = settings
-        music = self.settings.get('music')
-        if music:
-            self.sound = mixer.Sound(music)
-            self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
-        else:
-            self.sound = None
-            self.silence = None
+        self.element_indices = {}
+        for i, element in enumerate(self.settings['elements']):
+            self.element_indices[element['image']] = element
+        self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
 
     def __str__(self):
         return 'Image'
     
     def load_resources(self, element):
+        index = self.element_indices[element['image']]
+        if index in self.resources_loaded:
+            return self.resources_loaded[index]
+        
+        resource = {}
+        resource['index'] = index
+        resource['fps'] = element['fps']
+        resource['relays'] = element['relays']
+
         path = element['image']
-        self.relays = element['relays']
         for relay in self.relays:
             if relay not in self.home.relays:
                 raise ValueError(f'Relay {relay} is not defined in the home.')
@@ -43,32 +45,37 @@ class Animation(object):
         print()
         print('Loading image:', path)
         image = Image.open(path)
-        self.image = image.getdata()
-        self.width = image.width
-        self.height = image.height
-        self.data = {}
-        self.home.local_strip.load_relays(self.validate_relays())
+        image = image.getdata()
+        resource['width'] = image.width
+        resource['height'] = image.height
+
+        resource['data'] = {}
+        print('Image loaded')
+        self.home.local_strip.load_relays(index, self.validate_relays(image, resource))
+        print('Relays loaded')
         for key, options in element['strips'].items():
-            start = len(self.relays) + options['start']
-            end = len(self.relays) + options['end']
-            slice = self.slice_image(start, end)
-            print('Slice loaded:', key)
-            self.home.strips[key].load_image(slice)
-            self.data[key] = slice
+            print(key, "processing")
+            start = len(resource['relays']) + options['start']
+            end = len(resource['relays']) + options['end']
+            slice = self.slice_image(image, resource, start, end)
+            resource['data'][key] = slice
+            self.home.strips[key].load_image(index, slice)     # copy to other strip controller
+            print(key, 'loaded')
 
         music = element['music']
         if music:
             print('Loading music:', music)
-            self.sound = mixer.Sound(music)
-            self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
+            resource['sound'] = mixer.Sound(music)
         else:
             print('No music')
-            self.sound = None
-            self.silence = None
         print()
 
-        self.fps = element['fps']
+        self.resources_loaded[index] = resource
+        return resource
 
+    def load_all_resources(self):
+        for element in self.settings['elements']:
+            self.load_resources(element)
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
@@ -76,11 +83,13 @@ class Animation(object):
         animation = self.settings['intermediate_animation']
         waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
 
+        self.load_all_resources()
+
         if self.settings.get('days'):
             days = set(self.settings['days'])
         else:
             days = None
-        if self.settings['minute']:
+        if self.settings['minute'] is not None:
             waitfor_minute = int(self.settings['minute'])
             waitfor_second = int(self.settings.get('second', 0))
         else:
@@ -113,36 +122,40 @@ class Animation(object):
             if self.settings.get('shuffle'):
                 shuffle(self.settings['elements'])
             for element in self.settings['elements']:
-                self.load_resources(element)
+                print('loading resource (but should be already loaded)')
+                resource = self.load_resources(element)
+                print('done!')
                 self.activate_relays(False)
                 try:
-                    self.present(end_by, epoch=until.timestamp())
+                    self.present(resource, end_by, epoch=until.timestamp())
                 finally:
-                    if self.sound:
-                        self.sound.stop()
+                    if resource['sound']:
+                        resource['sound'].stop()
                 time.sleep(10)
             time.sleep(20)
 
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active, True)
 
-    def slice_image(self, start, end):
+    def slice_image(self, image, resource, start, end):
         image_slice = []
         for y in range(self.height):
             row = []
             for x in range(start, end):
-                color = self.image[self.width * y + x]
+                color = image[resource['width'] * y + x]
                 color_rgb = color[0], color[1], color[2]
+                if x >= resource['width']:
+                    color_rgb = (0, 0, 0)
                 row.append(color_rgb)
             image_slice.append(row)
         return image_slice
 
-    def validate_relays(self):
+    def validate_relays(self, image, resource):
         relay_data = []
-        for y in range(self.height):
+        for y in range(resource['height']):
             row = []
-            for x, name in enumerate(self.relays):
-                color = self.image[self.width * y + x]
+            for x, name in enumerate(resource['relays']):
+                color = image[resource['width'] * y + x]
                 if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
                     for row in relay_data:
                         print(''.join(['-','X'][c] for c in row))
@@ -154,7 +167,7 @@ class Animation(object):
             relay_data.append(row)
         return relay_data
 
-    def present(self, end_by, epoch=None):
+    def present(self, resource, end_by, epoch=None):
         end_by_float = end_by.timestamp()
         self.home.strip.on = True
         self.home.clear()
@@ -163,12 +176,11 @@ class Animation(object):
 
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
-            if self.silence:
-                self.silence.play()
+            self.silence.play()
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
-        if not self.sound:
+        if not resource['sound']:
             early = epoch - time.time()
             if early > 0:
                 print('early by', early, 'seconds. sleeping')
@@ -176,21 +188,21 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
-            self.home.local_strip.player.relays = self.relays
+            self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2 + self.globals.audio_delay
             for key in self.data:
                 strip = self.home.strips[key]
                 if strip.ip:
                     print('sending play command')
-                    strip.play(self.repeat, end_by_float, epoch, self.fps)
+                    strip.play(self.repeat, end_by_float, epoch, resource['fps'])
                     print('sent!')
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
-            self.sound.play()
+            resource['sound'].play()
             time.sleep(self.globals.audio_delay)
 
         print("PLAYING LOCALLY??????")
-        self.home.local_strip.play(self.repeat, end_by_float, epoch, self.fps)
+        self.home.local_strip.play(index, self.repeat, end_by_float, epoch, resource['fps'])
 
         for key in self.data:
             strip = self.home.strips[key]

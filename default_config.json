@@ -299,7 +299,7 @@
                         },
                         "upstairs": {
                             "start": 455,
-                            "end": 810
+                            "end": 900
                         }
                     },
                     "relays": [
@@ -311,11 +311,11 @@
                         "truck",
                         "presents",
                         "pillar_left",
-                        "cane_r",
-                        "cane_rc",
-                        "cane_c",
-                        "cane_lc",
                         "cane_l",
+                        "cane_lc",
+                        "cane_c",
+                        "cane_rc",
+                        "cane_r",
                         "snowflake",
                         "pillar_right",
                         "tree_left",
@@ -332,8 +332,8 @@
                             "end": 450
                         },
                         "upstairs": {
-                            "start": 450,
-                            "end": 810
+                            "start": 455,
+                            "end": 900
                         }
                     },
                     "relays": [
