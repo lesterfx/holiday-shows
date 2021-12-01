@@ -139,7 +139,7 @@ class Animation(object):
 
     def slice_image(self, image, resource, start, end):
         image_slice = []
-        for y in range(self.height):
+        for y in range(resource['height']):
             row = []
             for x in range(start, end):
                 color = image[resource['width'] * y + x]
