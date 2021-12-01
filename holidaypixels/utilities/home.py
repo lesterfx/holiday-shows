@@ -350,7 +350,9 @@ class Strip_Remote_Client():
                 for pixel in row:
                     assert all(type(x) == int for x in pixel)
                     packed += struct.pack('BBB', *pixel)
+            print('sending image to remote')
             self.send(b'load_image:' + packed, expected_response=b'ok')
+            print('sent!')
         else:
             self.player.load_image(index, image_data)
 
