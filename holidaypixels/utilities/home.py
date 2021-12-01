@@ -340,12 +340,12 @@ class Strip_Remote_Client():
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
 
-    def load_image(self, image_data):
+    def load_image(self, index, image_data):
         if self.ip:
             width = len(image_data[0])
             height = len(image_data)
-            data = [width, height]
-            structure = 'ii'
+            data = [index, width, height]
+            structure = 'iii'
             for row in image_data:
                 for pixel in row:
                     data += pixel
@@ -353,7 +353,7 @@ class Strip_Remote_Client():
             message = struct.pack(structure, *data)
             self.send(b'load_image:' + message, expected_response=b'ok')
         else:
-            self.player.load_image(image_data)
+            self.player.load_image(index, image_data)
 
     def play(self, index, repeat, end_by, epoch, fps):
         if self.ip:
