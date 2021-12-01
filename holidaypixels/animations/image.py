@@ -45,19 +45,19 @@ class Animation(object):
         print()
         print('Loading image:', path)
         image = Image.open(path)
-        image = image.getdata()
+        image_data = image.getdata()
         resource['width'] = image.width
         resource['height'] = image.height
 
         resource['data'] = {}
         print('Image loaded')
-        self.home.local_strip.load_relays(index, self.validate_relays(image, resource))
+        self.home.local_strip.load_relays(index, self.validate_relays(image_data, resource))
         print('Relays loaded')
         for key, options in element['strips'].items():
             print(key, "processing")
             start = len(resource['relays']) + options['start']
             end = len(resource['relays']) + options['end']
-            slice = self.slice_image(image, resource, start, end)
+            slice = self.slice_image(image_data, resource, start, end)
             resource['data'][key] = slice
             self.home.strips[key].load_image(index, slice)     # copy to other strip controller
             print(key, 'loaded')
