@@ -350,7 +350,6 @@ class Strip_Remote_Client():
             for row in image_data:
                 for pixel in row:
                     assert all(type(x) == int for x in pixel)
-                    packed += struct.pack('BBB', *pixel)
                     pattern += 'BBB'
                     data += pixel
             packed = struct.pack(pattern, *data)
