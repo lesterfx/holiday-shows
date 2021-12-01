@@ -26,6 +26,7 @@ class Animation(object):
     
     def load_resources(self, element):
         index = self.element_indices[element['image']]
+        print('loading resource: index', index)
         if index in self.resources_loaded:
             return self.resources_loaded[index]
         
