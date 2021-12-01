@@ -138,6 +138,8 @@ class Animation(object):
         self.home.set_relays_in_order(active, True)
 
     def slice_image(self, image, resource, start, end):
+        print('slicing image from', start, 'to', end)
+        print('image dimensions', resource['width'], 'x', resource['height'])
         image_slice = []
         for y in range(resource['height']):
             row = []
