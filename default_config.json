@@ -294,11 +294,11 @@
                     "fps": 24,
                     "strips": {
                         "first_floor": {
-                            "start": 17,
+                            "start": 18,
                             "end": 467
                         },
                         "upstairs": {
-                            "start": 472,
+                            "start": 468,
                             "end": 917
                         }
                     },

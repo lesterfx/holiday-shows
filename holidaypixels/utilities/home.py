@@ -287,6 +287,7 @@ class Strip_Remote_Server():
         index, repeat, end_by, epoch, fps = struct.unpack('ibddb', data)
         print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
         self.player.play(index, repeat, end_by, epoch, fps)
+        return b'ok'
 
 class Strip_Remote_Client():
     def __init__(self, config):
