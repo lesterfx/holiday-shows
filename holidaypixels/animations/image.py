@@ -28,6 +28,7 @@ class Animation(object):
             resource['index'] = index  # in case it gets shuffled later, this is the original
             resource['fps'] = element['fps']
             resource['relays'] = element['relays']
+            resource['loop'] = element.get('loop', False)
 
             path = element['image']
             for relay in resource['relays']:
@@ -165,7 +166,7 @@ class Animation(object):
         self.home.show_relays(True)
 
         repeat = self.repeat
-        if resource['loop']:
+        if resource.get('loop'):
             repeat = 0
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
