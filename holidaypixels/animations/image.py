@@ -3,7 +3,7 @@
 import datetime
 import importlib
 import os
-from random import randint, shuffle
+from random import randint, shuffle, choice
 import time
 
 from PIL import Image
@@ -27,6 +27,7 @@ class Animation(object):
     def load_resources(self):
         self.element_indices = {}
         self.resources_loaded = {}
+        self.resources_without_sound = []
 
         for index, element in enumerate(self.settings['elements']):
             self.element_indices[element['image']] = index
@@ -75,17 +76,13 @@ class Animation(object):
             if music:
                 print('Loading music:', music)
                 resource['sound'] = mixer.Sound(music)
+                self.resources_loaded[index] = resource
             else:
                 print('No music')
-            print()
-
-            self.resources_loaded[index] = resource
+                self.resources_without_sound = resource
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
-
-        animation = self.settings['intermediate_animation']
-        waiting_module = importlib.import_module('.' + animation, 'holidaypixels.animations')
 
         self.load_all_resources()
 
@@ -105,21 +102,22 @@ class Animation(object):
         while True:
             now = datetime.datetime.now().replace(second=0, microsecond=0)
             self.activate_relays(True)
-            waiting = waiting_module.Animation(self.home, self.globals, self.settings)
+            
+            silent_resource = random.choice(self.resources_without_sound)
             if days is None or now.strftime('%A') in days:
                 until = now.replace(minute=waitfor_minute, hour=now.hour, second=waitfor_second, microsecond=0)
                 if until < now:
                     until += datetime.timedelta(hours=1)
                 if until > end_by:
-                    print('LAST SHOW ENDED', animation, 'until night time:', end_by)
-                    waiting.main(end_by)
+                    print('LAST SHOW ENDED. silent animation until night time:', end_by)
+                    self.present(silent_resource, end_by)
                     return
                 else:
-                    print(animation, 'until', until)
-                    waiting.main(until - datetime.timedelta(seconds=5))
+                    print('silent animation until', until)
+                    self.present(silent_resource, until-datetime.timedelta(seconds=5))
             else:
-                print(animation, 'until night time:', end_by)
-                waiting.main(end_by)
+                print('silent animation until night time:', end_by)
+                self.present(silent_resource, end_by)
                 return
             
             self.activate_relays(True)
