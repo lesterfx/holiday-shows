@@ -133,7 +133,7 @@ class Animation(object):
                 try:
                     self.present(resource, end_by, epoch=until.timestamp())
                 finally:
-                    if resource['sound']:
+                    if 'sound' in resource:
                         resource['sound'].stop()
                 time.sleep(10)
             time.sleep(10)
@@ -177,7 +177,7 @@ class Animation(object):
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
-        if not resource['sound']:
+        if not resource.get('sound'):
             early = epoch - time.time()
             if early > 0:
                 print('early by', early, 'seconds. sleeping')
