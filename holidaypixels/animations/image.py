@@ -77,7 +77,7 @@ class Animation(object):
                 self.home.strips[key].load_image(index, slice)     # copy to other strip controller
                 print(key, 'loaded')
 
-            music = element['music']
+            music = element.get('music')
             if music:
                 print('Loading music:', music)
                 resource['sound'] = mixer.Sound(music)
