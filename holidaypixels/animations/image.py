@@ -198,7 +198,7 @@ class Animation(object):
                 strip = self.home.strips[key]
                 if strip.ip:
                     print('sending play command')
-                    strip.play(self.repeat, end_by_float, epoch, resource['fps'])
+                    strip.play(resource['index'], self.repeat, end_by_float, epoch, resource['fps'])
                     print('sent!')
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
