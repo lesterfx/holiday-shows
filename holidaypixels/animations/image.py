@@ -24,8 +24,6 @@ class Animation(object):
         self.resources_without_sound = []
 
         for index, element in enumerate(self.settings['elements']):
-            self.element_indices[element['image']] = index
-
             resource = {}
             resource['index'] = index  # in case it gets shuffled later, this is the original
             resource['fps'] = element['fps']
