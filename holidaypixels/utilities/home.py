@@ -695,10 +695,7 @@ class Home(object):
         return ((len(self) + every - 1) // every) * every
 
     def clear(self, show=False):
-        for i in range(len(self)):
-            self[i] = None
-        if show:
-            self.show()
+        self.strip.clear(show)
     
     def clear_relays(self):
         for remote in self.remotes.values():
