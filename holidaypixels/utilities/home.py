@@ -283,8 +283,8 @@ class Strip_Remote_Server():
         self.player.load_image(index, image_data)
         return b'ok'
 
-    def play(self, index, data):
-        repeat, end_by, epoch, fps = struct.unpack('bddb', data)
+    def play(self, data):
+        index, repeat, end_by, epoch, fps = struct.unpack('ibddb', data)
         print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
         self.player.play(index, repeat, end_by, epoch, fps)
 
