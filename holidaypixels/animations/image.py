@@ -83,7 +83,7 @@ class Animation(object):
                 self.resources_loaded[index] = resource
             else:
                 print('No music')
-                self.resources_without_sound = resource
+                self.resources_without_sound.append(resource)
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
