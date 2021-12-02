@@ -67,6 +67,8 @@ class Animation(object):
             self.home.local_strip.load_relays(index, relay_data)
             print('Relays loaded')
             for key, options in element['slices'].items():
+                if key == 'relays':
+                    continue
                 print(key, "processing")
                 start = options['start']
                 end = options['end']
