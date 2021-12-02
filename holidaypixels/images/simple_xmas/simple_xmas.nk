@@ -1,5 +1,5 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"" format:"20 20 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default" datatype:"unknown" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"simple_xmas.png" format:"40 40 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
@@ -34,6 +34,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/simple_xmas/simple_xmas.nk
+ project_directory "\[python \{nuke.script_directory()\}]/"
  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
  proxy_type scale
  proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
@@ -48,8 +49,9 @@ Root {
 Constant {
  inputs 0
  channels rgb
- format "20 20 0 0 20 20 1 xmas_tile"
+ format "40 40 0 0 40 40 1 xmas_tile"
  name Constant1
+ selected true
  xpos 175
  ypos -112
 }
@@ -66,15 +68,22 @@ Grade {
  xpos 175
  ypos -16
 }
-Write {
- name Write1
- xpos 175
- ypos 31
-}
+set N129cf400 [stack 0]
 Viewer {
  frame 1
  frame_range 1-100
  name Viewer1
  xpos -40
  ypos -9
+}
+push $N129cf400
+Write {
+ file simple_xmas.png
+ raw true
+ file_type png
+ checkHashOnRead false
+ version 2
+ name Write1
+ xpos 175
+ ypos 31
 }

@@ -18,11 +18,11 @@ import neopixel
 
 from holidaypixels.utilities import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['corners', 'ranges', 'max', 'black', 'relay_remotes', 'relay_order', 'strips', 'audio_delay'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
-StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length'])
+StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
 class CalendarEntry(object):
     def __init__(self, entry):
@@ -178,19 +178,11 @@ class Holiday_Pixels(object):
     def process_globals(self, globals_):
         if self.args.norelays:
             globals_['relays'] = []
-        corners = [int(corner) for corner in globals_['corners']]
-        ranges = [(int(min_range), int(max_range)) for min_range, max_range in globals_['ranges']]
         relay_order = globals_['relay_order']
         strips = self.process_strips(globals_['strips'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
-        black = globals_['black']
-        max_ = globals_['max']
         audio_delay = globals_['audio_delay']
         self.globals = GlobalPrefs(
-            corners=corners,
-            ranges=ranges,
-            max=max_,
-            black=black,
             relay_remotes=relay_remotes,
             relay_order=relay_order,
             strips=strips,
@@ -214,7 +206,8 @@ class Holiday_Pixels(object):
                 invert=strip['invert'],
                 pin_channel=strip['pin_channel'],
                 brightness=strip['brightness'],
-                length=strip['length']
+                length=strip['length'],
+                black=strip.get('black', [])
             ))
         return processed_strips
 

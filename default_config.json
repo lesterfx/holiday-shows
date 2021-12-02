@@ -1,11 +1,5 @@
 {
     "globals": {
-        "corners": [160, 214, 446, 550, 728],
-        "black": [
-            [0, 17],
-            [446, 469],
-            [627, 651]
-        ],
         "max": 810,
         "ranges": [[17, 810]],
         "audio_delay": 0.1,
@@ -20,7 +14,12 @@
                 "invert": false,
                 "pin_channel": 0,
                 "brightness": 255,
-                "length": 360
+                "length": 360,
+                "black": [
+                    [0, 20],
+                    [140, 150],
+                    [300, 360]
+                ]
             },
             "first_floor": {
                 "ip": null,
@@ -32,7 +31,12 @@
                 "invert": false,
                 "pin_channel": 0,
                 "brightness": 255,
-                "length": 450
+                "length": 450,
+                "black": [
+                    [0, 17],
+                    [430, 450]
+                ]
+
             }
         },
         "relay_remotes": {

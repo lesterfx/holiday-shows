@@ -569,15 +569,11 @@ class StripWrapper(object):
         )
 
     def __setitem__(self, x, rgb):
-        # self.cached[x] = rgb
         if rgb:
             value = self.map(*rgb)
         else:
             value = 0
         self.real_strip.setPixelColor(x, value)
-
-    # def __getitem__(self, x):
-    #     return self.cached[x]
 
     def clear(self, show=False):
         for x in range(self.real_strip.numPixels()):
@@ -596,7 +592,6 @@ class StripWrapper(object):
 class Home(object):
     def __init__(self, globals_):
         self.globals = globals_
-        self.max = self.globals.ranges[-1][-1]
         self.init_relays()
         self.init_strip()
         # self.cache = [None] * len(self)
@@ -734,16 +729,6 @@ class Home(object):
                 self.strip[key] = (self.strip[key] | value).color
         else:
             self.strip[key] = value or 0
-
-    def __contains__(self, key):
-        key = int(key)
-        for range_ in self.globals.ranges:
-            if range_[0] <= key <= range_[1]:
-                return True
-        return False
-
-    def __len__(self):
-        return self.max+1
 
     def __del__(self):
         try:
