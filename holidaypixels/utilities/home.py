@@ -322,7 +322,14 @@ class Strip_Remote_Client():
             response = self.send(b'synchronize:' + packed, fallback_response=packed)
             server_time = struct.unpack('d', response)[0]
             self.time_offset = server_time - client_time
-            print(f'{self.ip}: time offset:', self.time_offset)
+            if abs(self.time_offset) > .03:
+                print()
+                print()
+                print()
+                print(f'{self.ip}: time offset:', self.time_offset)
+                print()
+                print()
+                print()
         else:
             self.time_offset = 0
 
@@ -526,7 +533,6 @@ class StripWrapper(object):
 
         self.cached = [(0, 0, 0)] * length
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
-        print('rgb shift:', self.shift)
         self.delay = self.calculate_delay(length)
         print('minimum time between frames:', self.delay)
         print('maximum fps:', 1/self.delay)
