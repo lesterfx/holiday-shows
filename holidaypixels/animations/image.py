@@ -177,7 +177,7 @@ class Animation(object):
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
-        if not resource.get('sound'):
+        if not resource.get('sound') and epoch is not None:
             early = epoch - time.time()
             if early > 0:
                 print('early by', early, 'seconds. sleeping')
@@ -195,7 +195,8 @@ class Animation(object):
                     print('sent!')
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
-            resource['sound'].play()
+            if resource.get('sound'):
+                resource['sound'].play()
             time.sleep(self.globals.audio_delay)
 
         print("PLAYING LOCALLY??????")
