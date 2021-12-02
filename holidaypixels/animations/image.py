@@ -84,7 +84,7 @@ class Animation(object):
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
 
-        self.load_all_resources()
+        self.load_resources()
 
         if self.settings.get('days'):
             days = set(self.settings['days'])
