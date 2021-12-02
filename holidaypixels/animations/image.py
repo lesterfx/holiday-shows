@@ -19,20 +19,15 @@ class Animation(object):
     def __str__(self):
         return 'Image'
     
-    def get_resource(self, element):
-        index = self.element_indices[element['image']]
-        return self.resources_loaded[index]
-    
     def load_resources(self):
-        self.element_indices = {}
-        self.resources_loaded = {}
+        self.resources_loaded = []
         self.resources_without_sound = []
 
         for index, element in enumerate(self.settings['elements']):
             self.element_indices[element['image']] = index
 
             resource = {}
-            resource['index'] = index
+            resource['index'] = index  # in case it gets shuffled later, this is the original
             resource['fps'] = element['fps']
             resource['relays'] = element['relays']
 
@@ -62,7 +57,7 @@ class Animation(object):
                     if options == 'cycle':
                         relay_data = 'cycle'
                 else:
-                    relay_data = self.slice_image(image_data, resource, start, end, True)
+                    relay_data = self.slice_image(image_data, resource, start, end, False, True)
             self.home.local_strip.load_relays(index, relay_data)
             print('Relays loaded')
             for key, options in element['slices'].items():
@@ -71,7 +66,8 @@ class Animation(object):
                 print(key, "processing")
                 start = options['start']
                 end = options['end']
-                slice = self.slice_image(image_data, resource, start, end)
+                wrap = options.get('wrap', False)
+                slice = self.slice_image(image_data, resource, start, end, wrap)
                 resource['data'][key] = slice
                 self.home.strips[key].load_image(index, slice)     # copy to other strip controller
                 print(key, 'loaded')
@@ -80,7 +76,7 @@ class Animation(object):
             if music:
                 print('Loading music:', music)
                 resource['sound'] = mixer.Sound(music)
-                self.resources_loaded[index] = resource
+                self.resources_loaded.append(resource)
             else:
                 print('No music')
                 self.resources_without_sound.append(resource)
@@ -126,9 +122,8 @@ class Animation(object):
             
             self.activate_relays(True)
             if self.settings.get('shuffle'):
-                random.shuffle(self.settings['elements'])
-            for element in self.settings['elements']:
-                resource = self.get_resource(element)
+                random.shuffle(self.resources_loaded)
+            for resource in self.resources_loaded:
                 self.activate_relays(False)
                 try:
                     self.present(resource, end_by, epoch=until.timestamp())
@@ -141,7 +136,7 @@ class Animation(object):
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active, True)
 
-    def slice_image(self, image, resource, start, end, is_relays=False):
+    def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
         print('slicing image from', start, 'to', end)
         print('image dimensions', resource['width'], 'x', resource['height'])
         image_slice = []
@@ -150,8 +145,8 @@ class Animation(object):
         for y in range(resource['height']):
             row = []
             for x in range(start, end):
-                if x < resource['width']:
-                    color = image[resource['width'] * y + x]
+                if x < resource['width'] or wrap:
+                    color = image[resource['width'] * y + (x % resource['width'])]
                     color_rgb = color[0], color[1], color[2]
                 else:
                     color_rgb = (0, 0, 0)

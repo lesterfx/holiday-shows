@@ -295,11 +295,13 @@
                     "slices": {
                         "first_floor": {
                             "start": 0,
-                            "end": 20
+                            "end": 20,
+                            "wrap": true
                         },
                         "upstairs": {
                             "start": 0,
-                            "end": 20
+                            "end": 20,
+                            "wrap": true
                         },
                         "relays": "cycle"
                     },
