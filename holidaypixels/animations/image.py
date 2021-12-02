@@ -171,6 +171,9 @@ class Animation(object):
         self.home.show()
         self.home.show_relays(True)
 
+        repeat = self.repeat
+        if resource['loop']:
+            repeat = 0
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
             self.silence.play()
@@ -191,7 +194,7 @@ class Animation(object):
                 strip = self.home.strips[key]
                 if strip.ip:
                     print('sending play command')
-                    strip.play(resource['index'], self.repeat, end_by_float, epoch, resource['fps'])
+                    strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
                     print('sent!')
             while time.time() < epoch - self.globals.audio_delay:
                 time.sleep(0.001)
@@ -200,7 +203,7 @@ class Animation(object):
             time.sleep(self.globals.audio_delay)
 
         print("PLAYING LOCALLY??????")
-        self.home.local_strip.play(resource['index'], self.repeat, end_by_float, epoch, resource['fps'])
+        self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
         for key in resource['data']:
             strip = self.home.strips[key]

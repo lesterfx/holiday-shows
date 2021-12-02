@@ -291,7 +291,7 @@
                 {
                     "image": "images/simple_xmas/simple_xmas.png",
                     "fps": 24,
-                    "repeat": 0,
+                    "loop": true,
                     "slices": {
                         "first_floor": {
                             "start": 0,
