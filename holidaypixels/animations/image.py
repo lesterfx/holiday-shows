@@ -12,71 +12,74 @@ from pygame import mixer
 class Animation(object):
     def __init__(self, home, globals_, settings):
         mixer.init()
-        self.resources_loaded = {}
         self.home = home
         self.globals = globals_
         self.settings = settings
-        self.element_indices = {}
-        for i, element in enumerate(self.settings['elements']):
-            self.element_indices[element['image']] = i
         self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
 
     def __str__(self):
         return 'Image'
     
-    def load_resources(self, element):
+    def get_resource(self, element):
         index = self.element_indices[element['image']]
-        print('loading resource: index', index)
-        if index in self.resources_loaded:
-            return self.resources_loaded[index]
-        
-        resource = {}
-        resource['index'] = index
-        resource['fps'] = element['fps']
-        resource['relays'] = element['relays']
+        return self.resources_loaded[index]
+    
+    def load_resources(self):
+        self.element_indices = {}
+        self.resources_loaded = {}
 
-        path = element['image']
-        for relay in resource['relays']:
-            if relay not in self.home.relays:
-                raise ValueError(f'Relay {relay} is not defined in the home.')
-        path = os.path.join(os.path.dirname(__file__), '..', path)
-        path = os.path.realpath(path)
-        if 'variations' in self.settings:
-            path = path.format(randint(1, self.settings['variations']))
-        print()
-        print('Loading image:', path)
-        image = Image.open(path)
-        image_data = image.getdata()
-        resource['width'] = image.width
-        resource['height'] = image.height
+        for index, element in enumerate(self.settings['elements']):
+            self.element_indices[element['image']] = index
 
-        resource['data'] = {}
-        print('Image loaded')
-        self.home.local_strip.load_relays(index, self.validate_relays(image_data, resource))
-        print('Relays loaded')
-        for key, options in element['strips'].items():
-            print(key, "processing")
-            start = options['start']
-            end = options['end']
-            slice = self.slice_image(image_data, resource, start, end)
-            resource['data'][key] = slice
-            self.home.strips[key].load_image(index, slice)     # copy to other strip controller
-            print(key, 'loaded')
+            resource = {}
+            resource['index'] = index
+            resource['fps'] = element['fps']
+            resource['relays'] = element['relays']
 
-        music = element['music']
-        if music:
-            print('Loading music:', music)
-            resource['sound'] = mixer.Sound(music)
-        else:
-            print('No music')
-        print()
+            path = element['image']
+            for relay in resource['relays']:
+                if relay not in self.home.relays:
+                    raise ValueError(f'Relay {relay} is not defined in the home.')
+            path = os.path.join(os.path.dirname(__file__), '..', path)
+            path = os.path.realpath(path)
+            if 'variations' in self.settings:
+                path = path.format(randint(1, self.settings['variations']))
+            print()
+            print('Loading image:', path)
+            image = Image.open(path)
+            image_data = image.getdata()
+            resource['width'] = image.width
+            resource['height'] = image.height
 
-        self.resources_loaded[index] = resource
-        return resource
+            resource['data'] = {}
+            print('Image loaded')
+            if 'relays' in element['slices']:
+                if element['slices']['relays'] == 'cycle':
+                    relay_data = 'cycle'
+                else:
+                    start = element['slices']['relays']['start']
+                    end = element['slices']['relays']['end']
+                    relay_data = self.slice_image(image_data, resource, start, end, True)
+            self.home.local_strip.load_relays(index, relay_data)
+            print('Relays loaded')
+            for key, options in element['slices'].items():
+                print(key, "processing")
+                start = options['start']
+                end = options['end']
+                slice = self.slice_image(image_data, resource, start, end)
+                resource['data'][key] = slice
+                self.home.strips[key].load_image(index, slice)     # copy to other strip controller
+                print(key, 'loaded')
 
-    def load_all_resources(self):
-        for element in self.settings['elements']:
-            self.load_resources(element)
+            music = element['music']
+            if music:
+                print('Loading music:', music)
+                resource['sound'] = mixer.Sound(music)
+            else:
+                print('No music')
+            print()
+
+            self.resources_loaded[index] = resource
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
@@ -123,9 +126,7 @@ class Animation(object):
             if self.settings.get('shuffle'):
                 shuffle(self.settings['elements'])
             for element in self.settings['elements']:
-                print('loading resource (but should be already loaded)')
-                resource = self.load_resources(element)
-                print('done!')
+                resource = self.get_resource(element)
                 self.activate_relays(False)
                 try:
                     self.present(resource, end_by, epoch=until.timestamp())
@@ -133,15 +134,17 @@ class Animation(object):
                     if resource['sound']:
                         resource['sound'].stop()
                 time.sleep(10)
-            time.sleep(20)
+            time.sleep(10)
 
     def activate_relays(self, active=True):
         self.home.set_relays_in_order(active, True)
 
-    def slice_image(self, image, resource, start, end):
+    def slice_image(self, image, resource, start, end, is_relays=False):
         print('slicing image from', start, 'to', end)
         print('image dimensions', resource['width'], 'x', resource['height'])
         image_slice = []
+        if is_relays and end == 'auto':
+            end = len(resource['relays'])
         for y in range(resource['height']):
             row = []
             for x in range(start, end):
@@ -150,26 +153,14 @@ class Animation(object):
                     color_rgb = color[0], color[1], color[2]
                 else:
                     color_rgb = (0, 0, 0)
-                row.append(color_rgb)
+                if is_relays:
+                    if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
+                        raise ValueError(f'Relay data at Row {y}, Col {x} is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
+                    row.append(bool(color_rgb[0]))
+                else:
+                    row.append(color_rgb)
             image_slice.append(row)
         return image_slice
-
-    def validate_relays(self, image, resource):
-        relay_data = []
-        for y in range(resource['height']):
-            row = []
-            for x, name in enumerate(resource['relays']):
-                color = image[resource['width'] * y + x]
-                if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
-                    for row in relay_data:
-                        print(''.join(['-','X'][c] for c in row))
-                    raise ValueError(f'Relay data at Row {y}, Col {x} ({name}) is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
-                elif color[0] == 0:
-                    row.append(False)
-                else:
-                    row.append(True)
-            relay_data.append(row)
-        return relay_data
 
     def present(self, resource, end_by, epoch=None):
         end_by_float = end_by.timestamp()

@@ -175,9 +175,13 @@ class Strip_Cache_Player():
             #     self.home[x-len(self.relays)] = color_tup
 
             if self.relay_data[index]:
-                relay_row = self.relay_data[index][y]
-                for x, name in enumerate(self.relays):
-                    self.home.relays[name].set(relay_row[x])
+                if self.relay_data[index] == 'cycle':
+                    for x, name in enumerate(self.relays):
+                        self.home.relays[name].set((abs_y//fps) % len(self.relays) != x)
+                else:
+                    relay_row = self.relay_data[index][y]
+                    for x, name in enumerate(self.relays):
+                        self.home.relays[name].set(relay_row[x])
                 self.home.show_relays(force=True)
 
             image_row = self.image_data[index][y]

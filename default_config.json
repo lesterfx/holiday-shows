@@ -289,10 +289,45 @@
             "module": "image",
             "elements": [
                 {
+                    "image": "images/simple_xmas/simple_xmas.png",
+                    "fps": 24,
+                    "repeat": 0,
+                    "slices": {
+                        "first_floor": {
+                            "start": 0,
+                            "end": 20
+                        },
+                        "second_floor": {
+                            "start": 0,
+                            "end": 20
+                        },
+                        "relays": "cycle"
+                    },
+                    "relays": [
+                        "wreath",
+                        "icicles",
+                        "deer_r",
+                        "deer_c",
+                        "deer_l",
+                        "truck",
+                        "presents",
+                        "pillar_left",
+                        "cane_l",
+                        "cane_lc",
+                        "cane_c",
+                        "cane_rc",
+                        "cane_r",
+                        "snowflake",
+                        "pillar_right",
+                        "tree_left",
+                        "tree_right"
+                    ]
+                },
+                {
                     "image": "images/sugarplum/sugarplum.png",
                     "music": "/home/pi/xmas-songs/sugarplum.mp3",
                     "fps": 24,
-                    "strips": {
+                    "slices": {
                         "first_floor": {
                             "start": 18,
                             "end": 467
@@ -300,6 +335,10 @@
                         "upstairs": {
                             "start": 468,
                             "end": 917
+                        },
+                        "relays": {
+                            "start": 0,
+                            "end": "auto"
                         }
                     },
                     "relays": [
@@ -326,7 +365,7 @@
                     "image": "images/sarajevo/nuke/sarajevo_2021.png",
                     "music": "/home/pi/xmas-songs/sarajevo.mp3",
                     "fps": 24,
-                    "strips": {
+                    "slices": {
                         "first_floor": {
                             "start": 17,
                             "end": 467
@@ -334,6 +373,10 @@
                         "upstairs": {
                             "start": 472,
                             "end": 917
+                        },
+                        "relays": {
+                            "start": 0,
+                            "end": "auto"
                         }
                     },
                     "relays": [
@@ -360,7 +403,6 @@
             "shuffle": false,
             "countdown": 3,
             "minute": 1,
-            "intermediate_animation": "simple_xmas",
             "days": [
                 "Friday",
                 "Saturday",

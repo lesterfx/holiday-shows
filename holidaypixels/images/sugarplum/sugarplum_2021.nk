@@ -1,9 +1,9 @@
 #! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
-#write_info Write1 file:"sugarplum/sugarplum.png" format:"827 3850 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4650" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+#write_info Write1 file:"sugarplum/sugarplum.png" format:"823 3850 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4650" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
 version 12.0 v3
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="0" w="1792" h="1120" fullscreen="1" screen="0">
+    <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
@@ -11,12 +11,12 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="643"/>
-                <dock id="" activePageId="Viewer.1">
+                <split size="612"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="452"/>
-                <dock id="" activePageId="DAG.1" focus="true">
+                <split size="430"/>
+                <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -120,13 +120,13 @@ Group {
   xpos 237
   ypos 185
  }
-set N6a107800 [stack 0]
+set N6802cc00 [stack 0]
  Output {
   name Output1
   xpos 237
   ypos 261
  }
-push $N6a107800
+push $N6802cc00
  Viewer {
   frame_range 1-841
   frame_range_lock true
@@ -141,7 +141,7 @@ Read {
  file sugarplum/sugarplum.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 39
+ version 40
  name Read1
  xpos 557
  ypos -436
@@ -161,17 +161,7 @@ Reformat {
  xpos 557
  ypos -308
 }
-set N69e5c800 [stack 0]
-Crop {
- box {0 0 516 {height}}
- reformat true
- crop false
- name Crop14
- xpos -18
- ypos -57
-}
-set N678fdc00 [stack 0]
-push $N69e5c800
+set N6802dc00 [stack 0]
 Crop {
  box {1286 0 1491 {input.height}}
  reformat true
@@ -190,7 +180,9 @@ Reformat {
  xpos 970
  ypos 30
 }
-push $N69e5c800
+set N71947000 [stack 0]
+push $N71947000
+push $N6802dc00
 Crop {
  box {1065 0 1270 {input.height}}
  reformat true
@@ -216,7 +208,7 @@ Group {
  ypos 111
  addUserKnob {20 User}
  addUserKnob {3 space}
- space 22
+ space 18
 }
  Input {
   inputs 0
@@ -263,13 +255,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N1ae24c00 [stack 0]
+set N7199e400 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N1ae24c00
+push $N7199e400
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -279,7 +271,23 @@ push $N1ae24c00
   ypos -34
  }
 end_group
-push $N69e5c800
+set N14fd8580 [stack 0]
+Viewer {
+ inputs 2
+ frame_range 1-42
+ frame_range_lock true
+ channels rgb
+ zoom_lock true
+ colour_sample_bbox {-0.1960784346 2.268476725 -0.1945701391 2.269984961}
+ samplepoints {{-0.1840120703 2.250377178}
+   }
+ input_process false
+ name Viewer1
+ xpos 1118
+ ypos 578
+}
+push $N14fd8580
+push $N6802dc00
 Crop {
  box {550 0 979 {input.height}}
  reformat true
@@ -295,7 +303,15 @@ Reformat {
  xpos 557
  ypos -59
 }
-push $N678fdc00
+push $N6802dc00
+Crop {
+ box {0 0 516 {height}}
+ reformat true
+ crop false
+ name Crop14
+ xpos -18
+ ypos -57
+}
 Group {
  name relays
  xpos -18
@@ -371,7 +387,7 @@ Group {
   ypos 144
   disable {{!parent.colorize}}
  }
-set N6c976000 [stack 0]
+set N67fa1800 [stack 0]
  Multiply {
   value {{parent.last-parent.first+1}}
   name Multiply1
@@ -400,8 +416,8 @@ set N6c976000 [stack 0]
   ypos 232
   disable {{!parent.expand}}
  }
-set N6c976c00 [stack 0]
-push $N6c976000
+set N67fa0c00 [stack 0]
+push $N67fa1800
  Viewer {
   inputs 2
   frame_range 1-4650
@@ -411,7 +427,7 @@ push $N6c976000
   xpos 135
   ypos 102
  }
-push $N6c976c00
+push $N67fa0c00
  Output {
   name Output1
   xpos 0
@@ -472,13 +488,13 @@ Group {
   xpos 126
   ypos -34
  }
-set Nd79f400 [stack 0]
+set N67ea2800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $Nd79f400
+push $N67ea2800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -542,13 +558,13 @@ Group {
   xpos 126
   ypos -34
  }
-set Nd761c00 [stack 0]
+set N221ac800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $Nd761c00
+push $N221ac800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -558,29 +574,13 @@ push $Nd761c00
   ypos -34
  }
 end_group
-set Nd71fb80 [stack 0]
-Viewer {
- inputs 2
- frame_range 1-42
- frame_range_lock true
- channels rgb
- zoom_lock true
- colour_sample_bbox {-0.1960784346 2.268476725 -0.1945701391 2.269984961}
- samplepoints {{-0.1840120703 2.250377178}
-   }
- input_process false
- name Viewer1
- xpos 1118
- ypos 578
-}
-push $Nd71fb80
 Write {
  file sugarplum/sugarplum.png
  raw true
  file_type png
  use_limit true
  checkHashOnRead false
- version 45
+ version 47
  name Write1
  xpos 899
  ypos 624
