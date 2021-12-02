@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 import datetime
-import importlib
 import os
-from random import randint, shuffle, choice
+import random
 import time
 
 from PIL import Image
@@ -44,7 +43,7 @@ class Animation(object):
             path = os.path.join(os.path.dirname(__file__), '..', path)
             path = os.path.realpath(path)
             if 'variations' in self.settings:
-                path = path.format(randint(1, self.settings['variations']))
+                path = path.format(random.randint(1, self.settings['variations']))
             print()
             print('Loading image:', path)
             image = Image.open(path)
@@ -127,7 +126,7 @@ class Animation(object):
             
             self.activate_relays(True)
             if self.settings.get('shuffle'):
-                shuffle(self.settings['elements'])
+                random.shuffle(self.settings['elements'])
             for element in self.settings['elements']:
                 resource = self.get_resource(element)
                 self.activate_relays(False)
