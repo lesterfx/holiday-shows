@@ -55,11 +55,14 @@ class Animation(object):
             resource['data'] = {}
             print('Image loaded')
             if 'relays' in element['slices']:
-                if element['slices']['relays'] == 'cycle':
-                    relay_data = 'cycle'
+                options = element['slices']['relays']
+                try:
+                    start = options['start']
+                    end = options['end']
+                except TypeError:
+                    if options == 'cycle':
+                        relay_data = 'cycle'
                 else:
-                    start = element['slices']['relays']['start']
-                    end = element['slices']['relays']['end']
                     relay_data = self.slice_image(image_data, resource, start, end, True)
             self.home.local_strip.load_relays(index, relay_data)
             print('Relays loaded')
