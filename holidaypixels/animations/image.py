@@ -194,7 +194,7 @@ class Animation(object):
         else:
             self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2 + self.globals.audio_delay
-            for key in self.data:
+            for key in resource['data']:
                 strip = self.home.strips[key]
                 if strip.ip:
                     print('sending play command')
@@ -206,9 +206,9 @@ class Animation(object):
             time.sleep(self.globals.audio_delay)
 
         print("PLAYING LOCALLY??????")
-        self.home.local_strip.play(index, self.repeat, end_by_float, epoch, resource['fps'])
+        self.home.local_strip.play(resource['index'], self.repeat, end_by_float, epoch, resource['fps'])
 
-        for key in self.data:
+        for key in resource['data']:
             strip = self.home.strips[key]
             if strip.ip:
                 print(strip.get_response())

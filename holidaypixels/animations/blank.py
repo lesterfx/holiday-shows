@@ -17,7 +17,7 @@ class Animation(object):
     def main(self, end_by):
         self.home.strip.on = False
         while datetime.datetime.now() < end_by:
-            self.home *= 0
+            self.home.clear()
             self.home.show(force=True)
             time.sleep(1)
 
