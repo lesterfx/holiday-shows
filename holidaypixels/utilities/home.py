@@ -218,8 +218,11 @@ class Strip_Remote_Server():
     def listen(self):
         print('Waiting for connection')
         self.sock.listen(1)
+        print('Listening for connection')
         conn, addr = self.sock.accept()
+        print('Accepted connection')
         while 1:
+            print('Waiting for message')
             message = b''
             while len(message) < 8:
                 message += conn.recv(8 - len(message))
