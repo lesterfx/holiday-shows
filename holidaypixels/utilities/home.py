@@ -529,13 +529,15 @@ class StripWrapper(object):
         invert = strip_prefs.invert
         brightness = strip_prefs.brightness
         pin_channel = strip_prefs.pin_channel
+        self.black = []
+        for black in strip_prefs.black:
+            self.black.append(range(black[0], black[1]))
 
         self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
 
         pixel_order = strip_prefs.pixel_order.lower()
 
-        self.cached = [(0, 0, 0)] * length
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         self.delay = self.calculate_delay(length)
         print('minimum time between frames:', self.delay)
@@ -569,6 +571,9 @@ class StripWrapper(object):
         )
 
     def __setitem__(self, x, rgb):
+        for black in self.black:
+            if x in black:
+                return
         if rgb:
             value = self.map(*rgb)
         else:
@@ -679,12 +684,6 @@ class Home(object):
 
         return func
     
-    def blacked_out(self, x):
-        for blackout in self.globals.black:
-            if x in range(blackout[0], blackout[-1]+1):
-                return True
-        return False
-
     @staticmethod
     def run_for(seconds, function, *args, **kwargs):
         end = time.time() + seconds
