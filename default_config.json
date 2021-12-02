@@ -1,7 +1,5 @@
 {
     "globals": {
-        "max": 810,
-        "ranges": [[17, 810]],
         "audio_delay": 0.1,
         "strips": {
             "upstairs": {
@@ -16,9 +14,9 @@
                 "brightness": 255,
                 "length": 360,
                 "black": [
-                    [0, 20],
+                    [0, 15],
                     [140, 150],
-                    [300, 360]
+                    [330, 360]
                 ]
             },
             "first_floor": {
@@ -33,8 +31,8 @@
                 "brightness": 255,
                 "length": 450,
                 "black": [
-                    [0, 17],
-                    [430, 450]
+                    [0, 16],
+                    [440, 450]
                 ]
 
             }
