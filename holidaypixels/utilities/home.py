@@ -162,6 +162,8 @@ class Strip_Cache_Player():
         print('player playing!')
         height = len(self.image_data[index])
         abs_y = 0
+        if epoch and epoch > time.time():
+            time.sleep(epoch - time.time())
         while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
             y = abs_y % height
 
@@ -197,6 +199,7 @@ class Strip_Cache_Player():
                     break
 
         print('image complete')
+        self.strip.clear(True)
 
     def stop(self):
         self.strip.clear(True)
