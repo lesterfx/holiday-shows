@@ -159,7 +159,7 @@ class Strip_Cache_Player():
         self.relay_data[index] = relay_data
 
     def play(self, index, repeat, end_by, epoch, fps):
-        print('player playing!')
+        print('player playing until', end_by)
         height = len(self.image_data[index])
         abs_y = 0
         if epoch and epoch > time.time():
