@@ -27,8 +27,11 @@ class Strip_Cache_Player():
         self.relay_data[index] = relay_data
 
     def play(self, index, repeat, end_by, epoch, fps):
-        print(f'player playing until {datetime.datetime.fromtimestamp(end_by)}')
         height = len(self.image_data[index])
+        if repeat:
+            print(f'playing at {fps} fps {repeat} times, starting at {datetime.datetime.fromtimestamp(epoch)} and ending at {datetime.datetime.fromtimestamp(epoch + height * fps)}')
+        else:
+            print(f'playing at {fps} fps on loop until {datetime.datetime.fromtimestamp(end_by)}, at {fps} fps')
         abs_y = 0
         if epoch and epoch > time.time():
             time.sleep(epoch - time.time())
@@ -156,7 +159,6 @@ class Strip_Remote_Server():
         index, repeat, end_by, epoch, fps = struct.unpack('ibddb', data)
         end_by += self.time_offset
         epoch += self.time_offset
-        print(f'playing {repeat} times, ending at {datetime.datetime.fromtimestamp(end_by)}, at {datetime.datetime.fromtimestamp(epoch)} with {fps} fps')
         self.player.play(index, repeat, end_by, epoch, fps)
         return b'ok'
 
@@ -358,6 +360,9 @@ class StripWrapper(object):
         print('maximum fps:', 1/self.delay)
         self.next_available = 0
 
+        self.fps_timer = time.time()
+        self.fps_count = 0
+
     @property
     def on(self):
         return self.relay.value
@@ -403,6 +408,16 @@ class StripWrapper(object):
             time.sleep(need_to_wait)
         self.real_strip.show()
         self.next_available = time.time() + self.delay
+        self.print_fps()
+
+    def print_fps(self):
+        now = time.time()
+        if now - self.fps_timer >= 1:
+            print(f'\r{self.fps_count} fps (on: {self.on})')
+            self.fps_count = 0
+            self.fps_timer = now
+        self.fps_count += 1
+
 
 class Home(object):
     def __init__(self, globals_):
@@ -410,8 +425,6 @@ class Home(object):
         self.init_relays()
         self.init_strips()
         self.clear()
-        self.fps_count = 0
-        self.fps_timer = time.time()
         self.show()
 
     def init_strips(self):
@@ -478,16 +491,7 @@ class Home(object):
         for remote in self.remotes.values():
             remote.all(False)
 
-    def print_fps(self):
-        now = time.time()
-        if now - self.fps_timer >= 1:
-            print(f'\r{self.fps_count} fps (on: {self.strip.on})')
-            self.fps_count = 0
-            self.fps_timer = now
-        self.fps_count += 1
-
     def show(self):
-        self.print_fps()
         self.strip.show()
 
     def __setitem__(self, key, value):
