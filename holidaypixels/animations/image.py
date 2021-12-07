@@ -15,7 +15,7 @@ class Animation(object):
         self.globals = globals_
         self.settings = settings
         prep_path = os.path.join(os.path.dirname(__file__), '..', 'utils', 'prepare_speakers.mp3')
-        prep_path = os.path.realpath(path)
+        prep_path = os.path.realpath(prep_path)
         self.prepare_speakers = mixer.Sound(prep_path)
 
     def __str__(self):
