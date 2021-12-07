@@ -365,7 +365,7 @@ class StripWrapper(object):
 
     @property
     def on(self):
-        return self.relay.value
+        return self.relay and self.relay.value
 
     @on.setter
     def on(self, value):
