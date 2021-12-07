@@ -43,7 +43,7 @@ class Strip_Cache_Player():
                     relay_row = self.relay_data[index][y]
                     for x, name in enumerate(self.relays):
                         self.home.relays[name].set(relay_row[x])
-                self.home.show_relays(force=True)
+                self.home.show_relays()
 
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
