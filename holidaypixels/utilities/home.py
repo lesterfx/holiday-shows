@@ -3,6 +3,7 @@
 from __future__ import print_function, division
 
 from collections import defaultdict
+import datetime
 import json
 import logging
 from pprint import pprint
@@ -14,7 +15,7 @@ import board
 import digitalio
 from rpi_ws281x import Adafruit_NeoPixel, Color as WS_Color
 
-from . import consolepixel, imagepixel, relay_client
+from . import relay_client
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -159,22 +160,13 @@ class Strip_Cache_Player():
         self.relay_data[index] = relay_data
 
     def play(self, index, repeat, end_by, epoch, fps):
-        print('player playing until', end_by)
+        print(f'player playing until {datetime.datetime.fromtimestamp(end_by)}')
         height = len(self.image_data[index])
         abs_y = 0
         if epoch and epoch > time.time():
             time.sleep(epoch - time.time())
         while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
             y = abs_y % height
-
-            # for x, name in enumerate(self.relays):
-            #     color = self.image[width * im_y + x]
-            #     self.home.relays[name].set(bool(color[0]))
-
-            # for x in range(len(self.relays), width):
-            #     color = self.image[width * im_y + x]
-            #     color_tup = color[0], color[1], color[2]
-            #     self.home[x-len(self.relays)] = color_tup
 
             if self.relay_data[index]:
                 if self.relay_data[index] == 'cycle':
@@ -221,15 +213,14 @@ class Strip_Remote_Server():
             if hasattr(self, 'player'):
                 self.player.stop()
             print('Strip Remote Server closed.')
-    
+
     def listen(self):
-        print('Waiting for connection')
         self.sock.listen(1)
-        print('Listening for connection')
+        print('waiting for connection')
         conn, addr = self.sock.accept()
-        print('Accepted connection')
+        print('accepted connection from', addr)
         while 1:
-            print('Waiting for message')
+            print(f'Waiting for message (connected to {addr})')
             message = b''
             while len(message) < 8:
                 message += conn.recv(8 - len(message))
@@ -358,6 +349,11 @@ class Strip_Remote_Client():
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
 
+    def disconnect(self):
+        if self.ip:
+            self.socket.close()
+            self.connected = False
+
     def load_image(self, index, image_data):
         if self.ip:
             width = len(image_data[0])
@@ -380,6 +376,7 @@ class Strip_Remote_Client():
     def play(self, index, repeat, end_by, epoch, fps):
         if self.ip:
             self.send(b'play:' + struct.pack('ibddb', index, repeat, end_by, epoch, fps), expected_response=-1)
+            self.disconnect()
         else:
             self.player.play(index, repeat, end_by, epoch, fps)
     
@@ -387,8 +384,12 @@ class Strip_Remote_Client():
         if self.ip:
             return self.socket.recv(1024)
 
-    def send(self, data, expected_response=None, fallback_response=None):
-        if not self.connected: return expected_response or fallback_response
+    def send(self, data, expected_response=None, fallback_response=None, must_be_connected=True):
+        if not self.connected:
+            if must_be_connected:
+                self.connect()
+            else:
+                return expected_response or fallback_response
         print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:

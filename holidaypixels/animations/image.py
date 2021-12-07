@@ -14,7 +14,7 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        self.silence = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/pop.mp3')
+        self.prepare_speakers = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/prepare_speakers.mp3')
 
     def __str__(self):
         return 'Image'
@@ -129,7 +129,7 @@ class Animation(object):
                 finally:
                     if 'sound' in resource:
                         resource['sound'].stop()
-                time.sleep(10)
+                time.sleep(3)
             time.sleep(10)
 
     def activate_relays(self, active=True):
@@ -170,7 +170,7 @@ class Animation(object):
             repeat = 0
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
-            self.silence.play()
+            self.prepare_speakers.play()
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
@@ -190,52 +190,18 @@ class Animation(object):
                     print('sending play command')
                     strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
                     print('sent!')
-            while time.time() < epoch - self.globals.audio_delay:
-                time.sleep(0.001)
+            now = time.time()
+            if now < epoch - self.globals.audio_delay:
+                time.sleep(epoch - self.globals.audio_delay - now)
             if resource.get('sound'):
                 resource['sound'].play()
             time.sleep(self.globals.audio_delay)
 
-        print("PLAYING LOCALLY??????")
         self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
         for key in resource['data']:
             strip = self.home.strips[key]
             if strip.ip:
                 print(strip.get_response())
-        # self.show_loop(self.data['_image'], self.data['_relays'], self.repeat, end_by_float, epoch)
-
-    def show_loop(self, image_slice, relays, repeat, end_by_float, epoch):
-        height = len(image_slice)
-        abs_y = 0
-        while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by_float):
-            y = abs_y % height
-
-            # for x, name in enumerate(self.relays):
-            #     color = self.image[width * im_y + x]
-            #     self.home.relays[name].set(bool(color[0]))
-
-            # for x in range(len(self.relays), width):
-            #     color = self.image[width * im_y + x]
-            #     color_tup = color[0], color[1], color[2]
-            #     self.home[x-len(self.relays)] = color_tup
-
-            if relays:
-                relay_row = relays[y]
-                for x, name in enumerate(self.relays):
-                    self.home.relays[name].set(relay_row[x])
-                self.home.show_relays(force=True)
-
-            image_row = image_slice[y]
-            for x, color in enumerate(image_row):
-                self.home[x] = color
-
-            self.home.show()
-
-            while True:
-                previous_y = abs_y
-                abs_y = int((time.time() - epoch) * self.fps)
-                if abs_y != previous_y:
-                    break
 
         print('image complete')

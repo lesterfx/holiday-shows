@@ -120,13 +120,13 @@ Group {
   xpos 237
   ypos 185
  }
-set N6802cc00 [stack 0]
+set N6b354c00 [stack 0]
  Output {
   name Output1
   xpos 237
   ypos 261
  }
-push $N6802cc00
+push $N6b354c00
  Viewer {
   frame_range 1-841
   frame_range_lock true
@@ -141,7 +141,7 @@ Read {
  file sugarplum/sugarplum.exr
  format "450 4650 0 0 450 4650 1 "
  origset true
- version 40
+ version 41
  name Read1
  xpos 557
  ypos -436
@@ -161,7 +161,7 @@ Reformat {
  xpos 557
  ypos -308
 }
-set N6802dc00 [stack 0]
+set N6b355c00 [stack 0]
 Crop {
  box {1286 0 1491 {input.height}}
  reformat true
@@ -180,9 +180,9 @@ Reformat {
  xpos 970
  ypos 30
 }
-set N71947000 [stack 0]
-push $N71947000
-push $N6802dc00
+set N6b49f400 [stack 0]
+push $N6b49f400
+push $N6b355c00
 Crop {
  box {1065 0 1270 {input.height}}
  reformat true
@@ -255,13 +255,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N7199e400 [stack 0]
+set N1b566800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N7199e400
+push $N1b566800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -271,23 +271,7 @@ push $N7199e400
   ypos -34
  }
 end_group
-set N14fd8580 [stack 0]
-Viewer {
- inputs 2
- frame_range 1-42
- frame_range_lock true
- channels rgb
- zoom_lock true
- colour_sample_bbox {-0.1960784346 2.268476725 -0.1945701391 2.269984961}
- samplepoints {{-0.1840120703 2.250377178}
-   }
- input_process false
- name Viewer1
- xpos 1118
- ypos 578
-}
-push $N14fd8580
-push $N6802dc00
+push $N6b355c00
 Crop {
  box {550 0 979 {input.height}}
  reformat true
@@ -303,7 +287,7 @@ Reformat {
  xpos 557
  ypos -59
 }
-push $N6802dc00
+push $N6b355c00
 Crop {
  box {0 0 516 {height}}
  reformat true
@@ -387,7 +371,7 @@ Group {
   ypos 144
   disable {{!parent.colorize}}
  }
-set N67fa1800 [stack 0]
+set N6b29d800 [stack 0]
  Multiply {
   value {{parent.last-parent.first+1}}
   name Multiply1
@@ -416,8 +400,8 @@ set N67fa1800 [stack 0]
   ypos 232
   disable {{!parent.expand}}
  }
-set N67fa0c00 [stack 0]
-push $N67fa1800
+set N6b29cc00 [stack 0]
+push $N6b29d800
  Viewer {
   inputs 2
   frame_range 1-4650
@@ -427,7 +411,7 @@ push $N67fa1800
   xpos 135
   ypos 102
  }
-push $N67fa0c00
+push $N6b29cc00
  Output {
   name Output1
   xpos 0
@@ -488,13 +472,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N67ea2800 [stack 0]
+set N6b19c800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N67ea2800
+push $N6b19c800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -558,13 +542,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N221ac800 [stack 0]
+set N6b1d6800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N221ac800
+push $N6b1d6800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -574,14 +558,31 @@ push $N221ac800
   ypos -34
  }
 end_group
+set N6b1cdb80 [stack 0]
+Viewer {
+ inputs 2
+ frame_range 1-42
+ frame_range_lock true
+ channels rgb
+ zoom_lock true
+ colour_sample_bbox {-0.1960784346 2.268476725 -0.1945701391 2.269984961}
+ samplepoints {{-0.1840120703 2.250377178}
+   }
+ input_process false
+ name Viewer1
+ xpos 1118
+ ypos 578
+}
+push $N6b1cdb80
 Write {
  file sugarplum/sugarplum.png
  raw true
  file_type png
  use_limit true
  checkHashOnRead false
- version 47
+ version 48
  name Write1
+ selected true
  xpos 899
  ypos 624
 }
