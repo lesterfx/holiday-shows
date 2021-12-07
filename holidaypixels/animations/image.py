@@ -165,7 +165,7 @@ class Animation(object):
         self.home.strip.on = True
         self.home.clear()
         self.home.show()
-        self.home.show_relays(True)
+        self.home.show_relays()
 
         repeat = self.repeat
         if resource.get('loop'):

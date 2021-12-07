@@ -13,11 +13,9 @@ class Animation(object):
         return 'blank'
 
     def main(self, end_by):
-        self.home.strip.on = False
         while datetime.datetime.now() < end_by:
+            self.home.strip.on = False
             self.home.clear()
-            self.home.show(force=True)
+            self.home.show()
+            self.home.show_relays()
             time.sleep(1)
-
-if __name__ == '__main__':
-    main()

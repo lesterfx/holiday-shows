@@ -13,9 +13,6 @@ import sys
 import time
 import traceback
 
-import board
-import neopixel
-
 from holidaypixels.utils import sun, home
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay'])
@@ -76,6 +73,7 @@ class Holiday_Pixels(object):
                     self.main()
             finally:
                 self.strip.on = False
+                self.strip.show_relays()
 
     def run_remote(self):
         home.run_remote(StripRemotePrefs)
