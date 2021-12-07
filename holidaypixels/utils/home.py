@@ -362,6 +362,7 @@ class StripWrapper(object):
 
         self.fps_timer = time.time()
         self.fps_count = 0
+        self.relay = None
 
     @property
     def on(self):
