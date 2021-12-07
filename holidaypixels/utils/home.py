@@ -360,10 +360,8 @@ class StripWrapper(object):
 
     @on.setter
     def on(self, value):
-        print('Deprecated strip relay setter called!')
         if self.relay:
             self.relay.set(value)
-            self.relay.show()
 
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
