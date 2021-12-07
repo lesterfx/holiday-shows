@@ -3,8 +3,6 @@
 import datetime
 import time
 
-from ..utilities import home
-
 class Animation(object):
     def __init__(self, home, globals_, settings):
         self.home = home

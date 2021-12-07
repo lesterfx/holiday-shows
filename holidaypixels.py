@@ -16,7 +16,7 @@ import traceback
 import board
 import neopixel
 
-from holidaypixels.utilities import sun, home
+from holidaypixels.utils import sun, home
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])

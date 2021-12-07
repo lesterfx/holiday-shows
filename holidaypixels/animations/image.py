@@ -14,7 +14,9 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        self.prepare_speakers = mixer.Sound('/home/pi/pixels/holidaypixels/utilities/prepare_speakers.mp3')
+        prep_path = os.path.join(os.path.dirname(__file__), '..', 'utils', 'prepare_speakers.mp3')
+        prep_path = os.path.realpath(path)
+        self.prepare_speakers = mixer.Sound(prep_path)
 
     def __str__(self):
         return 'Image'
