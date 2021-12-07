@@ -152,7 +152,7 @@ class Strip_Remote_Server():
         index, repeat, end_by, epoch, fps = struct.unpack('ibddb', data)
         end_by += self.time_offset
         epoch += self.time_offset
-        print(f'playing {repeat} times, ending at {end_by}, at {epoch} with {fps} fps')
+        print(f'playing {repeat} times, ending at {datetime.datetime.fromtimestamp(end_by)}, at {datetime.datetime.fromtimestamp(epoch)} with {fps} fps')
         self.player.play(index, repeat, end_by, epoch, fps)
         return b'ok'
 

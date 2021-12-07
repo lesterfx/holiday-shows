@@ -201,9 +201,4 @@ class Animation(object):
 
         self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
-        for key in resource['data']:
-            strip = self.home.strips[key]
-            if strip.ip:
-                print(strip.get_response())
-
         print('image complete')
