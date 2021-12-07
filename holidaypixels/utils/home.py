@@ -98,6 +98,8 @@ class Strip_Remote_Server():
             response = self.handle(message)
             if response:
                 conn.sendall(response)
+            else:
+                break
         conn.close()
 
     def handle(self, data):
@@ -115,6 +117,8 @@ class Strip_Remote_Server():
                 handler = options[key]
                 response = handler(data[len(key)+1:])
                 print(f'successfully handled {key}. replying with:', response)
+                if key == b'play':
+                    return
                 return response
         else:
             raise NotImplementedError(data)
