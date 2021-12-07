@@ -135,7 +135,7 @@ class Animation(object):
             time.sleep(10)
 
     def activate_relays(self, active=True):
-        self.home.set_relays_in_order(active, True)
+        self.home.set_relays_in_order(active)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
         print('slicing image from', start, 'to', end)
