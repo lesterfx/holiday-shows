@@ -474,7 +474,7 @@ class Home(object):
     
     def clear_relays(self):
         for remote in self.remotes.values():
-            remote.all()
+            remote.all(False)
 
     def print_fps(self):
         now = time.time()
