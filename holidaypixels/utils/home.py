@@ -160,11 +160,14 @@ class Strip_Remote_Server():
         return b'ok'
 
 class Strip_Remote_Client():
+    my_ips = [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith('127.')]
+    print(my_ips)
+
     def __init__(self, config):
         self.config = config
         self.name = config.name
         self.ip = config.ip
-        if self.ip in self.my_ips():
+        if self.ip in self.my_ips:
             print('This strip runs locally')
             self.ip = None
         if self.ip is not None:
@@ -178,10 +181,6 @@ class Strip_Remote_Client():
         self.synchronize()
         time.sleep(1)
         self.init_strip()
-    
-    @staticmethod
-    def my_ips():
-        return [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith('127.')]
 
     def __del__(self):
         self.socket.close()
