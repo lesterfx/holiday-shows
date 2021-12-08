@@ -81,4 +81,5 @@ class RelayClient:
     def send_state(self, ip_idx):
         ip, port = self.ip_ports[ip_idx]
         # print(self.state[ip_idx].to_bytes(3, byteorder='big').hex())
+        print(f'{int(ip[:-1])*5*" "}, {bin(self.state[ip_idx])}')
         self.socket.sendto(self.state[ip_idx].to_bytes(3, byteorder='big'), (ip, port))
