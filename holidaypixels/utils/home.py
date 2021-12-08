@@ -14,7 +14,7 @@ from rpi_ws281x import Adafruit_NeoPixel
 
 from . import relay_client
 
-def my_ip(self):
+def my_ip():
     # https://stackoverflow.com/a/28950776/3130539
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
