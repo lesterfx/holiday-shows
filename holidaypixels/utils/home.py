@@ -14,6 +14,19 @@ from rpi_ws281x import Adafruit_NeoPixel
 
 from . import relay_client
 
+def my_ip(self):
+    # https://stackoverflow.com/a/28950776/3130539
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
+MY_IP = my_ip()
 class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = StripWrapper(config)
@@ -164,9 +177,9 @@ class Strip_Remote_Client():
         self.config = config
         self.name = config.name
         self.ip = config.ip
-        print('my ips:', self.my_ip)
+        print('my ip:', MY_IP)
         print('this ip:', self.ip)
-        if self.ip == self.my_ip:
+        if self.ip == MY_IP:
             print('This strip runs locally')
             self.ip = None
         if self.ip is not None:
@@ -180,21 +193,6 @@ class Strip_Remote_Client():
         self.synchronize()
         time.sleep(1)
         self.init_strip()
-
-    @property
-    def my_ip(self):
-        # https://stackoverflow.com/a/28950776/3130539
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            # doesn't even have to be reachable
-            s.connect(('10.255.255.255', 1))
-            ip = s.getsockname()[0]
-        except Exception:
-            ip = '127.0.0.1'
-        finally:
-            s.close()
-        Strip_Remote_Client.my_ip = ip
-        return ip
 
     def __del__(self):
         self.socket.close()
@@ -527,5 +525,5 @@ class Home(object):
 
 def run_remote(StripRemotePrefs):
     print('Running Remote')
-    HOST, PORT = "127.0.0.1", 2700
+    HOST, PORT = MY_IP, 2700
     Strip_Remote_Server(HOST, PORT, StripRemotePrefs)
