@@ -164,9 +164,9 @@ class Strip_Remote_Client():
         self.config = config
         self.name = config.name
         self.ip = config.ip
-        print('my ips:', self.my_ips)
+        print('my ips:', self.my_ip)
         print('this ip:', self.ip)
-        if self.ip in self.my_ips:
+        if self.ip == self.my_ip:
             print('This strip runs locally')
             self.ip = None
         if self.ip is not None:
@@ -195,9 +195,6 @@ class Strip_Remote_Client():
             s.close()
         Strip_Remote_Client.my_ip = ip
         return ip
-
-    my_ips = [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith('127.')]
-
 
     def __del__(self):
         self.socket.close()
