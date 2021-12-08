@@ -285,25 +285,26 @@ class Holiday_Pixels(object):
 
     def load_config(self):
         config = json.load(open(self.default_config_path))
-        # config_path = self.args.config
-        # print('Config file path:')
-        # print(config_path)
-        # if self.args.reset == 'force' or not os.path.exists(config_path):
-        #     if self.args.reset:
-        #         print('Saving default config file.')
-        #         with open(config_path, 'w') as config_file:
-        #             json.dump(config, config_file, indent=4)
-        #     else:
-        #         print('File not found.')
-        #         print('To auto-populate run with argument "--reset"')
-        #         raise Exit
-        # else:
-        #     if self.args.reset:
-        #         print('Reset argument passed, but config file already exists. Use "--reset force" to make a new config')
-        #         raise Exit
-        #     print('Loading config')
-        #     with open(config_path) as config_file:
-        #         self.merge_config(config, json.load(config_file))
+        config_path = self.args.config
+        print('Config file path:')
+        print(config_path)
+        if self.args.reset == 'force' or not os.path.exists(config_path):
+            if self.args.reset:
+                print('Saving default config file.')
+                with open(config_path, 'w') as config_file:
+                    json.dump(config, config_file, indent=4)
+            else:
+                print('File not found.')
+                print('To auto-populate run with argument "--reset"')
+                raise Exit
+        else:
+            if self.args.reset:
+                print('Reset argument passed, but config file already exists. Use "--reset force" to make a new config')
+                raise Exit
+            print('Loading config')
+            with open(config_path) as config_file:
+                config = json.load(config_file)
+                # self.merge_config(config, json.load(config_file))
         return config
 
     @property
