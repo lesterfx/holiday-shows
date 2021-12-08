@@ -310,7 +310,7 @@ class Relay_Remote(dict):
         return hash(self.name)
 
     def show(self):
-        if not self: return
+        if not self: return ''
         for relay in self.values():
             self.client.set_relay(self.client_index, relay.index, relay.value)
         return self.client.send_state(self.client_index)
