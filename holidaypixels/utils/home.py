@@ -527,5 +527,5 @@ class Home(object):
 
 def run_remote(StripRemotePrefs):
     print('Running Remote')
-    HOST, PORT = "192.168.3.209", 2700
+    HOST, PORT = "127.0.0.1", 2700
     Strip_Remote_Server(HOST, PORT, StripRemotePrefs)
