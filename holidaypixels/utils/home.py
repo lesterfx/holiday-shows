@@ -106,9 +106,6 @@ class Strip_Remote_Server():
         conn.close()
 
     def handle(self, data):
-        print('------------')
-        print(data[:24])
-
         options = {
             b'init_strip': self.init_strip,
             b'synchronize': self.synchronize,
@@ -316,7 +313,7 @@ class Relay_Remote(dict):
         if not self: return
         for relay in self.values():
             self.client.set_relay(self.client_index, relay.index, relay.value)
-        self.client.send_state(self.client_index)
+        return self.client.send_state(self.client_index)
     
     def all(self, value):
         for relay in self.values():
@@ -464,7 +461,8 @@ class Home(object):
     
     def show_relays(self):
         for remote in self.remotes.values():
-            remote.show()
+            print(remote.show(), end=' ')
+        print()
 
     def __enter__(self):
         self.strip.on = True
