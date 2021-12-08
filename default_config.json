@@ -20,8 +20,8 @@
                 ]
             },
             "first_floor": {
-                "ip": null,
-                "port": null,
+                "ip": "192.168.3.201",
+                "port": 2700,
                 "pin": 18,
                 "pixel_order": "RGB",
                 "frequency": 800000,
