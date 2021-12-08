@@ -160,8 +160,6 @@ class Strip_Remote_Server():
         return b'ok'
 
 class Strip_Remote_Client():
-    my_ips = [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith('127.')]
-
     def __init__(self, config):
         self.config = config
         self.name = config.name
@@ -182,6 +180,24 @@ class Strip_Remote_Client():
         self.synchronize()
         time.sleep(1)
         self.init_strip()
+
+    @property
+    def my_ip(self):
+        # https://stackoverflow.com/a/28950776/3130539
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            # doesn't even have to be reachable
+            s.connect(('10.255.255.255', 1))
+            ip = s.getsockname()[0]
+        except Exception:
+            ip = '127.0.0.1'
+        finally:
+            s.close()
+        Strip_Remote_Client.my_ip = ip
+        return ip
+
+    my_ips = [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith('127.')]
+
 
     def __del__(self):
         self.socket.close()
