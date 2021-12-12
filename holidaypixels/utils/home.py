@@ -383,11 +383,6 @@ class StripWrapper(object):
     def on(self):
         return self.relay and self.relay.value
 
-    @on.setter
-    def on(self, value):
-        if self.relay:
-            self.relay.set(value)
-
     def calculate_delay(self, pixels):
         # about 1ms per 100 bytes
         # 100 bytes == 33 pixels
@@ -486,7 +481,6 @@ class Home(object):
         print()
 
     def __enter__(self):
-        self.strip.on = True
         self.show_relays()
         return self
 
@@ -494,7 +488,6 @@ class Home(object):
         print('Complete')
         self.clear()
         self.show()
-        self.strip.on = False
         self.clear_relays()
         self.show_relays()
     

@@ -72,7 +72,8 @@ class Holiday_Pixels(object):
                 else:
                     self.main()
             finally:
-                self.strip.on = False
+                for relay in self.strip.relays.values():
+                    relay.set(False)
                 self.strip.show_relays()
 
     def run_remote(self):
