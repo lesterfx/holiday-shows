@@ -193,6 +193,9 @@ class Strip_Remote_Client():
         self.init_strip()
 
     def __del__(self):
+        self.disconnect()
+    
+    def disconnect(self):
         self.socket.close()
 
     def load_relays(self, index, relay_data):
@@ -482,12 +485,16 @@ class Home(object):
         self.show_relays()
         return self
 
-    def __exit__(self, *args, **kwargs):
-        print('Complete')
+    def cleanup(self):
         self.clear()
         self.show()
+        for strip in self.strips:
+            self.strips[strip].disconnect()
         self.clear_relays()
-        self.show_relays()
+
+    def __exit__(self, *args, **kwargs):
+        self.cleanup()
+        print('Complete')
     
     @staticmethod
     def run_for(seconds, function, *args, **kwargs):
