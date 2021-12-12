@@ -71,7 +71,11 @@ class Holiday_Pixels(object):
                     self.demo(self.args.demo)
                 else:
                     self.main()
+            except KeyboardInterrupt:
+                print('cleanup!')
+                self.strip.cleanup()
             finally:
+                print('cleanup finally!')
                 self.strip.cleanup()
 
     def run_remote(self):
