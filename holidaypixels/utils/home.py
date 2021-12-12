@@ -253,7 +253,7 @@ class Strip_Remote_Client():
             print(f'{self.name}: this strip runs locally')
 
     def disconnect(self):
-        if self.ip:
+        if self.connected:
             self.send(b'disconnect', expected_response=b'ok')
             self.socket.close()
             self.connected = False
