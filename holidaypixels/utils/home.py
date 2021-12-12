@@ -473,8 +473,6 @@ class Home(object):
                 self.relay_groups[name].append(self.relays[relay_name])
     
     def show_relays(self):
-        import traceback
-        print(traceback.format_stack())
         for remote in self.remotes.values():
             labels = remote.show()
             print(remote.name, labels, end=' ')
