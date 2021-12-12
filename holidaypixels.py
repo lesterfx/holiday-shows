@@ -72,8 +72,7 @@ class Holiday_Pixels(object):
                 else:
                     self.main()
             except KeyboardInterrupt:
-                print('cleanup!')
-                self.strip.cleanup()
+                pass
             finally:
                 print('cleanup finally!')
                 self.strip.cleanup()

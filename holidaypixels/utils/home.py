@@ -112,6 +112,9 @@ class Strip_Remote_Server():
             message = b''
             while len(message) < message_length:
                 message += conn.recv(message_length - len(message))
+            if message == b'disconnect':
+                print('disconnecting')
+                break
             response = self.handle(message)
             if response:
                 conn.sendall(response)
@@ -136,7 +139,6 @@ class Strip_Remote_Server():
                 return response
         else:
             raise NotImplementedError(data)
-
 
     def init_strip(self, data):
         strip_data = self.StripRemotePrefs(*json.loads(data))
@@ -195,9 +197,6 @@ class Strip_Remote_Client():
     def __del__(self):
         self.disconnect()
     
-    def disconnect(self):
-        self.socket.close()
-
     def load_relays(self, index, relay_data):
         '''
         stores all relays' animations for the indexed song
@@ -254,6 +253,7 @@ class Strip_Remote_Client():
 
     def disconnect(self):
         if self.ip:
+            self.send(b'disconnect', expected_response=b'ok')
             self.socket.close()
             self.connected = False
 
