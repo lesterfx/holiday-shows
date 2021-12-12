@@ -114,6 +114,7 @@ class Strip_Remote_Server():
                 message += conn.recv(message_length - len(message))
             if message == b'disconnect':
                 print('disconnecting')
+                conn.sendall(b'ok')
                 break
             response = self.handle(message)
             if response:
