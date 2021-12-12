@@ -25,7 +25,7 @@ class Animation(object):
         self.resources_loaded = []
         self.resources_without_sound = []
 
-        for index, element in enumerate(self.settings['elements']):
+        for index, element in enumerate(self.settings['songs']):
             resource = {}
             resource['index'] = index  # in case it gets shuffled later, this is the original
             resource['fps'] = element['fps']
@@ -102,8 +102,7 @@ class Animation(object):
 
         while True:
             now = datetime.datetime.now().replace(second=0, microsecond=0)
-            self.activate_relays(True)
-            
+
             silent_resource = random.choice(self.resources_without_sound)
             if days is None or now.strftime('%A') in days:
                 until = now.replace(minute=waitfor_minute, hour=now.hour, second=waitfor_second, microsecond=0)
@@ -111,21 +110,23 @@ class Animation(object):
                     until += datetime.timedelta(hours=1)
                 if until > end_by:
                     print('LAST SHOW ENDED. silent animation until night time:', end_by)
+                    self.activate_relays(show_starting=False, any_show_tonight=False)
                     self.present(silent_resource, end_by)
                     return
                 else:
                     print('silent animation until', until)
+                    self.activate_relays(show_starting=False, any_show_tonight=True)
                     self.present(silent_resource, until-datetime.timedelta(seconds=5))
             else:
                 print('silent animation until night time:', end_by)
+                self.activate_relays(show_starting=False, any_show_tonight=False)
                 self.present(silent_resource, end_by)
                 return
             
-            self.activate_relays(True)
             if self.settings.get('shuffle'):
                 random.shuffle(self.resources_loaded)
             for resource in self.resources_loaded:
-                self.activate_relays(False)
+                self.activate_relays(show_starting=True, any_show_tonight=True)  # before a music show
                 try:
                     self.present(resource, end_by, epoch=until.timestamp())
                 finally:
@@ -134,8 +135,16 @@ class Animation(object):
                 time.sleep(3)
             time.sleep(10)
 
-    def activate_relays(self, active=True):
-        self.home.set_relays_in_order(active)
+    def activate_relays(self, show_starting, any_show_tonight):
+        relay_group_values = {
+            'off_when_blank': True,
+            'off_for_shows': not show_starting,
+            'animate_between_shows': show_starting,
+            'on_show_nights': any_show_tonight,
+        }
+        for group, value in relay_group_values.items():
+            for relay in self.home.relays[group]:
+                relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
         print('slicing image from', start, 'to', end)

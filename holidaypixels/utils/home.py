@@ -27,6 +27,7 @@ def my_ip():
         s.close()
     return ip
 MY_IP = my_ip()
+
 class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = StripWrapper(config)
@@ -177,10 +178,7 @@ class Strip_Remote_Client():
         self.config = config
         self.name = config.name
         self.ip = config.ip
-        print('my ip:', MY_IP)
-        print('this ip:', self.ip)
         if self.ip == MY_IP:
-            print('This strip runs locally')
             self.ip = None
         if self.ip is not None:
             assert self.ip
@@ -248,6 +246,8 @@ class Strip_Remote_Client():
             else:
                 print(f'{self.name} ({self.ip}) connected')
                 self.connected = True
+        else:
+            print(f'{self.name}: this strip runs locally')
 
     def disconnect(self):
         if self.ip:
@@ -466,16 +466,16 @@ class Home(object):
             self.remotes[name] = remote
             self.relays.update(remote)
         self.relay_client.handshake_all()
-        self.relays_in_order = []
-        self.remotes_used_in_order = set()
-        for name in self.globals.relay_order:
-            self.relays_in_order.append(self.relays[name])
-            self.remotes_used_in_order.add(self.relays[name].remote)
-    
-    def set_relays_in_order(self, value):
-        for relay in self.relays_in_order:
-            relay.set(value)
-        self.show_relays()
+        self.relay_groups = {}
+        for name in [
+            'off_when_blank',
+            'off_for_shows',
+            'animate_between_shows',
+            'on_show_nights'
+        ]:
+            self.relay_groups[name] = []
+            for relay_name in self.globals.relay_purposes.get(name, []):
+                self.relay_groups[name].append(self.relays[relay_name])
     
     def show_relays(self):
         for remote in self.remotes.values():
