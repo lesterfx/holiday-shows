@@ -17,7 +17,7 @@ from holidaypixels.utils import sun, home
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
-SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time', 'dusk_brightness', 'dusk_duration'])
+SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
 StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
@@ -250,11 +250,7 @@ class Holiday_Pixels(object):
         end_time = schedule['end_time']
         hour, minute = map(int, end_time.split(':'))
         end_time = datetime.time(hour, minute)
-        dusk_brightness = max(0, min(int(schedule['dusk_brightness']), 255))
-        dusk_duration = schedule['dusk_duration']
-        hours, minutes = map(int, dusk_duration.split(':'))
-        dusk_duration = datetime.timedelta(hours=hours, minutes=minutes)
-        self.schedule = SchedulePrefs(location, start_time, sunset_offset, end_time, dusk_brightness, dusk_duration)
+        self.schedule = SchedulePrefs(location, start_time, sunset_offset, end_time)
 
     def process_calendar(self, calendar):
         self.calendar = set()
