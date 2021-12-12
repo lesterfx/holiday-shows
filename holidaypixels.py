@@ -15,7 +15,7 @@ import traceback
 
 from holidaypixels.utils import sun, home
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
@@ -184,7 +184,8 @@ class Holiday_Pixels(object):
             relay_remotes=relay_remotes,
             relay_order=relay_order,
             strips=strips,
-            audio_delay=audio_delay
+            audio_delay=audio_delay,
+            relay_purposes = globals_['relay_purposes']
         )
 
     def process_relay_remotes(self, remotes):
