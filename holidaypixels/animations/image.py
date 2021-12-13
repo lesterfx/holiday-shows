@@ -143,7 +143,7 @@ class Animation(object):
             'on_show_nights': any_show_tonight,
         }
         for group, value in relay_group_values.items():
-            for relay in self.home.relays[group]:
+            for relay in self.home.relay_groups[group]:
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
