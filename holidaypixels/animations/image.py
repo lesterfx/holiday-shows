@@ -9,7 +9,7 @@ from PIL import Image
 from pygame import mixer
 
 class ProgressBar():
-    def __init__(self, total, width=80):
+    def __init__(self, total, width=50):
         self.total = total
         self.width = width
     
@@ -21,9 +21,9 @@ class ProgressBar():
         print()
 
     def update(self, value):
-        fullchars = int(value / self.total * 80)
-        emptychars = 80 - fullchars
-        print(f'\r[{"#" * fullchars}{"-" * emptychars}]', end='')
+        fullchars = int(value / self.total * self.width)
+        emptychars = self.width - fullchars
+        print(f'[{"█" * fullchars}{"-" * emptychars}]', end='\r')
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -140,10 +140,10 @@ class Animation(object):
                 self.present(silent_resource, end_by)
                 return
             
+            self.activate_relays(show_starting=True, any_show_tonight=True)  # before a music show
             if self.settings.get('shuffle'):
                 random.shuffle(self.resources_loaded)
             for resource in self.resources_loaded:
-                self.activate_relays(show_starting=True, any_show_tonight=True)  # before a music show
                 try:
                     self.present(resource, end_by, epoch=until.timestamp())
                 finally:
