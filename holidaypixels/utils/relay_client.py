@@ -1,5 +1,4 @@
 import socket
-import time
 
 class RelayClient:
     # ips: array of ip addresses of relay control boards. The index of the ip in the list is used

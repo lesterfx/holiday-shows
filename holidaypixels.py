@@ -21,41 +21,6 @@ SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_o
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
 StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
-class CalendarEntry(object):
-    def __init__(self, entry):
-        today = datetime.date.today()
-
-        self.start = datetime.datetime.strptime(entry['start'], '%B %d').date().replace(year=today.year)
-        self.end = datetime.datetime.strptime(entry['end'], '%B %d').date().replace(year=today.year)
-
-        self.days = frozenset(datetime.datetime.strptime(day, '%A').weekday() for day in entry.get('days', []))
-        self.animation = frozenset(entry['animation'])
-        
-        self.name = entry['name']
-
-    def __repr__(self):
-        return self.name
-
-    def iter(self):
-        today = datetime.date.today()
-        if self.end < self.start:
-            # crosses december 31, so end next year instead of this year
-            extrayear = 1
-        else:
-            extrayear = 0
-        for year in count(today.year):
-            start = self.start.replace(year=year)
-            end = self.end.replace(year=year+extrayear)
-            day = start
-            if day < today:
-                day = today
-            while day <= end:
-                if self.days:
-                    if day.weekday() in self.days:
-                        yield day
-                else:
-                    yield day
-                day += datetime.timedelta(1)
 class Holiday_Pixels(object):
     def __init__(self):
         self.sun = sun.Sun()
@@ -74,7 +39,7 @@ class Holiday_Pixels(object):
             except KeyboardInterrupt:
                 pass
             finally:
-                print('cleanup finally!')
+                print('cleaning up')
                 self.strip.cleanup()
 
     def run_remote(self):
