@@ -153,6 +153,7 @@ class Animation(object):
         if is_relays and end == 'auto':
             end = len(resource['relays'])
         for y in range(resource['height']):
+            self.home.progressbar(y, resource['height'])
             row = []
             for x in range(start, end):
                 if x < resource['width'] or wrap:
@@ -167,6 +168,7 @@ class Animation(object):
                 else:
                     row.append(color_rgb)
             image_slice.append(row)
+        print()
         return image_slice
 
     def present(self, resource, end_by, epoch=None):

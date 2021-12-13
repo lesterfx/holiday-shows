@@ -114,7 +114,6 @@ class Strip_Remote_Server():
                 message += conn.recv(message_length - len(message))
             if message == b'disconnect':
                 print('disconnecting')
-                conn.sendall(b'ok')
                 break
             response = self.handle(message)
             if response:
@@ -254,7 +253,7 @@ class Strip_Remote_Client():
 
     def disconnect(self):
         if self.connected:
-            self.send(b'disconnect', expected_response=b'ok')
+            self.send(b'disconnect', expected_response=-1)
             self.socket.close()
             self.connected = False
 
@@ -523,6 +522,11 @@ class Home(object):
             self.clear(True)
         except:
             pass
+    
+    def progressbar(self, current, total):
+        fullchars = int(current / total * 80)
+        emptychars = 80 - fullchars
+        print(f'\r[{"#" * fullchars}{"-" * emptychars}', end='')
 
 def run_remote(StripRemotePrefs):
     print('Running Remote')
