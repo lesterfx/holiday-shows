@@ -66,7 +66,7 @@ Globals stores the configuration of relays, pixel strips, and the remotes that c
 Name | Blank | Between shows | During Show | Night with no shows | Example |
 ------|-------|---------------|-------------|--------------------|--------|
 `"off_when_blank"` | off | on | on | on | pixel strip power
-`"off_for_shows"` | on | on | off | on | sign advertising the show
+`"off_for_shows"` | off | on | off | on | sign advertising the show
 `"animate_between_shows"` | off | on | see "animations" | on | note, "on" is through animation
 `"on_show_nights"` | off | on | on | off | speakers
 

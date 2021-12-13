@@ -6,7 +6,7 @@ import time
 class Animation(object):
     relay_group_values = {
         'off_when_blank': False,
-        'off_for_shows': True,
+        'off_for_shows': False,
         'animate_between_shows': False,
         'on_show_nights': False,
     }
