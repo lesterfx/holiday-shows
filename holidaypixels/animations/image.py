@@ -171,7 +171,6 @@ class Animation(object):
 
     def present(self, resource, end_by, epoch=None):
         end_by_float = end_by.timestamp()
-        self.home.strip.on = True
         self.home.clear()
         self.home.show()
         self.home.show_relays()
