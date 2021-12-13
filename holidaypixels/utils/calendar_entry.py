@@ -3,7 +3,7 @@ from itertools import count
 
 class CalendarEntry(object):
     def __init__(self, entry):
-        today = datetime.date.today()
+        today = date.today()
 
         self.start = datetime.strptime(entry['start'], '%B %d').date().replace(year=today.year)
         self.end = datetime.strptime(entry['end'], '%B %d').date().replace(year=today.year)
