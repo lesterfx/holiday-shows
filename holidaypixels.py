@@ -13,7 +13,7 @@ import sys
 import time
 import traceback
 
-from holidaypixels.utils import sun, home
+from holidaypixels.utils import sun, home, strip_remote_server
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
@@ -43,7 +43,7 @@ class Holiday_Pixels(object):
                 self.strip.cleanup()
 
     def run_remote(self):
-        home.run_remote(StripRemotePrefs)
+        strip_remote_server.run_remote(StripRemotePrefs)
 
     def init_strip(self):
         try:
