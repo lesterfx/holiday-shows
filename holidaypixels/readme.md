@@ -1,12 +1,12 @@
 # Holiday Pixels
 
-Holiday pixels is built to handle pixel strips and relays for use in a holiday light show. It also includes images, with all corresponding projects, for several animations, including my Christmas light show (see https://youtube.com/playlist?list=PL5_7cNnkl5ej_f4FlKBPtnKV2Qg7zWjKU).
+Holiday pixels is built to handle pixel strips and relays for use in a holiday light show. It also includes images, with all corresponding projects, for several animations, including [my Christmas light show](https://youtube.com/playlist?list=PL5_7cNnkl5ej_f4FlKBPtnKV2Qg7zWjKU).
 
 Higher level, it also handles scheduling of different animations throughout the year, and time of day for running the display.
 
 # installation
 
-Clone the repo into your environment, and running the following to install dependencies.
+Clone the repo into your environment, and run the following to install dependencies.
 
 Note that `sudo` should be used to allow the packages to be run by root.
 
@@ -17,16 +17,16 @@ Note that `sudo` should be used to allow the packages to be run by root.
     sudo apt install libsdl2-2.0-0
     sudo apt-get install git curl libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
 
-if PIL continues giving errors, the following worked for me:
+if PIL gives errors, the following worked for me:
 
     sudo apt-get install libopenjp2-7
     sudo apt-get install libtiff5
 
 # hardware
 
-The main code is built to run on one or more Raspberry Pi computers, with the primary handling scheduling, dispatch, and audio. Additional devices can be used:
+The main code runs on a Raspberry Pi computer, handling scheduling, dispatch, audio, and up to one pixel strip. Additional devices can be used:
 
-- Additional Raspberry Pi computers to control additional pixel strips, beyond the one that may be attached to the primary. Should run with `--remote` flag.
+- Additional Raspberry Pi computers to control additional pixel strips, beyond the one that may be attached to the primary. Run with `--remote` flag.
 - Arduinos to switch relays, running the `UDPRelayControl` sketch.
 - [future] Arduino to control short pixel strips or predefined animations
 - [future] Arduino to display a countdown
@@ -96,4 +96,28 @@ At this point, all animations run through the `image` module, but it is currentl
 
 ### songs
 
-Where all your hard work is defined! This is why you're here, and...I haven't written the readme yet. Good luck!
+This section translates an image into the animation that plays. Each grouping is called as a unit from the calendar, but internally multiple songs are defined.
+
+Songs are separated by whether or not music is attached. Songs without music (still referred to as "songs") play constantly every evening, whereas songs with music are considered to be special shows, and play once per hour so as to not annoy the neighbors too much.
+
+Outside of the `"songs"` key, settings are:
+
+- `"shuffle"`: Determines whether the song list should be randomized each time, or played in the order defined.
+- `"countdown"`: Number of seconds before a song should start playing.
+- `"minute"`: What minute of each hour songs with music should start. TODO: Define a list of times or an interval instead of forcing hourly.
+- `"days"`: A list of days the songs with music are played. All other days, "songs" without music are played.
+
+Lastly, the actual `"songs"` section, which is a list of individual song definitions. Within each song:
+
+- `"image"`: The path to the image. If path starts with a `/`, path is absolute. If path starts with `~`, path is in *root*'s home directory. Otherwise, path is relative to `holidaypixels`.
+- `"music"`: The path to the music. Same logic as `"image"`.
+- `"fps"`: The framerate of the animation, i.e. how many pixels to scan down per second.
+- `"loop"`: Whether the animation should loop, as in a repeating pattern.
+- `"slices"`: Assign column chunks to different strips by name, or to `"relays"`. Each slice is defined in `[start-end)`, with optional `"wrap"` to loop around until end is reached. The `"relays"` group refers to the column of pixels that represents the relays, but can also be defined as `"cycle"` to have all but one on at a time, cycling once per second.
+- `"relays"`: The list of relays, in order, by which the `"relays"` `"slice"` is assigned (as well as the order the relays should cycle).
+
+# additional files included
+
+Blender and Nuke source projects are included for the images. Instructions for the use of them are beyond the scope of this readme.
+
+Arduino sketches are included for the relay server and pixel looper. Additional sketches are untested, non-functional, or otherwise completely worthless.

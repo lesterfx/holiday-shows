@@ -5,7 +5,6 @@ import datetime
 from collections import namedtuple
 import importlib
 import json
-import math
 from operator import itemgetter
 import os
 import sys
