@@ -4,16 +4,15 @@ import argparse
 import datetime
 from collections import namedtuple
 import importlib
-from itertools import count
 import json
 import math
-from operator import itemgetter, methodcaller
+from operator import itemgetter
 import os
 import sys
 import time
 import traceback
 
-from holidaypixels.utils import sun, home, strip_remote_server
+from holidaypixels.utils import calendar_entry, home, strip_remote_server, sun
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
@@ -223,7 +222,7 @@ class Holiday_Pixels(object):
     def process_calendar(self, calendar):
         self.calendar = set()
         for entry in calendar:
-            entry = CalendarEntry(entry)
+            entry = calendar_entry.CalendarEntry(entry)
             self.calendar.add(entry)
 
     def process_animations(self, animations):
