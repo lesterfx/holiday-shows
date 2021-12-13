@@ -6,7 +6,7 @@ from ..utils import strip
 
 class Strip_Cache_Player():
     def __init__(self, config):
-        self.strip = strip.StripWrapper(config)
+        self.strip = strip.Strip(config)
         self.image_data = defaultdict(lambda: None)
         self.relay_data = defaultdict(lambda: None)
         
