@@ -8,6 +8,23 @@ import time
 from PIL import Image
 from pygame import mixer
 
+class ProgressBar():
+    def __init__(self, total, width=80):
+        self.total = total
+        self.width = width
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *args, **kwargs):
+        self.update(self.total)
+        print()
+
+    def update(self, value):
+        fullchars = int(value / self.total * 80)
+        emptychars = 80 - fullchars
+        print(f'\r[{"#" * fullchars}{"-" * emptychars}]', end='')
+
 class Animation(object):
     def __init__(self, home, globals_, settings):
         mixer.init()
@@ -152,23 +169,23 @@ class Animation(object):
         image_slice = []
         if is_relays and end == 'auto':
             end = len(resource['relays'])
-        for y in range(resource['height']):
-            self.home.progressbar(y, resource['height'])
-            row = []
-            for x in range(start, end):
-                if x < resource['width'] or wrap:
-                    color = image[resource['width'] * y + (x % resource['width'])]
-                    color_rgb = color[0], color[1], color[2]
-                else:
-                    color_rgb = (0, 0, 0)
-                if is_relays:
-                    if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
-                        raise ValueError(f'Relay data at Row {y}, Col {x} is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
-                    row.append(bool(color_rgb[0]))
-                else:
-                    row.append(color_rgb)
-            image_slice.append(row)
-        print()
+        with ProgressBar(resource['height']) as bar:
+            for y in range(resource['height']):
+                bar.update(y)
+                row = []
+                for x in range(start, end):
+                    if x < resource['width'] or wrap:
+                        color = image[resource['width'] * y + (x % resource['width'])]
+                        color_rgb = color[0], color[1], color[2]
+                    else:
+                        color_rgb = (0, 0, 0)
+                    if is_relays:
+                        if not (color[0] == color[1] == color[2]) or color[0] not in (0, 255):
+                            raise ValueError(f'Relay data at Row {y}, Col {x} is ({color[0]}, {color[1]}, {color[2]}). Must be black or white.')
+                        row.append(bool(color_rgb[0]))
+                    else:
+                        row.append(color_rgb)
+                image_slice.append(row)
         return image_slice
 
     def present(self, resource, end_by, epoch=None):

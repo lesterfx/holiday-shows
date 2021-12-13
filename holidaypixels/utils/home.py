@@ -522,11 +522,6 @@ class Home(object):
             self.clear(True)
         except:
             pass
-    
-    def progressbar(self, current, total):
-        fullchars = int(current / total * 80)
-        emptychars = 80 - fullchars
-        print(f'\r[{"#" * fullchars}{"-" * emptychars}', end='')
 
 def run_remote(StripRemotePrefs):
     print('Running Remote')
