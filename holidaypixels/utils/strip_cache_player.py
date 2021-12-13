@@ -2,11 +2,11 @@ from collections import defaultdict
 from datetime import datetime
 import time
 
-from . import strip_wrapper
+from ..utils import strip
 
 class Strip_Cache_Player():
     def __init__(self, config):
-        self.strip = strip_wrapper.StripWrapper(config)
+        self.strip = strip.StripWrapper(config)
         self.image_data = defaultdict(lambda: None)
         self.relay_data = defaultdict(lambda: None)
         
