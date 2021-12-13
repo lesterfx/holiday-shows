@@ -3,21 +3,7 @@ import time
 import socket
 import struct
 
-from . import strip_cache_player, progress_bar
-
-def my_ip():
-    # https://stackoverflow.com/a/28950776/3130539
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        # doesn't even have to be reachable
-        s.connect(('10.255.255.255', 1))
-        ip = s.getsockname()[0]
-    except Exception:
-        ip = '127.0.0.1'
-    finally:
-        s.close()
-    return ip
-MY_IP = my_ip()
+from . import strip_cache_player, progress_bar, my_ip
 
 
 class Strip_Remote_Client:
@@ -25,7 +11,7 @@ class Strip_Remote_Client:
         self.config = config
         self.name = config.name
         self.ip = config.ip
-        if self.ip == MY_IP:
+        if self.ip == my_ip.MY_IP:
             self.ip = None
         if self.ip is not None:
             assert self.ip

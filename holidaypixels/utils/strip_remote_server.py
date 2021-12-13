@@ -1,7 +1,7 @@
 import socket
 import struct
 
-from . import strip_cache_player
+from . import strip_cache_player, my_ip
 
 class Strip_Remote_Server:
     def __init__(self, HOST, PORT, StripRemotePrefs):
@@ -99,5 +99,5 @@ class Strip_Remote_Server:
 
 def run_remote(StripRemotePrefs):
     print('Running Remote')
-    HOST, PORT = '127.0.0.1', 2700
+    HOST, PORT = my_ip.MY_IP, 2700
     Strip_Remote_Server(HOST, PORT, StripRemotePrefs)
