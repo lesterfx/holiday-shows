@@ -82,3 +82,19 @@ class RelayClient:
         # print(self.state[ip_idx].to_bytes(3, byteorder='big').hex())
         self.socket.sendto(self.state[ip_idx].to_bytes(3, byteorder='big'), (ip, port))
         return bin(self.state[ip_idx])[-16:].replace("0", ".").replace("1", "|")
+
+if __name__ == '__main__':
+    import time
+    client = RelayClient()
+    client.append('192.168.3.240', 2700)
+    client.append('192.168.3.242', 2700)
+    print('Handshaking...')
+    client.handshake_all()
+    print('Success!')
+    for on in True, False:
+        for i in range(16):
+            box, relay = divmod(i, 16)
+            print(f'Setting box {box} relay {relay} to {on}')
+            client.set_relay(box, relay, True, True)
+            time.sleep(1)
+    print('Test complete')
