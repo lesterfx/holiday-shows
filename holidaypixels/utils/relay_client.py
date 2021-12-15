@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import socket
 
 class RelayClient(list):
@@ -7,7 +9,7 @@ class RelayClient(list):
         self.socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
     def append(self, ip, port):
-        list.append(self, (ip, port, 0xDD0000))
+        list.append(self, [ip, port, 0xDD0000])
         return len(self) - 1
 
     # Check that we can talk to all the clients
