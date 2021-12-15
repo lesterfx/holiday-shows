@@ -52,7 +52,7 @@
                     "deer_l",
                     "truck",
                     "icicles",
-                    null,
+                    "sign_power",
                     "pillar_right",
                     "pillar_left",
                     "presents",
@@ -128,7 +128,8 @@
                 "strips"
             ],
             "off_for_shows": [
-                "sign"
+                "sign",
+                "sign_power"
             ],
             "animate_between_shows": [
                 "wreath",
