@@ -125,11 +125,11 @@
         ],
         "relay_purposes": {
             "off_when_blank": [
-                "strips"
+                "strips",
+                "sign_power"
             ],
             "off_for_shows": [
-                "sign",
-                "sign_power"
+                "sign"
             ],
             "animate_between_shows": [
                 "wreath",
