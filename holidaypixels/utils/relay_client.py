@@ -32,7 +32,7 @@ class RelayClient(list):
             ips_remaining.remove(returnIP)
         
         for i in range(len(self)):
-            self.get_frames(self, i)
+            self.get_frames(i)
 
         return True
 
