@@ -117,12 +117,11 @@ if __name__ == '__main__':
                     print('Dropped getting frame count')
                     dropped = True
                     break
-                print('{} of {} frames delivered successfully'.format(sent, delivered))
+                print('{} of {} frames delivered successfully'.format(delivered, sent))
                 if sent > delivered: dropped = True
             if not dropped:
                 delay /= 2
             else:
                 break
         print(f'Frames dropped at delay of {delay} seconds')
-        
         print('Test complete')
