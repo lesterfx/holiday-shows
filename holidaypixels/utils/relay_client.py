@@ -109,7 +109,7 @@ if __name__ == '__main__':
                     relay, box = divmod(i, 2)
                     print(f'Setting box {box} relay {relay} to {on}')
                     client.set_relay(box, relay, True, True)
-                    time.sleep(.2)
+                    time.sleep(delay)
             for i in range(len(client)):
                 sent, delivered = client.get_frames(i)
                 print('{} of {} frames delivered successfully'.format(sent, delivered))
