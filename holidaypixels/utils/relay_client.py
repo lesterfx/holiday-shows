@@ -112,7 +112,7 @@ if __name__ == '__main__':
                     time.sleep(delay)
             for i in range(len(client)):
                 try:
-                    sent, delivered = client.get_frames(i)
+                    delivered, sent = client.get_frames(i)
                 except:
                     print('Dropped getting frame count')
                     dropped = True
