@@ -52,6 +52,7 @@ class RelayClient(list):
             raise Exception("Get frame error - invalid return IP. Only call for one device at a time")
         if msg[0] != 0xCC:
             raise Exception("Invalid response from get_frames: {}".format(msg))
+        self[index][3] = 0
         return int.from_bytes(msg[1:3], "big"), counter
 
     # Set relay state
@@ -99,13 +100,21 @@ if __name__ == '__main__':
         print('Handshaking...')
         client.handshake_all()
         print('Success!')
-        for on in True, False:
-            for i in range(16*len(client)):
-                relay, box = divmod(i, 2)
-                print(f'Setting box {box} relay {relay} to {on}')
-                client.set_relay(box, relay, True, True)
-                time.sleep(.2)
-        for i in range(len(client)):
-            print('{} of {} frames delivered successfully'.format(*client.get_frames(i)))
+        delay = 0.25
+        dropped = False
+        while dropped:
+            print(f'Testing with delay of {delay} seconds')
+            for on in True, False:
+                for i in range(16*len(client)):
+                    relay, box = divmod(i, 2)
+                    print(f'Setting box {box} relay {relay} to {on}')
+                    client.set_relay(box, relay, True, True)
+                    time.sleep(.2)
+            for i in range(len(client)):
+                sent, delivered = client.get_frames(i)
+                print('{} of {} frames delivered successfully'.format(sent, delivered))
+                dropped = sent > delivered
+            delay /= 2
+        print(f'Frames dropped at delay of {delay} seconds')
         
         print('Test complete')
