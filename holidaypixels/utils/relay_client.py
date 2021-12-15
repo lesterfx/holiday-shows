@@ -103,6 +103,6 @@ if __name__ == '__main__':
                 client.set_relay(box, relay, True, True)
                 time.sleep(.2)
         for i in range(len(client)):
-            print('{} of {} frames delivered successfully'.format(*client.get_frames(i))
+            print('{} of {} frames delivered successfully'.format(*client.get_frames(i)))
         
         print('Test complete')
