@@ -102,7 +102,7 @@ if __name__ == '__main__':
         print('Success!')
         delay = 0.25
         dropped = False
-        while dropped:
+        while not dropped:
             print(f'Testing with delay of {delay} seconds')
             for on in True, False:
                 for i in range(16*len(client)):
