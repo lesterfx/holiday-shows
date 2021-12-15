@@ -111,7 +111,12 @@ if __name__ == '__main__':
                     client.set_relay(box, relay, True, True)
                     time.sleep(delay)
             for i in range(len(client)):
-                sent, delivered = client.get_frames(i)
+                try:
+                    sent, delivered = client.get_frames(i)
+                except:
+                    print('Dropped getting frame count')
+                    dropped = True
+                    break
                 print('{} of {} frames delivered successfully'.format(sent, delivered))
                 dropped = sent > delivered
             delay /= 2
