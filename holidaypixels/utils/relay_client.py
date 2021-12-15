@@ -9,13 +9,13 @@ class RelayClient(list):
         self.socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
     def append(self, ip, port):
-        list.append(self, [ip, port, 0xDD0000])
+        list.append(self, [ip, port, 0xDD0000, 0])
         return len(self) - 1
 
     # Check that we can talk to all the clients
     def handshake_all(self):
         ips_remaining = []
-        for ip, port, state in self:
+        for ip, port, state, counter in self:
             self.socket.sendto(bytes.fromhex('AA0000'), (ip, port))
             ips_remaining.append(ip)
 
@@ -40,7 +40,7 @@ class RelayClient(list):
     # IMPORTANTE NOTE 2: If there is packet loss while this command is executing it WILL timeout and raise an exception. 
     # Make sure to deal with errors (try...catch) if you want the code to continue to execute even on packet loss
     def get_frames(self, index):
-        ip, port, state = self[index]
+        ip, port, state, counter = self[index]
         self.socket.sendto(bytes.fromhex('CC0000'), (ip, port))
 
         self.socket.settimeout(1)
@@ -49,7 +49,7 @@ class RelayClient(list):
             raise Exception("Get frame error - invalid return IP. Only call for one device at a time")
         if msg[0] != 0xCC:
             raise Exception("Invalid response from get_frames: {}".format(msg))
-        return int.from_bytes(msg[1:3], "big")
+        return int.from_bytes(msg[1:3], "big"), counter
 
     # Set relay state
     # index: IP Address index
@@ -76,8 +76,9 @@ class RelayClient(list):
 
     # Sends the state to the relay
     def send_state(self, index):
-        ip, port, state = self[index]
+        ip, port, state, counter = self[index]
         self.socket.sendto(state.to_bytes(3, byteorder='big'), (ip, port))
+        self[index][3] += 1
         return bin(state)[-16:].replace("0", ".").replace("1", "|")
 
 if __name__ == '__main__':
@@ -100,5 +101,8 @@ if __name__ == '__main__':
                 relay, box = divmod(i, 2)
                 print(f'Setting box {box} relay {relay} to {on}')
                 client.set_relay(box, relay, True, True)
-                time.sleep(1)
+                time.sleep(.2)
+        for i in range(len(client)):
+            print('{} of {} frames delivered successfully'.format(*client.get_frames(i))
+        
         print('Test complete')
