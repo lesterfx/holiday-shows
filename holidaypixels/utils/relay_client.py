@@ -102,7 +102,7 @@ if __name__ == '__main__':
         print('Success!')
         delay = 0.25
         dropped = False
-        while not dropped:
+        while True:
             print(f'Testing with delay of {delay} seconds')
             for on in True, False:
                 for i in range(16*len(client)):
@@ -118,8 +118,11 @@ if __name__ == '__main__':
                     dropped = True
                     break
                 print('{} of {} frames delivered successfully'.format(sent, delivered))
-                dropped = sent > delivered
-            delay /= 2
+                if sent > delivered: dropped = True
+            if not dropped:
+                delay /= 2
+            else:
+                break
         print(f'Frames dropped at delay of {delay} seconds')
         
         print('Test complete')
