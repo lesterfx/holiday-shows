@@ -108,7 +108,7 @@ if __name__ == '__main__':
                 for i in range(16*len(client)):
                     relay, box = divmod(i, 2)
                     print(f'Setting box {box} relay {relay} to {on}')
-                    client.set_relay(box, relay, True, True)
+                    client.set_relay(box, relay, on, True)
                     time.sleep(delay)
             for i in range(len(client)):
                 try:
