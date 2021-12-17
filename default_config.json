@@ -90,9 +90,9 @@
                     "wreath",
                     null,
                     "speakers",
+                    "strip_upper",
+                    "strip_lower",
                     null,
-                    null,
-                    "strips",
                     null,
                     null,
                     null,
@@ -125,7 +125,8 @@
         ],
         "relay_purposes": {
             "off_when_blank": [
-                "strips",
+                "strip_upper",
+                "strip_lower",
                 "sign_power"
             ],
             "off_for_shows": [
