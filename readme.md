@@ -1,6 +1,6 @@
-# Holiday Pixels
+# Holiday Shows
 
-Holiday pixels is built to handle pixel strips and relays for use in a holiday light show. It also includes images, with all corresponding projects, for several animations, including [my Christmas light show](https://youtube.com/playlist?list=PL5_7cNnkl5ej_f4FlKBPtnKV2Qg7zWjKU).
+Holiday shows is built to handle pixel strips and relays for use in a holiday light show. It also includes images, with all corresponding projects, for several animations, including [my Christmas light show](https://youtube.com/playlist?list=PL5_7cNnkl5ej_f4FlKBPtnKV2Qg7zWjKU).
 
 Higher level, it also handles scheduling of different animations throughout the year, and time of day for running the display.
 
@@ -109,7 +109,7 @@ Outside of the `"songs"` key, settings are:
 
 Lastly, the actual `"songs"` section, which is a list of individual song definitions. Within each song:
 
-- `"image"`: The path to the image. If path starts with a `/`, path is absolute. If path starts with `~`, path is in *root*'s home directory. Otherwise, path is relative to `holidaypixels`.
+- `"image"`: The path to the image. If path starts with a `/`, path is absolute. If path starts with `~`, path is in *root*'s home directory. Otherwise, path is relative to `holidayshows`.
 - `"music"`: The path to the music. Same logic as `"image"`.
 - `"fps"`: The framerate of the animation, i.e. how many pixels to scan down per second.
 - `"loop"`: Whether the animation should loop, as in a repeating pattern.

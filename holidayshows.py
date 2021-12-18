@@ -11,7 +11,7 @@ import sys
 import time
 import traceback
 
-from holidaypixels.utils import calendar_entry, home, strip_remote_server, sun
+from holidayshows.utils import calendar_entry, home, strip_remote_server, sun
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
@@ -74,7 +74,7 @@ class Holiday_Pixels(object):
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
                 animation = settings.get('module', animation)
-                module = importlib.import_module('.' + animation, 'holidaypixels.animations')
+                module = importlib.import_module('.' + animation, 'holidayshows.animations')
                 settings.update(self.settings_overrides)
                 animation = module.Animation(home, self.globals, settings)
                 animations.append(animation)
