@@ -12,7 +12,7 @@ from . import my_ip
 
 class Music_Server:
     def __init__(self, HOST, PORT):
-        self.delay = 0.1
+        self.delay = 0.04
         print(f'Serving on {HOST}:{PORT}')
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
