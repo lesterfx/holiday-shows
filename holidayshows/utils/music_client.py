@@ -9,14 +9,13 @@ from . import my_ip
 class Music_Client:
     def __init__(self, config):
         self.config = config
-        self.ip = config.ip
+        self.ip = config['ip']
         if self.ip == my_ip.MY_IP:
             self.ip = None
         if self.ip is not None:
             assert self.ip
-            self.ip = config.ip
-            self.port = config.port
-            self.strip_config = config
+            self.ip = config['ip']
+            self.port = config['port']
 
         self.connected = False
         self.connect()
