@@ -55,7 +55,7 @@ class Home(object):
         for remote in self.remotes.values():
             labels = remote.show()
             # print(remote.name, labels, end=' ')
-        print()
+        # print()
 
     def __enter__(self):
         self.show_relays()
