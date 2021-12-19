@@ -6,19 +6,19 @@ import random
 import time
 
 from PIL import Image
-from pygame import mixer
+# from pygame import mixer really
 
 from ..utils import progress_bar
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
-        mixer.init()
+        # mixer.init()
         self.home = home
         self.globals = globals_
         self.settings = settings
         prep_path = os.path.join(os.path.dirname(__file__), '..', 'utils', 'prepare_speakers.mp3')
         prep_path = os.path.realpath(prep_path)
-        self.prepare_speakers = mixer.Sound(prep_path)
+        # self.prepare_speakers = mixer.Sound(prep_path)
 
     def __str__(self):
         return 'Image'
@@ -77,8 +77,11 @@ class Animation(object):
 
             music = element.get('music')
             if music:
+                if not os.path.exists(music):
+                    raise OSError('Music file not found:', music)
                 print('Loading music:', music)
-                resource['sound'] = mixer.Sound(music)
+                # resource['sound'] = mixer.Sound(music)
+                resource['sound'] = True
                 self.resources_loaded.append(resource)
             else:
                 print('No music')
@@ -133,7 +136,8 @@ class Animation(object):
                     self.present(resource, end_by, epoch=until.timestamp())
                 finally:
                     if 'sound' in resource:
-                        resource['sound'].stop()
+                        # resource['sound'].stop()
+                        pass
                 time.sleep(3)
             time.sleep(10)
 
@@ -209,7 +213,8 @@ class Animation(object):
             if now < epoch - self.globals.audio_delay:
                 time.sleep(epoch - self.globals.audio_delay - now)
             if resource.get('sound'):
-                resource['sound'].play()
+                # resource['sound'].play()
+                pass
             time.sleep(self.globals.audio_delay)
 
         self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
