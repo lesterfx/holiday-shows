@@ -202,7 +202,7 @@ class Animation(object):
                 print('not early. late by', early, 'seconds')
         else:
             self.home.local_strip.player.relays = resource['relays']
-            epoch = time.time() + 2 + self.globals.audio_delay
+            epoch = time.time() + 2
             for key in resource['data']:
                 strip = self.home.strips[key]
                 if strip.ip:
@@ -214,12 +214,11 @@ class Animation(object):
             self.home.music_client.play(resource['index'], epoch)
             print('\n'*4)
             now = time.time()
-            if now < epoch - self.globals.audio_delay:
-                time.sleep(epoch - self.globals.audio_delay - now)
+            if now < epoch:
+                time.sleep(epoch - now)
             if resource.get('sound'):
                 # resource['sound'].play()
                 pass
-            time.sleep(self.globals.audio_delay)
 
         self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
