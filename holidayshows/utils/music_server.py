@@ -78,6 +78,9 @@ class Music_Server:
 
     def play(self, data):
         index, epoch = struct.unpack('id', data)
+        print('\n'*4)
+        print('received play request:', index, epoch)
+        print('\n'*4)
         while time.time() < epoch:
             time.sleep(0.01)
         self.songs[index].play()

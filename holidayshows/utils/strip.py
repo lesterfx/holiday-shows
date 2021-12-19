@@ -75,7 +75,7 @@ class Strip(object):
             time.sleep(need_to_wait)
         self.real_strip.show()
         self.next_available = time.time() + self.delay
-        self.print_fps()
+        # self.print_fps()
 
     def print_fps(self):
         now = time.time()

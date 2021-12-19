@@ -150,7 +150,7 @@ class Animation(object):
         }
         for group, value in relay_group_values.items():
             for relay in self.home.relay_groups[group]:
-                print('Setting', relay, 'in relay group', group, 'to', value)
+                # print('Setting', relay, 'in relay group', group, 'to', value)
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
