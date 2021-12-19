@@ -83,16 +83,20 @@ class Music_Server:
         print('\n'*4)
         while time.time() < epoch:
             time.sleep(0.01)
-        self.songs[index].play()
+        song = self.songs[index]
+        if song:
+            song.play()
         
     def load_music(self):
         songs = [
+            None,
             '/Users/michael/Documents/development/xmas/music/sugarplum.mp3',
             '/Users/michael/Documents/development/xmas/music/sarajevo.mp3'
         ]
         mixer.init()
         self.songs = []
         for song in songs:
+            if song is None: continue
             if not os.path.exists(song):
                 raise OSError(f'song does not exist: {song}')
             self.songs.append(mixer.Sound(song))
