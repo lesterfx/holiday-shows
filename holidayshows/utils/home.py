@@ -8,13 +8,14 @@ class Home(object):
     def __init__(self, globals_):
         self.globals = globals_
         self.init_relays()
+        self.init_music_client()
         self.init_strips()
         self.clear()
         self.show()
 
-    def init_sound_client(self):
-        print('Initializing Sound Client')
-        self.sound_client = music_client.Music_Client(self.globals.music_server)
+    def init_music_client(self):
+        print('Initializing Music Client')
+        self.music_client = music_client.Music_Client(self.globals.music_server)
 
     def init_strips(self):
         print('Initializing Strips')
