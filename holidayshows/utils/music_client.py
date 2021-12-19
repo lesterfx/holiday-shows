@@ -9,7 +9,7 @@ from . import my_ip
 class Music_Client:
     def __init__(self, config):
         self.config = config
-        print('MUSIC SERVER CONFIG': self.config)
+        print('MUSIC SERVER CONFIG;', self.config)
         self.ip = config['ip']
         if self.ip == my_ip.MY_IP:
             self.ip = None
