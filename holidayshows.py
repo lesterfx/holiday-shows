@@ -25,7 +25,7 @@ class Holiday_Pixels(object):
         self.load_args()
         if self.args.remote:
             self.run_remote()
-        elif self.args.sound_server:
+        elif self.args.music_remote:
             self.run_sound_server()
         else:
             config = self.load_config()

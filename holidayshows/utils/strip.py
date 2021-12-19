@@ -1,6 +1,11 @@
 import time
 
-from rpi_ws281x import Adafruit_NeoPixel
+try:
+    from rpi_ws281x import Adafruit_NeoPixel
+except ImportError:
+    def Adafruit_NeoPixel(*args, **kwargs):
+        raise ImportError('rpi_ws281x not installed')
+    print('rpi_ws281x not installed')
 
 class Strip(object):
     def __init__(self, strip_prefs):
