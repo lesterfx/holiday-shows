@@ -96,7 +96,9 @@ class Music_Server:
         mixer.init()
         self.songs = []
         for song in songs:
-            if song is None: continue
+            if song is None:
+                self.songs.append(None)
+                continue
             if not os.path.exists(song):
                 raise OSError(f'song does not exist: {song}')
             self.songs.append(mixer.Sound(song))
