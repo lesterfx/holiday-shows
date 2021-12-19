@@ -9,6 +9,7 @@ from . import my_ip
 class Music_Client:
     def __init__(self, config):
         self.config = config
+        print('MUSIC SERVER CONFIG': self.config)
         self.ip = config['ip']
         if self.ip == my_ip.MY_IP:
             self.ip = None
@@ -51,6 +52,7 @@ class Music_Client:
             print(f'music server: connecting to {self.ip}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
+
                 self.socket.connect((self.ip, self.port))
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
                 print(f'music server ({self.ip}) connection error: {e}')
