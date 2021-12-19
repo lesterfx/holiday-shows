@@ -9,7 +9,6 @@ from . import my_ip
 class Music_Client:
     def __init__(self, config):
         self.config = config
-        self.name = config.name
         self.ip = config.ip
         if self.ip == my_ip.MY_IP:
             self.ip = None
