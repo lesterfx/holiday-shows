@@ -3,7 +3,7 @@
         "audio_delay": 0.1,
         "strips": {
             "upstairs": {
-                "ip": "192.168.3.209",
+                "ip": "192.168.3.201",
                 "port": 2700,
                 "pin": 18,
                 "pixel_order": "RGB",
@@ -20,7 +20,7 @@
                 ]
             },
             "first_floor": {
-                "ip": "192.168.3.201",
+                "ip": "192.168.3.209",
                 "port": 2700,
                 "pin": 18,
                 "pixel_order": "RGB",
