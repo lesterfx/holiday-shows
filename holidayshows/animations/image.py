@@ -209,7 +209,10 @@ class Animation(object):
                     print('sending play command')
                     strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
                     print('sent!')
+            print('\n'*4)
+            print('telling music to play index', resource['index'], 'at', epoch)
             self.home.music_client.play(resource['index'], epoch)
+            print('\n'*4)
             now = time.time()
             if now < epoch - self.globals.audio_delay:
                 time.sleep(epoch - self.globals.audio_delay - now)
