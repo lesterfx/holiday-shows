@@ -11,9 +11,9 @@ import sys
 import time
 import traceback
 
-from holidayshows.utils import calendar_entry, home, strip_remote_server, sun
+from holidayshows.utils import calendar_entry, home, music_server, strip_remote_server, sun
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'audio_delay', 'relay_purposes'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'sound_server', 'audio_delay', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
@@ -25,6 +25,8 @@ class Holiday_Pixels(object):
         self.load_args()
         if self.args.remote:
             self.run_remote()
+        elif self.args.sound_server:
+            self.run_sound_server()
         else:
             config = self.load_config()
             self.process_config(config)
@@ -42,6 +44,9 @@ class Holiday_Pixels(object):
 
     def run_remote(self):
         strip_remote_server.run_remote(StripRemotePrefs)
+
+    def run_sound_server(self):
+        music_server.run_remote()
 
     def init_strip(self):
         try:
@@ -143,12 +148,14 @@ class Holiday_Pixels(object):
             globals_['relays'] = []
         relay_order = globals_['relay_order']
         strips = self.process_strips(globals_['strips'])
+        sound_server = self.process_sound_server(globals_['sound_server'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         audio_delay = globals_['audio_delay']
         self.globals = GlobalPrefs(
             relay_remotes=relay_remotes,
             relay_order=relay_order,
             strips=strips,
+            sound_server=sound_server,
             audio_delay=audio_delay,
             relay_purposes = globals_['relay_purposes']
         )
@@ -174,6 +181,12 @@ class Holiday_Pixels(object):
                 black=strip.get('black', [])
             ))
         return processed_strips
+
+    def process_sound_server(self, config):
+        server = {}
+        server['ip'] = config['ip'],
+        server['port'] = config['port']
+        return server
 
     def process_strip(self, strip):
         pin = int(strip['pin'])
@@ -242,6 +255,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
         parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
         parser.add_argument('--remote', action='store_true', help="Run a remote pixel server. All other options are ignored.")
+        parser.add_argument('--music-remote', action='store_true', help="Run a remote music player. All other options are ignored.")
         self.args = parser.parse_args()
         print(self.args)
 

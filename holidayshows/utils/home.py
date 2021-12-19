@@ -2,7 +2,7 @@
 
 import time
 
-from . import relay_client, relay, strip_remote_client
+from . import music_client, relay_client, relay, strip_remote_client
 
 class Home(object):
     def __init__(self, globals_):
@@ -11,6 +11,10 @@ class Home(object):
         self.init_strips()
         self.clear()
         self.show()
+
+    def init_sound_client(self):
+        print('Initializing Sound Client')
+        self.sound_client = music_client.Music_Client(self.globals.music_server)
 
     def init_strips(self):
         print('Initializing Strips')

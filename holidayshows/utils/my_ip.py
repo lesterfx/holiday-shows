@@ -13,3 +13,6 @@ def my_ip():
         s.close()
     return ip
 MY_IP = my_ip()
+
+if __name__ == '__main__':
+    print(MY_IP)
