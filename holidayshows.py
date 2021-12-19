@@ -184,7 +184,7 @@ class Holiday_Pixels(object):
 
     def process_music_server(self, config):
         server = {}
-        server['ip'] = config['ip'],
+        server['ip'] = config['ip']
         server['port'] = config['port']
         return server
 
