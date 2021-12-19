@@ -48,17 +48,17 @@ class Music_Client:
 
     def connect(self):
         if self.ip:
-            print(f'{self.name}: connecting to {self.ip}:{self.port}')
+            print(f'music server: connecting to {self.ip}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.socket.connect((self.ip, self.port))
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
-                print(f'{self.name} ({self.ip}) connection error: {e}')
+                print(f'music server ({self.ip}) connection error: {e}')
             else:
-                print(f'{self.name} ({self.ip}) connected')
+                print(f'music server ({self.ip}) connected')
                 self.connected = True
         else:
-            print(f'{self.name}: this strip runs locally')
+            print(f'music server runs locally')
 
     def disconnect(self):
         if self.connected:
@@ -87,7 +87,7 @@ class Music_Client:
                 self.connect()
             else:
                 return expected_response or fallback_response
-        print(f'{self.name} ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
+        print(f'music server ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
             self.socket.sendall(data)
@@ -96,6 +96,6 @@ class Music_Client:
                 return
             response = self.socket.recv(1024)
             if expected_response is not None and response != expected_response:
-                raise ValueError(f'{self.name} ({self.ip}) expected {expected_response} got {response}')
+                raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
             return response
 
