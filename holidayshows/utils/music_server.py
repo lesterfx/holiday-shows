@@ -54,6 +54,7 @@ class Music_Server:
             else:
                 break
         conn.close()
+        print('connection closed')
 
     def handle(self, data):
         options = {

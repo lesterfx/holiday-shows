@@ -1,7 +1,7 @@
 {
     "globals": {
         "music_server": {
-            "audio_delay": 0.1,
+            "audio_delay": 0.05,
             "ip": "192.168.1.222",
             "port": 2700
         },
