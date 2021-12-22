@@ -64,7 +64,7 @@ class Holiday_Pixels(object):
             until = datetime.datetime.now().replace(hour=hour, minute=minute, second=0, microsecond=0)
         else:
             if not self.args.minutes and not self.args.seconds:
-                self.args.minutes = 1
+                self.args.minutes = 10
             until = datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes, seconds=self.args.seconds)
         self.run(until, *animation)
 
