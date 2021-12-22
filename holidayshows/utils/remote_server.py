@@ -56,7 +56,9 @@ class Remote_Server:
             'add_player': self.add_player,
             'disconnect': None
         }
-        return handlers[data['function']](data['arguments'])
+        handler = handlers[data['function']]
+        if handler:
+            return handler(data['arguments'])
 
     def synchronize(self, arguments):
         master_time = arguments['master_time']
