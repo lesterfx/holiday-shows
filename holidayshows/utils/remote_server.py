@@ -18,7 +18,7 @@ class Remote_Server:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((HOST, PORT))
-        self.players = []
+        self.players = {}
         try:
             while True:
                 self.listen()
@@ -26,7 +26,7 @@ class Remote_Server:
             pass
         finally:
             self.sock.close()
-            for player in self.players:
+            for player in self.players.values():
                 player.stop()
             print('Remote Server closed')
 
@@ -85,7 +85,7 @@ class Remote_Server:
         print('received play request:', index, epoch)
         print('\n'*4)
         players = []
-        for player in self.players:
+        for player in self.players.values():
             players.append(player.play(index, epoch + self.time_offset))
         for player in players:
             try:
@@ -102,10 +102,10 @@ class Remote_Server:
 
         if player_kind == PLAYER_KINDS.MUSIC:
             from . import music_player
-            self.players.append(music_player.Music_Player(player_globals))
+            self.players[PLAYER_KINDS.MUSIC] = music_player.Music_Player(player_globals)
         elif player_kind == PLAYER_KINDS.STRIP:
             from . import strip_cache_player
-            self.players.append(strip_cache_player.Strip_Cache_Player(player_globals))
+            self.players[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
         else:
             raise ValueError(f'Unknown player kind: {player_kind}')
 
