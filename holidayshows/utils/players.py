@@ -19,9 +19,9 @@ class Players(dict):
         print('Adding player', player_kind, 'with globals', player_globals)
         if player_kind == PLAYER_KINDS.MUSIC:
             from . import music_player
-            self.players[PLAYER_KINDS.MUSIC] = music_player.Music_Player(player_globals)
+            self[PLAYER_KINDS.MUSIC] = music_player.Music_Player(player_globals)
         elif player_kind == PLAYER_KINDS.STRIP:
             from . import strip_cache_player
-            self.players[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
+            self[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
         else:
             raise ValueError(f'Unknown player kind: {player_kind}')
