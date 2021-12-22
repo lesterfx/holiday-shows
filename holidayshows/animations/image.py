@@ -203,23 +203,36 @@ class Animation(object):
         else:
             self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2
-            for key in resource['data']:
-                strip = self.home.strips[key]
-                if strip.ip:
-                    print('sending play command')
-                    strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
-                    print('sent!')
-            print('\n'*4)
-            print('telling music to play index', resource['index'], 'at', epoch)
-            self.home.music_client.play(resource['index'], epoch)
-            print('\n'*4)
-            now = time.time()
-            if now < epoch:
-                time.sleep(epoch - now)
-            if resource.get('sound'):
-                # resource['sound'].play()
-                pass
+            players = []
+            for remote in self.home.remote_clients.values():
+                players.append(remote.play(resource['index'], repeat, end_by_float, epoch, resource['fps']))
+            while True:
+                for player in players:
+                    any_still_playing = False
+                    try:
+                        next(player)
+                        any_still_playing = True
+                    except StopIteration:
+                        pass
+                if not any_still_playing:
+                    break
+        #     for key in resource['data']:
+        #         strip = self.home.strips[key]
+        #         if strip.ip:
+        #             print('sending play command')
+        #             strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
+        #             print('sent!')
+        #     print('\n'*4)
+        #     print('telling music to play index', resource['index'], 'at', epoch)
+        #     self.home.music_client.play(resource['index'], epoch)
+        #     print('\n'*4)
+        #     now = time.time()
+        #     if now < epoch:
+        #         time.sleep(epoch - now)
+        #     if resource.get('sound'):
+        #         # resource['sound'].play()
+        #         pass
 
-        self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
+        # self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
         print('image complete')

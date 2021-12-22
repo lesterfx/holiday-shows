@@ -11,7 +11,7 @@ import sys
 import time
 import traceback
 
-from holidayshows.utils import calendar_entry, home, music_server, strip_remote_server, sun
+from holidayshows.utils import calendar_entry, home, remote_server, sun
 
 GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'music_server', 'relay_purposes'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
@@ -25,8 +25,6 @@ class Holiday_Pixels(object):
         self.load_args()
         if self.args.remote:
             self.run_remote()
-        elif self.args.music_remote:
-            self.run_music_server()
         else:
             config = self.load_config()
             self.process_config(config)
@@ -43,10 +41,7 @@ class Holiday_Pixels(object):
                 self.strip.cleanup()
 
     def run_remote(self):
-        strip_remote_server.run_remote(StripRemotePrefs)
-
-    def run_music_server(self):
-        music_server.run_remote()
+        remote_server.run_remote()
 
     def init_strip(self):
         try:

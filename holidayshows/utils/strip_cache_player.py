@@ -7,8 +7,8 @@ from ..utils import strip
 class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = strip.Strip(config)
-        self.image_data = defaultdict(lambda: None)
-        self.relay_data = defaultdict(lambda: None)
+        self.image_data = {}
+        self.relay_data = {}
         
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
@@ -38,6 +38,8 @@ class Strip_Cache_Player():
                         self.home.relays[name].set(relay_row[x])
                 self.home.show_relays()
 
+            # TODO: grow after epoch, shrink as we approach end_by
+            
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
                 self.strip[x] = color
@@ -45,6 +47,7 @@ class Strip_Cache_Player():
             self.strip.show()
 
             while True:
+                yield
                 previous_y = abs_y
                 abs_y = int((time.time() - epoch) * fps)
                 if abs_y != previous_y:

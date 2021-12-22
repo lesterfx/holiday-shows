@@ -12,8 +12,9 @@ from . import my_ip
 
 class Music_Server:
     def __init__(self, HOST, PORT):
-        self.delay = 0.04
         print(f'Serving on {HOST}:{PORT}')
+        self.delay = 0
+        self.time_offset = 0
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((HOST, PORT))
@@ -83,7 +84,7 @@ class Music_Server:
         print('\n'*4)
         print('received play request:', index, epoch)
         print('\n'*4)
-        while time.time() < epoch:
+        while time.time() < epoch + self.time_offset:
             time.sleep(0.01)
         song = self.songs[index]
         if song:

@@ -2,33 +2,36 @@
 
 import time
 
-from . import music_client, relay_client, relay, strip_remote_client
+from . import music_client, relay_client, relay, remote_client
+
+from enum import Enum
+PLAYER_KINDS = Enum('MUSIC', 'STRIP')
 
 class Home(object):
     def __init__(self, globals_):
         self.globals = globals_
         self.init_relays()
+        self.init_remotes()
         self.init_music_client()
         self.init_strips()
         self.clear()
         self.show()
 
+    def init_remote_clients(self):
+        print('Initializing Remotes')
+        self.remote_clients = {}
+        for name, config in self.globals.remotes:
+            self.remote_clients[name] = remote_client.Remote_Client(config)
+
     def init_music_client(self):
         print('Initializing Music Client')
-        self.music_client = music_client.Music_Client(self.globals.music_server)
+        self.remote_clients[self.globals.music_server].add_player(PLAYER_KINDS.MUSIC, None)
 
     def init_strips(self):
         print('Initializing Strips')
         self.strips = {}
         for strip_config in self.globals.strips:
-            strip = strip_remote_client.Strip_Remote_Client(strip_config)
-            self.strips[strip.name] = strip
-            if strip.ip is None:
-                self.local_strip = strip
-                self.local_strip.player.home = self
-                # shortcut for "old code" that doesn't use severs
-                self.strip = self.strips[strip_config.name].player.strip
-                self.strip.relay = self.relays.get('strips')
+            self.remote_clients[strip_config.name].add_player(PLAYER_KINDS.STRIP, strip_config)
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()

@@ -1,14 +1,22 @@
 {
     "globals": {
-        "music_server": {
-            "audio_delay": 0.05,
-            "ip": "192.168.1.222",
-            "port": 2700
-        },
-        "strips": {
+        "remotes": {
             "upstairs": {
                 "ip": "192.168.3.209",
-                "port": 2700,
+                "port": 2700
+            },
+            "first_floor": {
+                "ip": "192.168.3.201",
+                "port": 2700
+            },
+            "laptop": {
+                "ip": "192.168.1.222",
+                "port": 2700
+            }
+        },
+        "music_server": "laptop",
+        "strips": {
+            "upstairs": {
                 "pin": 18,
                 "pixel_order": "RGB",
                 "frequency": 800000,
@@ -24,8 +32,6 @@
                 ]
             },
             "first_floor": {
-                "ip": "192.168.3.201",
-                "port": 2700,
                 "pin": 18,
                 "pixel_order": "RGB",
                 "frequency": 800000,
