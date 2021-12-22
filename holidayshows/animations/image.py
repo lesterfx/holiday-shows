@@ -58,7 +58,7 @@ class Animation(object):
                         relay_data = 'cycle'
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
-            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays']})
+            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays'], 'home': self.home})
             for key, options in element['slices'].items():
                 if key == 'relays':
                     continue

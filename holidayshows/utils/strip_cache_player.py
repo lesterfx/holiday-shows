@@ -9,11 +9,12 @@ class Strip_Cache_Player():
         self.strip = strip.Strip(config)
         self.image_data = {}
         self.relay_data = {}
-        
+        self.relays = {}
+
     def load_data(self, arguments):
         index = arguments['index']
         if 'relay_data' in arguments:
-            self.load_relays(index, arguments['relay_data'], arguments['relay_order'])
+            self.load_relays(index, arguments['relay_data'], arguments['relay_order'], arguments['home'])
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
         else:
@@ -22,9 +23,10 @@ class Strip_Cache_Player():
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
 
-    def load_relays(self, index, relay_data, relay_order):
+    def load_relays(self, index, relay_data, relay_order, home):
         self.relay_data[index] = relay_data
-        self.relays = relay_order
+        self.relays[index] = relay_order
+        self.home = home  # this is a hack, but relays are a hack right now anyway
 
     def play(self, arguments):
         index = arguments['index']
