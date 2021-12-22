@@ -3,6 +3,7 @@
 import time
 
 from . import relay_client, relay, remote_client
+from .players import PLAYER_KINDS
 
 class Home(object):
     def __init__(self, globals_):
@@ -23,13 +24,13 @@ class Home(object):
 
     def init_music_client(self):
         print('Initializing Music Client')
-        self.remote_clients[self.globals['music_server']].add_player(remote_client.PLAYER_KINDS.MUSIC, None)
+        self.remote_clients[self.globals['music_server']].add_player(PLAYER_KINDS.MUSIC, None)
 
     def init_strips(self):
         print('Initializing Strips')
         self.strips = {}
         for strip_config in self.globals['strips']:
-            self.remote_clients[strip_config['name']].add_player(remote_client.PLAYER_KINDS.STRIP, strip_config)
+            self.remote_clients[strip_config['name']].add_player(PLAYER_KINDS.STRIP, strip_config)
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
