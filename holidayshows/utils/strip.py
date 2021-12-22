@@ -9,21 +9,21 @@ except ImportError:
 
 class Strip(object):
     def __init__(self, strip_prefs):
-        length = strip_prefs.length
-        pin = strip_prefs.pin
-        frequency = strip_prefs.frequency
-        dma = strip_prefs.dma
-        invert = strip_prefs.invert
-        brightness = strip_prefs.brightness
-        pin_channel = strip_prefs.pin_channel
+        length = strip_prefs['length']
+        pin = strip_prefs['pin']
+        frequency = strip_prefs['frequency']
+        dma = strip_prefs['dma']
+        invert = strip_prefs['invert']
+        brightness = strip_prefs['brightness']
+        pin_channel = strip_prefs['pin_channel']
         self.black = []
-        for black in strip_prefs.black:
+        for black in strip_prefs['black']:
             self.black.append(range(black[0], black[1]))
 
         self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
 
-        pixel_order = strip_prefs.pixel_order.lower()
+        pixel_order = strip_prefs['pixel_order'].lower()
 
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         self.delay = self.calculate_delay(length, frequency)
