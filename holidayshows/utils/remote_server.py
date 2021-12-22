@@ -81,12 +81,14 @@ class Remote_Server:
         player_globals = arguments['player_globals']
 
         self.players.add(player_kind, player_globals)
+        return {'response': 'success'}
 
     def load_data(self, arguments):
         kind = arguments['kind']
         player_kind = players.PLAYER_KINDS(kind)
         data = arguments['data']
         self.players.load_data(player_kind, data)
+        return {'response': 'success'}
 
 def run_remote():
     print('Running Remote')
