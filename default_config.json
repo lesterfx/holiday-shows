@@ -316,7 +316,7 @@
                 },
                 {
                     "image": "images/sugarplum/sugarplum.png",
-                    "music": "/home/pi/xmas-songs/sugarplum.mp3",
+                    "music": "~/xmas-songs/sugarplum.mp3",
                     "fps": 24,
                     "slices": {
                         "first_floor": {
@@ -354,7 +354,7 @@
                 },
                 {
                     "image": "images/sarajevo/nuke/sarajevo_2021.png",
-                    "music": "/home/pi/xmas-songs/sarajevo.mp3",
+                    "music": "~/xmas-songs/sarajevo.mp3",
                     "fps": 24,
                     "slices": {
                         "first_floor": {

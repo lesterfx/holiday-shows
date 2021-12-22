@@ -16,6 +16,7 @@ class Music_Player():
         if music is None:
             self.songs[index] = None
             return
+        music = os.path.expanduser(music)
         if not os.path.exists(music):
             raise OSError(f'music file does not exist: {music}')
         self.songs[index] = mixer.Sound(music)
