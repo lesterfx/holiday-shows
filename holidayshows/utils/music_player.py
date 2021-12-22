@@ -21,8 +21,13 @@ class Music_Player():
             raise OSError(f'music file does not exist: {music}')
         self.songs[index] = mixer.Sound(music)
 
-    def play(self, index, at):
-        while time.time() < at + self.delay:
+    def play(self, arguments):
+        index = arguments['index']
+        repeat = arguments['repeat']
+        end_by = arguments['end_by']
+        epoch = arguments['epoch']
+        fps = arguments['fps']
+        while time.time() < epoch + self.delay:
             time.sleep(0.001)
             yield
         song = self.songs[index]

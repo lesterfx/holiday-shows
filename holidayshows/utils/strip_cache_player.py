@@ -22,10 +22,16 @@ class Strip_Cache_Player():
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
 
-    def load_relays(self, index, relay_data):
+    def load_relays(self, index, relay_data, relay_order):
         self.relay_data[index] = relay_data
 
-    def play(self, index, repeat, end_by, epoch, fps):
+    def play(self, arguments):
+        index = arguments['index']
+        repeat = arguments['repeat']
+        end_by = arguments['end_by']
+        epoch = arguments['epoch']
+        fps = arguments['fps']
+
         height = len(self.image_data[index])
         if repeat:
             print(f'playing at {fps} fps {repeat} times, starting at {datetime.fromtimestamp(epoch)} and ending at {datetime.fromtimestamp(epoch + height * fps)}')

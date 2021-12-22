@@ -5,16 +5,16 @@ class PLAYER_KINDS(IntEnum):
     STRIP = 2
 
 class Players(dict):
-    def play_all(self, index, epoch):
+    def play_all(self, arguments):
         players = []
         for player in self.values():
-            players.append(player.play(index, epoch))
+            players.append(player.play(arguments))
         for player in players:
             try:
                 next(player)
             except StopIteration:
                 pass
-    
+
     def add(self, player_kind, player_globals):
         print('Adding player', player_kind, 'with globals', player_globals)
         if player_kind == PLAYER_KINDS.MUSIC:

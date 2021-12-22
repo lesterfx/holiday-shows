@@ -16,9 +16,6 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        prep_path = os.path.join(os.path.dirname(__file__), '..', 'utils', 'prepare_speakers.mp3')
-        prep_path = os.path.realpath(prep_path)
-        # self.prepare_speakers = mixer.Sound(prep_path)
 
     def __str__(self):
         return 'Image'
@@ -43,10 +40,10 @@ class Animation(object):
             if 'variations' in self.settings:
                 path = path.format(random.randint(1, self.settings['variations']))
             print()
-            print('Loading image:', path, end='... ')
+            print(os.path.basename(path), end=' ')
             image = Image.open(path)
             image_data = image.getdata()
-            print('done')
+            print('loaded')
             resource['width'] = image.width
             resource['height'] = image.height
 
@@ -62,18 +59,15 @@ class Animation(object):
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
             self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays']})
-            print('Relays loaded')
             for key, options in element['slices'].items():
                 if key == 'relays':
                     continue
-                print(key, "processing")
                 start = options['start']
                 end = options['end']
                 wrap = options.get('wrap', False)
                 slice = self.slice_image(image_data, resource, start, end, wrap)
                 resource['data'][key] = slice
                 self.home.remote_clients[key].load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'image_data': slice})
-                print(key, 'loaded')
 
             music = element.get('music')
             if music:
@@ -151,8 +145,6 @@ class Animation(object):
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
-        print('slicing image from', start, 'to', end)
-        print('image dimensions', resource['width'], 'x', resource['height'])
         image_slice = []
         if is_relays and end == 'auto':
             end = len(resource['relays'])
@@ -184,7 +176,6 @@ class Animation(object):
             repeat = 0
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
-            self.prepare_speakers.play()
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)

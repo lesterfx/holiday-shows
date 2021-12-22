@@ -72,15 +72,16 @@ class Remote_Client:
             self.socket.close()
             self.connected = False
 
-    def play(self, index, epoch):
+    def play(self, index, repeat, end_by, epoch, fps):
         '''
         plays the indexed song, starting at epoch, which should be in the future
         time offset will be applied to epoch and end_by on remote
         '''
+        arguments = {'index': index, 'repeat': repeat, 'end_by': end_by, 'epoch': epoch, 'fps': fps}
         if self.local:
-            raise NotImplementedError('cannot play locally at this time')
+            self.players.play_all(arguments)
         else:
-            self.send(function='play', arguments={'index': index, 'epoch': epoch}, expected_response=-1)
+            self.send(function='play', arguments=arguments, expected_response=-1)
             self.disconnect()
     
     def get_response(self):

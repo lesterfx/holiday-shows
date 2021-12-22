@@ -69,12 +69,14 @@ class Remote_Server:
         return {'response': my_time}
 
     def play(self, arguments):
-        index = arguments['index']
-        epoch = arguments['epoch']
+        required_arguments = 'index', 'epoch', 'repeat', 'end_by', 'fps'
+        for key in required_arguments:
+            if key not in arguments:
+                raise KeyError(key)
         print('\n'*4)
-        print('received play request:', index, epoch)
+        print('received play request:', arguments)
         print('\n'*4)
-        self.play_all(index, epoch + self.time_offset)
+        self.play_all(arguments)
 
     def add_player(self, arguments):
         kind = arguments['kind']
