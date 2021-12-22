@@ -2,10 +2,7 @@
 
 import time
 
-from . import music_client, relay_client, relay, remote_client
-
-from enum import Enum
-PLAYER_KINDS = Enum('MUSIC', 'STRIP')
+from . import relay_client, relay, remote_client
 
 class Home(object):
     def __init__(self, globals_):
@@ -25,7 +22,7 @@ class Home(object):
 
     def init_music_client(self):
         print('Initializing Music Client')
-        self.remote_clients[self.globals.music_server].add_player(PLAYER_KINDS.MUSIC, None)
+        self.remote_clients[self.globals.music_server].add_player(remote_client.PLAYER_KINDS.MUSIC, None)
 
     def init_strips(self):
         print('Initializing Strips')

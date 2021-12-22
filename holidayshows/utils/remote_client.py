@@ -1,9 +1,12 @@
+from enum import Enum
 import json
 import time
 import socket
 import struct
 
 from . import my_ip
+
+PLAYER_KINDS = Enum('MUSIC', 'STRIP')
 
 
 class Remote_Client:
@@ -96,3 +99,6 @@ class Remote_Client:
                 raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
             return response
 
+    def add_player(self, kind, player_globals):
+        if self.ip:
+            self.send(b'add_player:' + struct.pack('b', int(kind)) + json.dumps(player_globals).encode())
