@@ -20,7 +20,7 @@ class Home(object):
     def init_remote_clients(self):
         print('Initializing Remotes')
         self.remote_clients = {}
-        for name, config in self.globals.remotes:
+        for name, config in self.globals.remotes.items():
             self.remote_clients[name] = remote_client.Remote_Client(config)
 
     def init_music_client(self):
