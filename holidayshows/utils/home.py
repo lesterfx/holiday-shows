@@ -17,7 +17,7 @@ class Home(object):
         print('Initializing Remotes')
         self.remote_clients = {}
         for name, config in self.globals['remotes'].items():
-            client = remote_client.Remote_Client(config)
+            client = remote_client.Remote_Client(name, config)
             self.remote_clients[name] = client
             if client.local:
                 self.local_client = client

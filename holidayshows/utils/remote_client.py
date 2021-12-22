@@ -9,9 +9,10 @@ from . import my_ip, players
 ALLOW_ERRORS = False
 
 class Remote_Client:
-    def __init__(self, config):
+    def __init__(self, name, config):
+        self.name = name
         config = config
-        print('configuring client for remote:', config)
+        print('configuring client for', name)
         self.ip = config['ip']
         self.port = config['port']
         self.local = False
@@ -40,7 +41,7 @@ class Remote_Client:
                 print()
                 print()
                 print()
-                print(f'{self.ip}: time offset:', self.time_offset)
+                print(f'{self.name}: time offset:', self.time_offset)
                 print()
                 print()
                 print()
@@ -49,7 +50,7 @@ class Remote_Client:
 
     def connect(self):
         if self.ip:
-            print(f'connecting to {self.ip}:{self.port}')
+            print(f'connecting to {self.name}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.socket.connect((self.ip, self.port))
@@ -58,7 +59,7 @@ class Remote_Client:
                 if not ALLOW_ERRORS:
                     raise
             else:
-                print(f'connected to {self.ip}')
+                print(f'connected to {self.name}')
                 self.connected = True
         else:
             print(f'server runs locally')
@@ -91,7 +92,7 @@ class Remote_Client:
             else:
                 return {'response': expected_response or fallback_response}
         data = json.dumps({'function': function, 'arguments': arguments}).encode()
-        print(f'server ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
+        print(f'server ({self.name}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
             self.socket.sendall(data)
@@ -102,7 +103,7 @@ class Remote_Client:
             print('raw_response:', response)
             response = json.loads(response.decode())
             if expected_response is not None and response != expected_response:
-                raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
+                raise ValueError(f'music server ({self.name}) expected {expected_response} got {response}')
             return response
 
     def load_data(self, kind, data):
