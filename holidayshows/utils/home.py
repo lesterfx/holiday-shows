@@ -15,17 +15,17 @@ class Home(object):
     def init_remote_clients(self):
         print('Initializing Remotes')
         self.remote_clients = {}
-        for name, config in self.globals.remotes.items():
+        for name, config in self.globals['remotes'].items():
             self.remote_clients[name] = remote_client.Remote_Client(config)
 
     def init_music_client(self):
         print('Initializing Music Client')
-        self.remote_clients[self.globals.music_server].add_player(remote_client.PLAYER_KINDS.MUSIC, None)
+        self.remote_clients[self.globals['music_server']].add_player(remote_client.PLAYER_KINDS.MUSIC, None)
 
     def init_strips(self):
         print('Initializing Strips')
         self.strips = {}
-        for strip_config in self.globals.strips:
+        for strip_config in self.globals['strips']:
             self.remote_clients[strip_config.name].add_player(remote_client.PLAYER_KINDS.STRIP, strip_config)
 
     def init_relays(self):
@@ -33,7 +33,7 @@ class Home(object):
 
         self.relays = {}
         self.remotes = {}
-        for name, config in self.globals.relay_remotes.items():
+        for name, config in self.globals['relay_remotes'].items():
             remote = relay.Relay_Remote(name, config, self.relay_client)
             self.remotes[name] = remote
             self.relays.update(remote)
@@ -46,7 +46,7 @@ class Home(object):
             'on_show_nights'
         ]:
             self.relay_groups[name] = []
-            for relay_name in self.globals.relay_purposes.get(name, []):
+            for relay_name in self.globals['relay_purposes'].get(name, []):
                 self.relay_groups[name].append(self.relays[relay_name])
     
     def show_relays(self):
