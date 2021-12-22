@@ -79,7 +79,7 @@ class Remote_Client:
         '''
         arguments = {'index': index, 'repeat': repeat, 'end_by': end_by, 'epoch': epoch, 'fps': fps}
         if self.local:
-            self.players.play_all(arguments)
+            yield from self.players.play_all(arguments)
         else:
             self.send(function='play', arguments=arguments, expected_response=-1)
             self.disconnect()

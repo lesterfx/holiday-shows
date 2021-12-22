@@ -77,15 +77,8 @@ class Holiday_Pixels(object):
             while datetime.datetime.now() < until:
                 for animation in animations:
                     print(f'{until} ends {animation}')
-                    try:
-                        animation.main(until)
-                        print()
-                    except KeyboardInterrupt:
-                        raise
-                    except:
-                        print(traceback.format_exc())
-                        print('Continuing in 10 seconds...')
-                        time.sleep(10)
+                    animation.main(until)
+                    print()
 
     def get_start_time(self, date):
         if self.schedule['start_time']:
