@@ -10,6 +10,7 @@ class Players(dict):
         for player in self.values():
             players.append(player.play(arguments))
         for player in players:
+            yield
             try:
                 next(player)
             except StopIteration:

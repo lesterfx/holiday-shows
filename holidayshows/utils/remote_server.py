@@ -58,6 +58,7 @@ class Remote_Server:
             'disconnect': None,
             'load_data': self.load_data
         }
+        print(data['function'])
         handler = handlers[data['function']]
         if handler:
             return handler(data['arguments'])
