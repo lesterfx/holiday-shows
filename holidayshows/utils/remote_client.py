@@ -99,6 +99,7 @@ class Remote_Client:
             if expected_response == -1:
                 return
             response = self.socket.recv(1024)
+            print('raw_response:', response)
             response = json.loads(response.decode())
             if expected_response is not None and response != expected_response:
                 raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')

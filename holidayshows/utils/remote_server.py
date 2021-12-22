@@ -42,7 +42,8 @@ class Remote_Server:
                 message += conn.recv(message_length - len(message))
             response = self.handle(message)
             if response:
-                conn.sendall(json.dumps(response).encode())
+                response_bytes = json.dumps(response).encode()
+                conn.sendall(response_bytes)
             else:
                 break
         conn.close()
