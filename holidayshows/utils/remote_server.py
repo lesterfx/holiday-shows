@@ -6,7 +6,9 @@ import time
 
 from . import my_ip
 
-PLAYER_KINDS = IntEnum('MUSIC', 'STRIP')
+class PLAYER_KINDS(IntEnum):
+    MUSIC = 1
+    STRIP = 2
 
 class Remote_Server:
     def __init__(self, HOST, PORT):
@@ -92,7 +94,8 @@ class Remote_Server:
 
     def add_player(self, data):
         kind = struct.unpack('b', data[:1])[0]
-        player_kind = PLAYER_KINDS[kind]
+        print('kind:', kind)
+        player_kind = PLAYER_KINDS(kind)
         player_globals = json.loads(data[1:])
 
         if player_kind == PLAYER_KINDS.music:
