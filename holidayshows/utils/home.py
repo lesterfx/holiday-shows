@@ -11,8 +11,6 @@ class Home(object):
         self.init_remote_clients()
         self.init_music_client()
         self.init_strips()
-        self.clear()
-        self.show()
 
     def init_remote_clients(self):
         print('Initializing Remotes')
@@ -78,15 +76,9 @@ class Home(object):
         while time.time() < end:
             function(*args, **kwargs)
 
-    def clear(self, show=False):
-        self.strip.clear(show)
-    
     def clear_relays(self):
         for remote in self.remotes.values():
             remote.all(False)
-
-    def show(self):
-        self.strip.show()
 
     def __setitem__(self, key, value):
         key = int(key)
