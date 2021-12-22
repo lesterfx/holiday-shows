@@ -24,6 +24,7 @@ class Strip_Cache_Player():
 
     def load_relays(self, index, relay_data, relay_order):
         self.relay_data[index] = relay_data
+        self.relays = relay_order
 
     def play(self, arguments):
         index = arguments['index']
