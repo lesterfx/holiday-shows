@@ -1,3 +1,4 @@
+from enum import IntEnum
 import json
 import socket
 import struct
@@ -5,8 +6,7 @@ import time
 
 from . import my_ip
 
-from enum import Enum
-PLAYER_KINDS = Enum('MUSIC', 'STRIP')
+PLAYER_KINDS = IntEnum('MUSIC', 'STRIP')
 
 class Remote_Server:
     def __init__(self, HOST, PORT):
