@@ -13,7 +13,7 @@ class Strip_Cache_Player():
     def load_data(self, arguments):
         index = arguments['index']
         if 'relay_data' in arguments:
-            self.load_relays(index, arguments['relay_data'])
+            self.load_relays(index, arguments['relay_data'], arguments['relay_order'])
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
         else:
