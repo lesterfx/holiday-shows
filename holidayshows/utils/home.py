@@ -28,7 +28,7 @@ class Home(object):
         print('Initializing Strips')
         self.strips = {}
         for strip_config in self.globals.strips:
-            self.remote_clients[strip_config.name].add_player(PLAYER_KINDS.STRIP, strip_config)
+            self.remote_clients[strip_config.name].add_player(remote_client.PLAYER_KINDS.STRIP, strip_config)
 
     def init_relays(self):
         self.relay_client = relay_client.RelayClient()
