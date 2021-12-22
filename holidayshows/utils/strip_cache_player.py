@@ -8,7 +8,7 @@ class Strip_Cache_Player():
     def __init__(self, config):
         self.strip = strip.Strip(config)
         self.image_data = {}
-        self.relay_data = {}
+        self.relay_data = defaultdict(lambda: None)
         self.relays = {}
 
     def load_data(self, arguments):
