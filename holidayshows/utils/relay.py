@@ -4,7 +4,7 @@ class Relay_Remote(dict):
         self.name = name
         ip = config['ip']
         port = config['port']
-        for i, relay_name in enumerate(config.relays):
+        for i, relay_name in enumerate(config['relays']):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
