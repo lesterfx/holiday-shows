@@ -161,8 +161,6 @@ class Holiday_Pixels(object):
         for name, strip in strips.items():
             processed_strips.append(StripRemotePrefs(
                 name=name,
-                ip=strip['ip'],
-                port=strip['port'],
                 pin=strip['pin'],
                 pixel_order=strip['pixel_order'],
                 frequency=strip['frequency'],
