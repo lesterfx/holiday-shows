@@ -38,14 +38,14 @@ class Holiday_Pixels(object):
                 pass
             finally:
                 print('cleaning up')
-                self.strip.cleanup()
+                self.home.cleanup()
 
     def run_remote(self):
         remote_server.run_remote()
 
     def init_strip(self):
         try:
-            self.strip = home.Home(self.globals)
+            self.home = home.Home(self.globals)
         except RuntimeError as err:
             print(err)
             return
@@ -70,7 +70,7 @@ class Holiday_Pixels(object):
 
     def run(self, until, *animation_names):
         animations = []
-        with self.strip as home:
+        with self.home as home:
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
                 animation = settings.get('module', animation)

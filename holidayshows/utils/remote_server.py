@@ -1,14 +1,9 @@
-from enum import IntEnum
 import json
 import socket
 import struct
 import time
 
-from . import my_ip
-
-class PLAYER_KINDS(IntEnum):
-    MUSIC = 1
-    STRIP = 2
+from . import my_ip, players
 
 class Remote_Server:
     def __init__(self, HOST, PORT):
@@ -18,7 +13,7 @@ class Remote_Server:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((HOST, PORT))
-        self.players = {}
+        self.players = players.Players()
         try:
             while True:
                 self.listen()
@@ -84,30 +79,14 @@ class Remote_Server:
         print('\n'*4)
         print('received play request:', index, epoch)
         print('\n'*4)
-        players = []
-        for player in self.players.values():
-            players.append(player.play(index, epoch + self.time_offset))
-        for player in players:
-            try:
-                next(player)
-            except StopIteration:
-                pass
+        self.play_all(index, epoch + self.time_offset)
 
     def add_player(self, data):
         kind = struct.unpack('b', data[:1])[0]
-        print('kind:', kind)
-        player_kind = PLAYER_KINDS(kind)
+        player_kind = players.PLAYER_KINDS(kind)
         player_globals = json.loads(data[1:])
-        print('Adding player', player_kind, 'with globals', player_globals)
 
-        if player_kind == PLAYER_KINDS.MUSIC:
-            from . import music_player
-            self.players[PLAYER_KINDS.MUSIC] = music_player.Music_Player(player_globals)
-        elif player_kind == PLAYER_KINDS.STRIP:
-            from . import strip_cache_player
-            self.players[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
-        else:
-            raise ValueError(f'Unknown player kind: {player_kind}')
+        self.players.add(player_kind, player_globals)
 
 
 def run_remote():

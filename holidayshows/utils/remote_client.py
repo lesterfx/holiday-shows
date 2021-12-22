@@ -4,11 +4,7 @@ import time
 import socket
 import struct
 
-from . import my_ip
-
-class PLAYER_KINDS(IntEnum):
-    MUSIC = 1
-    STRIP = 2
+from . import my_ip, players
 
 
 class Remote_Client:
@@ -21,6 +17,7 @@ class Remote_Client:
         if self.ip == my_ip.MY_IP:
             self.ip = None
             self.local = True
+            self.players = players.Players()
 
         self.connected = False
         self.connect()
@@ -75,14 +72,14 @@ class Remote_Client:
         plays the indexed song, starting at epoch, which should be in the future
         time offset will be applied to epoch and end_by on remote
         '''
-        if self.ip:
+        if self.local:
+            raise NotImplementedError('cannot play locally at this time')
+        else:
             self.send(b'play:' + struct.pack('id', index, epoch), expected_response=-1)
             self.disconnect()
-        else:
-            raise NotImplementedError('cannot play locally at this time')
     
     def get_response(self):
-        if self.ip:
+        if not self.local:
             return self.socket.recv(1024)
 
     def send(self, data, expected_response=None, fallback_response=None, must_be_connected=True):
