@@ -103,6 +103,14 @@ class Remote_Client:
                 raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
             return response
 
+    def load_data(self, kind, data_bytes):
+        if self.local:
+            raise NotImplementedError('cannot add player locally at this time')
+        else:
+            self.send(b'load_data:' + struct.pack('b', int(kind)) + data_bytes)
+
     def add_player(self, kind, player_globals):
-        if self.ip:
+        if self.local:
+            raise NotImplementedError('cannot add player locally at this time')
+        else:
             self.send(b'add_player:' + struct.pack('b', int(kind)) + json.dumps(player_globals).encode())
