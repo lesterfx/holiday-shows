@@ -17,7 +17,7 @@ class Strip_Cache_Player():
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
         else:
-            raise ValueError(f'unexpected arguments {arguments}')
+            raise ValueError(f'unexpected arguments {list(arguments)}')
 
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
