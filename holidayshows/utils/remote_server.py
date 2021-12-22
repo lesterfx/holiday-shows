@@ -55,7 +55,8 @@ class Remote_Server:
             'synchronize': self.synchronize,
             'play': self.play,
             'add_player': self.add_player,
-            'disconnect': None
+            'disconnect': None,
+            'load_data': self.load_data
         }
         handler = handlers[data['function']]
         if handler:
