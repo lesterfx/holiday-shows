@@ -97,6 +97,7 @@ class Remote_Server:
         print('kind:', kind)
         player_kind = PLAYER_KINDS(kind)
         player_globals = json.loads(data[1:])
+        print('Adding player', player_kind, 'with globals', player_globals)
 
         if player_kind == PLAYER_KINDS.MUSIC:
             from . import music_player
