@@ -28,7 +28,7 @@ class Holiday_Pixels(object):
         else:
             config = self.load_config()
             self.process_config(config)
-            self.init_strip()
+            self.init_home()
             try:
                 if self.args.demo:
                     self.demo(self.args.demo)
@@ -43,12 +43,8 @@ class Holiday_Pixels(object):
     def run_remote(self):
         remote_server.run_remote()
 
-    def init_strip(self):
-        try:
-            self.home = home.Home(self.globals)
-        except RuntimeError as err:
-            print(err)
-            return
+    def init_home(self):
+        self.home = home.Home(self.globals)
             
     def main(self):
         for event_start, event in self.iter():

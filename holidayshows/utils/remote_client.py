@@ -108,6 +108,6 @@ class Remote_Client:
 
     def add_player(self, kind, player_globals):
         if self.local:
-            raise NotImplementedError('cannot add player locally at this time')
+            self.players.add(kind, player_globals)
         else:
             self.send(b'add_player:' + struct.pack('b', int(kind)) + json.dumps(player_globals).encode())
