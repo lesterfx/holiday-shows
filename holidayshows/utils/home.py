@@ -28,7 +28,6 @@ class Home(object):
 
     def init_strips(self):
         print('Initializing Strips')
-        self.strips = {}
         for strip_config in self.globals['strips']:
             self.remote_clients[strip_config['name']].add_player(PLAYER_KINDS.STRIP, strip_config)
 

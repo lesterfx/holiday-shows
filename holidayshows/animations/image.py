@@ -72,7 +72,7 @@ class Animation(object):
                 wrap = options.get('wrap', False)
                 slice = self.slice_image(image_data, resource, start, end, wrap)
                 resource['data'][key] = slice
-                self.home.strips[key].load_image(index, slice)     # copy to other strip controller
+                self.home.remote_clients[key].load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'image_data': slice})
                 print(key, 'loaded')
 
             music = element.get('music')
