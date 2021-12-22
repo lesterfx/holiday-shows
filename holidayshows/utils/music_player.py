@@ -10,13 +10,15 @@ class Music_Player():
         self.config = config
         self.songs = {}  # a list, but populated out of order
 
-    def load(self, index, path):
-        if path is None:
+    def load_data(self, arguments):
+        index = arguments['index']
+        music = arguments['music']
+        if music is None:
             self.songs[index] = None
             return
-        if not os.path.exists(path):
-            raise OSError(f'song does not exist: {path}')
-        self.songs[index] = mixer.Sound(path)
+        if not os.path.exists(music):
+            raise OSError(f'music file does not exist: {music}')
+        self.songs[index] = mixer.Sound(music)
 
     def play(self, index, at):
         while time.time() < at + self.delay:

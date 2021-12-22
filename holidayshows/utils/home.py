@@ -24,7 +24,8 @@ class Home(object):
 
     def init_music_client(self):
         print('Initializing Music Client')
-        self.remote_clients[self.globals['music_server']].add_player(PLAYER_KINDS.MUSIC, None)
+        self.music_client = self.remote_clients[self.globals['music_server']]
+        self.music_client.add_player(PLAYER_KINDS.MUSIC, None)
 
     def init_strips(self):
         print('Initializing Strips')
@@ -63,8 +64,8 @@ class Home(object):
         return self
 
     def cleanup(self):
-        for strip in self.strips:
-            self.strips[strip].disconnect()
+        for client in self.remote_clients:
+            self.remote_clients[client].disconnect()
         self.clear_relays()
 
     def __exit__(self, *args, **kwargs):
