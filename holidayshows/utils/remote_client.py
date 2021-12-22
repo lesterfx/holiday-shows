@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 import json
 import time
 import socket
@@ -6,7 +6,9 @@ import struct
 
 from . import my_ip
 
-PLAYER_KINDS = Enum('MUSIC', 'STRIP')
+class PLAYER_KINDS(IntEnum):
+    MUSIC = 1
+    STRIP = 2
 
 
 class Remote_Client:
