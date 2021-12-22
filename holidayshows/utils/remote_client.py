@@ -89,7 +89,7 @@ class Remote_Client:
             if must_be_connected:
                 self.connect()
             else:
-                return expected_response or fallback_response
+                return {'response': expected_response or fallback_response}
         data = json.dumps({'function': function, 'arguments': arguments}).encode()
         print(f'server ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
@@ -99,6 +99,7 @@ class Remote_Client:
             if expected_response == -1:
                 return
             response = self.socket.recv(1024)
+            response = json.loads(response.decode())
             if expected_response is not None and response != expected_response:
                 raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
             return response
