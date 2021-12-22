@@ -60,8 +60,6 @@ class Home(object):
         return self
 
     def cleanup(self):
-        self.clear()
-        self.show()
         for strip in self.strips:
             self.strips[strip].disconnect()
         self.clear_relays()
