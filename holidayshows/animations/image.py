@@ -77,10 +77,6 @@ class Animation(object):
 
             music = element.get('music')
             if music:
-                if not os.path.exists(music):
-                    raise OSError('Music file not found:', music)
-                print('Loading music:', music)
-                # resource['sound'] = mixer.Sound(music)
                 self.home.music_client.load_data(players.PLAYER_KINDS.MUSIC, {'index': index, 'music': music})
                 resource['sound'] = True
                 self.resources_loaded.append(resource)
