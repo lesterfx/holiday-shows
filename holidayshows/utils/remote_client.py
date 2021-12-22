@@ -110,7 +110,7 @@ class Remote_Client:
 
     def load_data(self, kind, data):
         if self.local:
-            raise NotImplementedError('cannot add player locally at this time')
+            self.players.load_data(kind, data)
         else:
             self.send(function='load_data', arguments={'kind': int(kind), 'data': data})
 
