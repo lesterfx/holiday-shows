@@ -13,7 +13,7 @@ import traceback
 
 from holidayshows.utils import calendar_entry, home, remote_server, sun
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes'])
+GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes', 'music_server'])
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
@@ -145,12 +145,14 @@ class Holiday_Pixels(object):
         strips = self.process_strips(globals_['strips'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         remotes = self.process_remotes(globals_['remotes'])
+        music_server = globals_['music_server']
         self.globals = GlobalPrefs(
             relay_remotes=relay_remotes,
             relay_order=relay_order,
             strips=strips,
             relay_purposes = globals_['relay_purposes'],
-            remotes=remotes
+            remotes=remotes,
+            music_server=music_server
         )
 
     def process_remotes(self, remotes):
