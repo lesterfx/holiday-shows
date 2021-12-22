@@ -17,7 +17,7 @@ GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips
 StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
 SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
 RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
-StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
+StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
 class Holiday_Pixels(object):
     def __init__(self):
