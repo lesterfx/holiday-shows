@@ -61,7 +61,7 @@ class Animation(object):
                         relay_data = 'cycle'
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
-            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data})
+            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays']})
             print('Relays loaded')
             for key, options in element['slices'].items():
                 if key == 'relays':
@@ -196,7 +196,7 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
-            self.home.local_strip.player.relays = resource['relays']
+            # self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2
             players = []
             for remote in self.home.remote_clients.values():
