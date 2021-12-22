@@ -32,6 +32,7 @@ class Remote_Server:
 
     def listen(self):
         self.sock.listen(1)
+        print('Players:', self.players)
         print('waiting for connection')
         conn, addr = self.sock.accept()
         print('accepted connection from', addr)
