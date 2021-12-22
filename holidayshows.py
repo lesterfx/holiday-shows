@@ -13,11 +13,11 @@ import traceback
 
 from holidayshows.utils import calendar_entry, home, remote_server, sun
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes', 'music_server'])
-StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
-SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
-RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
-StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
+# GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes', 'music_server'])
+# StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
+# SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
+# RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
+# StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
 class Holiday_Pixels(object):
     def __init__(self):
@@ -146,14 +146,14 @@ class Holiday_Pixels(object):
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         remotes = self.process_remotes(globals_['remotes'])
         music_server = globals_['music_server']
-        self.globals = GlobalPrefs(
-            relay_remotes=relay_remotes,
-            relay_order=relay_order,
-            strips=strips,
-            relay_purposes = globals_['relay_purposes'],
-            remotes=remotes,
-            music_server=music_server
-        )
+        self.globals = {
+            'relay_remotes': relay_remotes,
+            'relay_order': relay_order,
+            'strips': strips,
+            'relay_purposes': globals_['relay_purposes'],
+            'remotes': remotes,
+            'music_server': music_server
+        }
 
     def process_remotes(self, remotes):
         ret = {}
@@ -162,23 +162,23 @@ class Holiday_Pixels(object):
         return ret
 
     def process_relay_remotes(self, remotes):
-        return {name: RelayRemotePrefs(name=name, ip=remote['ip'], port=remote['port'], relays=remote['relays']) for name, remote in remotes.items()}
+        return {name: {'name': name, 'ip': remote['ip'], 'port': remote['port'], 'relays': remote['relays']} for name, remote in remotes.items()}
 
     def process_strips(self, strips):
         processed_strips = []
         for name, strip in strips.items():
-            processed_strips.append(StripRemotePrefs(
-                name=name,
-                pin=strip['pin'],
-                pixel_order=strip['pixel_order'],
-                frequency=strip['frequency'],
-                dma=strip['dma'],
-                invert=strip['invert'],
-                pin_channel=strip['pin_channel'],
-                brightness=strip['brightness'],
-                length=strip['length'],
-                black=strip.get('black', [])
-            ))
+            processed_strips.append({
+                'name': name,
+                'pin': strip['pin'],
+                'pixel_order': strip['pixel_order'],
+                'frequency': strip['frequency'],
+                'dma': strip['dma'],
+                'invert': strip['invert'],
+                'pin_channel': strip['pin_channel'],
+                'brightness': strip['brightness'],
+                'length': strip['length'],
+                'black': strip.get('black', [])
+            })
         return processed_strips
 
     def process_strip(self, strip):
@@ -190,16 +190,16 @@ class Holiday_Pixels(object):
         invert = bool(strip['invert'])
         pin_channel = int(strip['pin_channel'])
         relay = strip['relay']
-        return StripPrefs(
-            pin=pin,
-            pixel_order=pixel_order,
-            brightness=brightness,
-            frequency=frequency,
-            dma=dma,
-            invert=invert,
-            pin_channel=pin_channel,
-            relay=relay
-        )
+        return {
+            'pin': pin,
+            'pixel_order': pixel_order,
+            'brightness': brightness,
+            'frequency': frequency,
+            'dma': dma,
+            'invert': invert,
+            'pin_channel': pin_channel,
+            'relay': relay
+        }
 
     def process_schedule(self, schedule):
         lat, lon = schedule['location']
@@ -222,7 +222,12 @@ class Holiday_Pixels(object):
         end_time = schedule['end_time']
         hour, minute = map(int, end_time.split(':'))
         end_time = datetime.time(hour, minute)
-        self.schedule = SchedulePrefs(location, start_time, sunset_offset, end_time)
+        self.schedule = {
+            'location': location,
+            'start_time': start_time,
+            'sunset_offset': sunset_offset,
+            'end_time': end_time
+        }
 
     def process_calendar(self, calendar):
         self.calendar = set()
