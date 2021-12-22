@@ -33,9 +33,8 @@ class Remote_Client:
         '''
         if self.ip:
             client_time = time.time()
-            packed = struct.pack('d', client_time)
-            response = self.send(b'synchronize:' + packed, fallback_response=packed)
-            server_time = struct.unpack('d', response)[0]
+            response = self.send(function='synchronize', arguments={'master_time': client_time})
+            server_time = response['response']
             self.time_offset = server_time - client_time
             if abs(self.time_offset) > .03:
                 print()
@@ -66,7 +65,7 @@ class Remote_Client:
 
     def disconnect(self):
         if self.connected:
-            self.send(b'disconnect', expected_response=-1)
+            self.send(function='disconnect', arguments=None, expected_response=-1)
             self.socket.close()
             self.connected = False
 
@@ -78,19 +77,20 @@ class Remote_Client:
         if self.local:
             raise NotImplementedError('cannot play locally at this time')
         else:
-            self.send(b'play:' + struct.pack('id', index, epoch), expected_response=-1)
+            self.send(function='play', arguments={'index': index, 'epoch': epoch}, expected_response=-1)
             self.disconnect()
     
     def get_response(self):
         if not self.local:
             return self.socket.recv(1024)
 
-    def send(self, data, expected_response=None, fallback_response=None, must_be_connected=True):
+    def send(self, function, arguments, expected_response=None, fallback_response=None, must_be_connected=True):
         if not self.connected:
             if must_be_connected:
                 self.connect()
             else:
                 return expected_response or fallback_response
+        data = json.dumps({'function': function, 'arguments': arguments}).encode()
         print(f'server ({self.ip}) sending {len(data)} bytes ({str(data)[:24]}...)')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
@@ -103,14 +103,14 @@ class Remote_Client:
                 raise ValueError(f'music server ({self.ip}) expected {expected_response} got {response}')
             return response
 
-    def load_data(self, kind, data_bytes):
+    def load_data(self, kind, data):
         if self.local:
             raise NotImplementedError('cannot add player locally at this time')
         else:
-            self.send(b'load_data:' + struct.pack('b', int(kind)) + data_bytes)
+            self.send(function='load_data', arguments={'kind': int(kind), 'data': data})
 
     def add_player(self, kind, player_globals):
         if self.local:
             self.players.add(kind, player_globals)
         else:
-            self.send(b'add_player:' + struct.pack('b', int(kind)) + json.dumps(player_globals).encode())
+            self.send(function='add_player', arguments={'kind':int(kind), 'player_globals': player_globals})

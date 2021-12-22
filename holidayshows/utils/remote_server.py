@@ -40,9 +40,6 @@ class Remote_Server:
             message = b''
             while len(message) < message_length:
                 message += conn.recv(message_length - len(message))
-            if message == b'disconnect':
-                print('disconnecting')
-                break
             response = self.handle(message)
             if response:
                 conn.sendall(response)
@@ -52,42 +49,41 @@ class Remote_Server:
         print('connection closed')
 
     def handle(self, data):
-        options = {
-            b'synchronize': self.synchronize,
-            b'play': self.play,
-            b'add_player': self.add_player
+        data = json.loads(data)
+        handlers = {
+            'synchronize': self.synchronize,
+            'play': self.play,
+            'add_player': self.add_player,
+            'disconnect': None
         }
-        for key in options:
-            if data.startswith(key + b':'):
-                handler = options[key]
-                response = handler(data[len(key)+1:])
-                print(f'successfully handled {key}. replying with:', response)
-                if key == b'play':
-                    return
-                return response
-        else:
-            raise NotImplementedError(data)
+        return handlers[data['function']](data['arguments'])
 
-    def synchronize(self, data):
-        master_time = struct.unpack('d', data)[0]
+    def synchronize(self, arguments):
+        master_time = arguments['master_time']
         my_time = time.time()
         self.time_offset = my_time - master_time
-        return struct.pack('d', my_time)
+        return {'response': my_time}
 
-    def play(self, data):
-        index, epoch = struct.unpack('id', data)
+    def play(self, arguments):
+        index = arguments['index']
+        epoch = arguments['epoch']
         print('\n'*4)
         print('received play request:', index, epoch)
         print('\n'*4)
         self.play_all(index, epoch + self.time_offset)
 
-    def add_player(self, data):
-        kind = struct.unpack('b', data[:1])[0]
+    def add_player(self, arguments):
+        kind = arguments['kind']
         player_kind = players.PLAYER_KINDS(kind)
-        player_globals = json.loads(data[1:])
+        player_globals = arguments['player_globals']
 
         self.players.add(player_kind, player_globals)
 
+    def load_data(self, arguments):
+        kind = arguments['kind']
+        player_kind = players.PLAYER_KINDS(kind)
+        data = arguments['data']
+        self.players.load_data(player_kind, data)
 
 def run_remote():
     print('Running Remote')

@@ -25,3 +25,6 @@ class Players(dict):
             self[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
         else:
             raise ValueError(f'Unknown player kind: {player_kind}')
+
+    def load_data(self, player_kind, data):
+        self[player_kind].load_data(data)
