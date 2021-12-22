@@ -6,6 +6,7 @@ import struct
 
 from . import my_ip, players
 
+ALLOW_ERRORS = False
 
 class Remote_Client:
     def __init__(self, config):
@@ -55,6 +56,8 @@ class Remote_Client:
                 self.socket.connect((self.ip, self.port))
             except (ConnectionRefusedError, socket.gaierror, OSError) as e:
                 print(f'error connecting to {self.ip}: {e}')
+                if not ALLOW_ERRORS:
+                    raise
             else:
                 print(f'connected to {self.ip}')
                 self.connected = True
