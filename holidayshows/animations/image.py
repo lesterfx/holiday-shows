@@ -8,7 +8,7 @@ import time
 from PIL import Image
 # from pygame import mixer really
 
-from ..utils import progress_bar
+from ..utils import progress_bar, players
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -61,7 +61,7 @@ class Animation(object):
                         relay_data = 'cycle'
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
-            self.home.local_client.load_relays(index, relay_data)
+            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data})
             print('Relays loaded')
             for key, options in element['slices'].items():
                 if key == 'relays':

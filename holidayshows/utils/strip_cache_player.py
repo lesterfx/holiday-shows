@@ -10,6 +10,15 @@ class Strip_Cache_Player():
         self.image_data = {}
         self.relay_data = {}
         
+    def load_data(self, arguments):
+        index = arguments['index']
+        if 'relay_data' in arguments:
+            self.load_relays(index, arguments['relay_data'])
+        elif 'image_data' in arguments:
+            self.load_image(index, arguments['image_data'])
+        else:
+            raise ValueError(f'unexpected arguments {arguments}')
+
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
 
@@ -39,7 +48,7 @@ class Strip_Cache_Player():
                 self.home.show_relays()
 
             # TODO: grow after epoch, shrink as we approach end_by
-            
+
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
                 self.strip[x] = color
