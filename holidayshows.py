@@ -53,7 +53,7 @@ class Holiday_Pixels(object):
     def main(self):
         for event_start, event in self.iter():
             print()
-            event_end = datetime.datetime.combine(event_start.date(), self.schedule.end_time)
+            event_end = datetime.datetime.combine(event_start.date(), self.schedule['end_time'])
             print(f'{event_start} starts {event}')
             self.run(event_start, 'blank')
             self.run(event_end, *event.animation)
@@ -92,14 +92,14 @@ class Holiday_Pixels(object):
                         time.sleep(10)
 
     def get_start_time(self, date):
-        if self.schedule.start_time:
-            return datetime.datetime.combine(date, self.schedule.start_time)
+        if self.schedule['start_time']:
+            return datetime.datetime.combine(date, self.schedule['start_time'])
         else:
-            return datetime.datetime.combine(date, self.get_sunset(date)) + self.schedule.sunset_offset
+            return datetime.datetime.combine(date, self.get_sunset(date)) + self.schedule['sunset_offset']
 
     def get_sunset(self, date):
         utc_date = self.utc_time_from_local_time(date)
-        sunset = self.sun.getSunsetTime(self.schedule.location, utc_date=utc_date)
+        sunset = self.sun.getSunsetTime(self.schedule['location'], utc_date=utc_date)
         hour = sunset['hr']
         minute = sunset['min']
         hour, minute = divmod(sunset['decimal'], 1)
