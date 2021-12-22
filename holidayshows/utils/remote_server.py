@@ -98,10 +98,10 @@ class Remote_Server:
         player_kind = PLAYER_KINDS(kind)
         player_globals = json.loads(data[1:])
 
-        if player_kind == PLAYER_KINDS.music:
+        if player_kind == PLAYER_KINDS.MUSIC:
             from . import music_player
             self.players.append(music_player.Music_Player(player_globals))
-        elif player_kind == PLAYER_KINDS.strip:
+        elif player_kind == PLAYER_KINDS.STRIP:
             from . import strip_cache_player
             self.players.append(strip_cache_player.Strip_Cache_Player(player_globals))
         else:
