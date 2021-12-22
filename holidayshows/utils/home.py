@@ -11,7 +11,7 @@ class Home(object):
     def __init__(self, globals_):
         self.globals = globals_
         self.init_relays()
-        self.init_remotes()
+        self.init_remote_clients()
         self.init_music_client()
         self.init_strips()
         self.clear()
