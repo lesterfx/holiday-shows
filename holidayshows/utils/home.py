@@ -16,7 +16,10 @@ class Home(object):
         print('Initializing Remotes')
         self.remote_clients = {}
         for name, config in self.globals['remotes'].items():
-            self.remote_clients[name] = remote_client.Remote_Client(config)
+            client = remote_client.Remote_Client(config)
+            self.remote_clients[name] = client
+            if client.local:
+                self.local_client = client
 
     def init_music_client(self):
         print('Initializing Music Client')

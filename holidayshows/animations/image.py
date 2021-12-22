@@ -61,7 +61,7 @@ class Animation(object):
                         relay_data = 'cycle'
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
-            self.home.local_strip.load_relays(index, relay_data)
+            self.home.local_client.load_relays(index, relay_data)
             print('Relays loaded')
             for key, options in element['slices'].items():
                 if key == 'relays':

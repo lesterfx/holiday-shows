@@ -17,8 +17,10 @@ class Remote_Client:
         print('configuring client for remote:', config)
         self.ip = config['ip']
         self.port = config['port']
+        self.local = False
         if self.ip == my_ip.MY_IP:
             self.ip = None
+            self.local = True
 
         self.connected = False
         self.connect()
