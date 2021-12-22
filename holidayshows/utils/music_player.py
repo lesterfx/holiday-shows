@@ -4,9 +4,10 @@ import time
 from pygame import mixer
 
 class Music_Player():
-    def __init__(self):
+    def __init__(self, config):
         mixer.init()
         self.delay = 0
+        self.config = config
         self.songs = {}  # a list, but populated out of order
 
     def load(self, index, path):
