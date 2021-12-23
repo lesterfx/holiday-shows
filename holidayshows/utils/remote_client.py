@@ -22,8 +22,6 @@ class Remote_Client:
             self.players = players.Players()
 
         self.connected = False
-        self.connect()
-        self.synchronize()
 
     def __del__(self):
         self.disconnect()
@@ -63,6 +61,7 @@ class Remote_Client:
             else:
                 print(f'connected to {self.name}')
                 self.connected = True
+            self.synchronize()
         else:
             print(f'server runs locally')
 
@@ -81,26 +80,23 @@ class Remote_Client:
         if self.local:
             yield from self.players.play_all(arguments)
         else:
-            self.send(function='play', arguments=arguments, expected_response=-1)
+            self.send(function='play', arguments=arguments, expected_response=False)
             self.disconnect()
     
     def get_response(self):
         if not self.local:
             return self.socket.recv(1024)
 
-    def send(self, function, arguments, expected_response=None, fallback_response=None, must_be_connected=True):
+    def send(self, function, arguments, expected_response=False):
         if not self.connected:
-            if must_be_connected:
-                self.connect()
-            else:
-                return {'response': expected_response or fallback_response}
+            self.connect()
         data = json.dumps({'function': function, 'arguments': arguments}).encode()
         print(f'{self.name}: {function}')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
             self.socket.sendall(data)
             time.sleep(0.1)
-            if expected_response == -1:
+            if expected_response == False:
                 return
             response = self.socket.recv(1024)
             response = json.loads(response.decode())
