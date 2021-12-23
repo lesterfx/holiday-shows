@@ -32,7 +32,7 @@ class Remote_Server:
         conn, addr = self.sock.accept()
         print('accepted connection from', addr)
         while 1:
-            print(f'command:', end=' ')
+            print(f'command:', end=' ', flush=True)
             message = b''
             while len(message) < 8:
                 message += conn.recv(8 - len(message))
@@ -78,9 +78,12 @@ class Remote_Server:
         print('received play request:', arguments)
         print('\n'*4)
         iter = self.players.play_all(arguments)
-        while True:
-            print('waiting')
-            print(next(iter))
+        try:
+            while True:
+                print('waiting')
+                print(next(iter))
+        except StopIteration:
+            print('StopIteration')
 
     def add_player(self, arguments):
         kind = arguments['kind']
