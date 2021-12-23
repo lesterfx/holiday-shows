@@ -20,7 +20,7 @@ class Remote_Client:
             self.ip = None
             self.local = True
             self.players = players.Players()
-
+        self.players_added = False
         self.connected = False
 
     def __del__(self):
