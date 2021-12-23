@@ -77,8 +77,10 @@ class Remote_Server:
         print('\n'*4)
         print('received play request:', arguments)
         print('\n'*4)
-        for _ in self.players.play_all(arguments):
-            pass
+        iter = self.players.play_all(arguments)
+        while True:
+            print('waiting')
+            print(next(iter))
 
     def add_player(self, arguments):
         kind = arguments['kind']
