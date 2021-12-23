@@ -17,6 +17,7 @@ class Players(dict):
                     still_going = True
                 except StopIteration:
                     pass
+            yield
             if not still_going:
                 break
         print(f'all {len(players)} players finished')
