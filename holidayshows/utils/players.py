@@ -27,8 +27,8 @@ class Players(dict):
             from . import music_player
             self[PLAYER_KINDS.MUSIC] = music_player.Music_Player(player_globals)
         elif player_kind == PLAYER_KINDS.STRIP:
-            from . import strip_cache_player
-            self[PLAYER_KINDS.STRIP] = strip_cache_player.Strip_Cache_Player(player_globals)
+            from . import strip_player
+            self[PLAYER_KINDS.STRIP] = strip_player.Strip_Player(player_globals)
         else:
             raise ValueError(f'Unknown player kind: {player_kind}')
 
