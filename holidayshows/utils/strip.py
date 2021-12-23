@@ -43,7 +43,7 @@ class Strip:
         invert = strip_prefs['invert']
         brightness = strip_prefs['brightness']
         pin_channel = strip_prefs['pin_channel']
-        self.blacks = Blacks(strip_prefs['blacks'])
+        self.blacks = Blacks(strip_prefs['black'])
 
         self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
