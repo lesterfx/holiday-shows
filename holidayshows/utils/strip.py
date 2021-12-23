@@ -13,12 +13,12 @@ class Blacks:
         for black in blacks_prefs:
             self.ranges.append(range(black[0], black[1]))
         self.ranges.sort(key=lambda x:x.start)
-        previous_end = None
+        previous_stop = None
         self.longest_range = 0
         for black_range in self.ranges:
-            if previous_end:
-                self.longest_span = max(self.longest_span, black_range.start - previous_end)
-            previous_end = black_range.end
+            if previous_stop:
+                self.longest_span = max(self.longest_span, black_range.start - previous_stop)
+            previous_stop = black_range.stop
         print('longest span:', self.longest_span)
 
     def scale(self, x=0):
