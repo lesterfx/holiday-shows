@@ -9,12 +9,16 @@ class Players(dict):
         players = []
         for player in self.values():
             players.append(player.play(arguments))
-        for player in players:
-            yield
-            try:
-                next(player)
-            except StopIteration:
-                pass
+        while True:
+            still_going = False
+            for player in players:
+                try:
+                    next(player)
+                    still_going = True
+                except StopIteration:
+                    pass
+            if not still_going:
+                break
         print(f'all {len(players)} players finished')
 
     def add(self, player_kind, player_globals):

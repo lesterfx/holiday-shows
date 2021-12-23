@@ -42,8 +42,9 @@ class Strip_Cache_Player():
             print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
 
         abs_y = 0
-        if epoch and epoch > time.time():
-            time.sleep(epoch - time.time())
+        while epoch and epoch > time.time():
+            time.sleep(0.001)
+            yield 'waiting for start time'
         while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
             y = abs_y % height
 
@@ -66,7 +67,7 @@ class Strip_Cache_Player():
             self.strip.show()
 
             while True:
-                yield
+                yield y / height
                 previous_y = abs_y
                 abs_y = int((time.time() - epoch) * fps)
                 if abs_y != previous_y:

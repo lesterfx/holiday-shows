@@ -193,14 +193,14 @@ class Animation(object):
             for remote in self.home.remote_clients.values():
                 players.append(remote.play(resource['index'], repeat, end_by_float, epoch, resource['fps']))
             while True:
+                still_going = False
                 for player in players:
-                    any_still_playing = False
                     try:
                         next(player)
-                        any_still_playing = True
+                        still_going = True
                     except StopIteration:
                         pass
-                if not any_still_playing:
+                if not still_going:
                     break
         #     for key in resource['data']:
         #         strip = self.home.strips[key]
