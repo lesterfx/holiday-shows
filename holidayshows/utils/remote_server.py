@@ -32,7 +32,7 @@ class Remote_Server:
         conn, addr = self.sock.accept()
         print('accepted connection from', addr)
         while 1:
-            print(f'Waiting for message from {addr}')
+            print(f'command:', end=' ')
             message = b''
             while len(message) < 8:
                 message += conn.recv(8 - len(message))

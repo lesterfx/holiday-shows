@@ -1,3 +1,4 @@
+from collections import defaultdict
 import os
 import time
 
@@ -8,7 +9,7 @@ class Music_Player():
         mixer.init()
         self.delay = 0
         self.config = config
-        self.songs = {}  # a list, but populated out of order
+        self.songs = defaultdict(lambda: None)
 
     def load_data(self, arguments):
         index = arguments['index']
