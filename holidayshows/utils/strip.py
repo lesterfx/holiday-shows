@@ -14,6 +14,7 @@ class Blacks:
             self.ranges.append(range(black[0], black[1]))
         self.ranges.sort(key=lambda x:x.start)
         previous_end = None
+        self.longest_range = 0
         for black_range in self.ranges:
             if previous_end:
                 self.longest_span = max(self.longest_span, black_range.start - previous_end)
