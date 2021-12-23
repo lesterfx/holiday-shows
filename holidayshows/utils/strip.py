@@ -25,9 +25,9 @@ class Blacks:
 
     def scale(self, x=0):
         '''
-        expand the blacks such that at 1 it's all black, and at 0 it's all default
+        expand the blacks such that at 0 it's all black, and at 1 it's all default
         '''
-        x = max(min(x, 1), 0)
+        x = max(min(1-x, 1), 0)
         delta = int(self.longest_span / 2 * x)
         # print(' scale is', x, 'with delta', delta)
         for i, old_range in enumerate(self.original_ranges):
