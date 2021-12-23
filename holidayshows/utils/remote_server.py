@@ -75,13 +75,13 @@ class Remote_Server:
                 raise KeyError(key)
         arguments['epoch'] += self.time_offset
         arguments['end_by'] += self.time_offset
-        print('\n'*4)
+        print('\n'*2)
         print('received play request:', arguments)
-        print('\n'*4)
+        print('\n'*2)
         iter = self.players.play_all(arguments)
         try:
             while True:
-                print('\r', next(iter), end='')
+                print('\r', str(next(iter)).ljust(50), end='')
         except StopIteration:
             pass
 

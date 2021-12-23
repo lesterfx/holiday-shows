@@ -195,7 +195,7 @@ class Animation(object):
                 still_going = False
                 for player in players:
                     try:
-                        print('\r', next(player), end='')
+                        print('\r', next(player).ljust(50), end='')
                         still_going = True
                     except StopIteration:
                         pass

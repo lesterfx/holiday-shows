@@ -4,7 +4,7 @@ import time
 
 from ..utils import strip
 
-class Strip_Cache_Player():
+class Strip_Player():
     def __init__(self, config):
         self.strip = strip.Strip(config)
         self.image_data = {}
@@ -36,10 +36,12 @@ class Strip_Cache_Player():
         fps = arguments['fps']
 
         height = len(self.image_data[index])
+        print('\n')
         if repeat:
             print(f'playing at {fps} fps {repeat} times, starting at {datetime.fromtimestamp(epoch)} and ending at {datetime.fromtimestamp(epoch + height * fps)}')
         else:
             print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
+        print('\n')
 
         abs_y = 0
         now = time.time()
