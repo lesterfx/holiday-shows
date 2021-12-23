@@ -43,32 +43,37 @@ class Strip_Player():
             print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
         print('\n')
 
+        FADE_IN_SECONDS = 30
+        FADE_OUT_SECONDS = 60
         abs_y = 0
         now = time.time()
         while epoch and epoch > now:
             time.sleep(0.001)
             yield 'waiting for start time'
             now = time.time()
+        self.strip.blacks.scale()
         while (repeat and (abs_y < height * repeat)) or (not repeat and now < end_by):
             y = abs_y % height
 
+            fade_in = abs_y / fps / FADE_IN_SECONDS
+            fade_out = (end_by - now) / FADE_OUT_SECONDS
+            fade = min(fade_in, fade_out)
+            if repeat == 0:
+                self.strip.blacks.scale(fade)
+
             if self.relay_data[index]:
                 if self.relay_data[index] == 'cycle':
-                    for x, name in enumerate(self.relays[index]):
-                        self.home.relays[name].set((abs_y//fps) % len(self.relays) != x)
+                    for i, name in enumerate(self.relays[index]):
+                        if i / len(self.relays) > fade:
+                            on = False
+                        else:
+                            on = (abs_y//fps) % len(self.relays) != i
+                        self.home.relays[name].set(on)
                 else:
                     relay_row = self.relay_data[index][y]
                     for x, name in enumerate(self.relays[index]):
                         self.home.relays[name].set(relay_row[x])
                 self.home.show_relays()
-
-            if repeat == 0:
-                if abs_y / fps / 30 < 1:
-                    self.strip.blacks.scale(abs_y / fps / 30)
-                elif end_by - now < 60:
-                    self.strip.blacks.scale((end_by - now) / 60)
-                else:
-                    self.strip.blacks.scale()
 
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
@@ -84,7 +89,7 @@ class Strip_Player():
                 if abs_y != previous_y:
                     break
 
-        self.strip.blacks.scale(0)
+        self.strip.blacks.scale()
 
         print('image complete')
         self.strip.clear(True)
