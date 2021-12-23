@@ -30,6 +30,7 @@ class Remote_Client:
         '''
         sends time to remote and gets time back. offset is stored on remote, but printed here too
         '''
+        assert self.connected
         if self.ip:
             client_time = time.time()
             response = self.send(function='synchronize', arguments={'master_time': client_time})
@@ -61,7 +62,7 @@ class Remote_Client:
             else:
                 print(f'connected to {self.name}')
                 self.connected = True
-            self.synchronize()
+                self.synchronize()
         else:
             print(f'server runs locally')
 
