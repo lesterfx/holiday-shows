@@ -81,7 +81,8 @@ class Strip:
         )
 
     def __setitem__(self, x, rgb):
-        if x in self.blacks: return
+        if x in self.blacks: 
+            rgb = 0
         if rgb:
             value = self.map(*rgb)
         else:
