@@ -27,11 +27,13 @@ class Music_Player():
         end_by = arguments['end_by']
         epoch = arguments['epoch']
         fps = arguments['fps']
-        while time.time() < epoch + self.delay:
-            time.sleep(0.001)
-            yield
+
         song = self.songs[index]
         if song:
+            while time.time() < epoch + self.delay:
+                time.sleep(0.001)
+                print('steady...')
+                yield
             song.play()
             print('song playing')
         else:

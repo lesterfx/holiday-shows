@@ -15,6 +15,7 @@ class Players(dict):
                 next(player)
             except StopIteration:
                 pass
+        print(f'all {len(players)} players finished')
 
     def add(self, player_kind, player_globals):
         print('Adding player', player_kind, 'with globals', player_globals)

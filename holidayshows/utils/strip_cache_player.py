@@ -40,6 +40,7 @@ class Strip_Cache_Player():
             print(f'playing at {fps} fps {repeat} times, starting at {datetime.fromtimestamp(epoch)} and ending at {datetime.fromtimestamp(epoch + height * fps)}')
         else:
             print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
+
         abs_y = 0
         if epoch and epoch > time.time():
             time.sleep(epoch - time.time())

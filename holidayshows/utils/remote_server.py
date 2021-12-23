@@ -77,7 +77,8 @@ class Remote_Server:
         print('\n'*4)
         print('received play request:', arguments)
         print('\n'*4)
-        self.players.play_all(arguments)
+        for _ in self.players.play_all(arguments):
+            pass
 
     def add_player(self, arguments):
         kind = arguments['kind']
