@@ -5,7 +5,7 @@
                 "ip": "192.168.3.209",
                 "port": 2700
             },
-            "first_floor": {
+            "downstairs": {
                 "ip": "192.168.3.201",
                 "port": 2700
             },
@@ -14,7 +14,7 @@
                 "port": 2700
             }
         },
-        "music_server": "laptop",
+        "music_server": "downstairs",
         "strips": {
             "upstairs": {
                 "pin": 18,
@@ -31,7 +31,7 @@
                     [355, 360]
                 ]
             },
-            "first_floor": {
+            "downstairs": {
                 "pin": 18,
                 "pixel_order": "RGB",
                 "frequency": 800000,
@@ -282,7 +282,7 @@
                     "fps": 24,
                     "loop": true,
                     "slices": {
-                        "first_floor": {
+                        "downstairs": {
                             "start": 0,
                             "end": 449,
                             "wrap": true
@@ -319,7 +319,7 @@
                     "music": "~/xmas-songs/sugarplum.mp3",
                     "fps": 24,
                     "slices": {
-                        "first_floor": {
+                        "downstairs": {
                             "start": 18,
                             "end": 467
                         },
@@ -357,7 +357,7 @@
                     "music": "~/xmas-songs/sarajevo.mp3",
                     "fps": 24,
                     "slices": {
-                        "first_floor": {
+                        "downstairs": {
                             "start": 17,
                             "end": 467
                         },

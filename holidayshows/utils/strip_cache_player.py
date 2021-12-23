@@ -67,7 +67,7 @@ class Strip_Cache_Player():
             self.strip.show()
 
             while True:
-                yield 'play in progress:', y / height
+                yield f'play in progress: {y / height:.0%}'
                 previous_y = abs_y
                 abs_y = int((time.time() - epoch) * fps)
                 if abs_y != previous_y:

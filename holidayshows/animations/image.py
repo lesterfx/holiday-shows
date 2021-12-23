@@ -187,7 +187,6 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
-            # self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2
             players = []
             for remote in self.home.remote_clients.values():
@@ -196,29 +195,11 @@ class Animation(object):
                 still_going = False
                 for player in players:
                     try:
-                        next(player)
+                        print('\r', next(player))
                         still_going = True
                     except StopIteration:
                         pass
                 if not still_going:
                     break
-        #     for key in resource['data']:
-        #         strip = self.home.strips[key]
-        #         if strip.ip:
-        #             print('sending play command')
-        #             strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
-        #             print('sent!')
-        #     print('\n'*4)
-        #     print('telling music to play index', resource['index'], 'at', epoch)
-        #     self.home.music_client.play(resource['index'], epoch)
-        #     print('\n'*4)
-        #     now = time.time()
-        #     if now < epoch:
-        #         time.sleep(epoch - now)
-        #     if resource.get('sound'):
-        #         # resource['sound'].play()
-        #         pass
-
-        # self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
 
         print('image complete')

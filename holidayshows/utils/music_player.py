@@ -35,9 +35,9 @@ class Music_Player():
                 time.sleep(0.001)
                 yield 'waiting for start time'
             song.play()
-            print('song playing')
+            yield 'song playing'
         else:
-            print('no song to play')
+            yield 'no song to play'
 
     def stop(self):
         mixer.stop()
