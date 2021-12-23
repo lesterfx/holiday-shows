@@ -8,7 +8,7 @@ import time
 from PIL import Image
 # from pygame import mixer really
 
-from ..utils import progress_bar
+from ..utils import progress_bar, players
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
@@ -16,9 +16,6 @@ class Animation(object):
         self.home = home
         self.globals = globals_
         self.settings = settings
-        prep_path = os.path.join(os.path.dirname(__file__), '..', 'utils', 'prepare_speakers.mp3')
-        prep_path = os.path.realpath(prep_path)
-        # self.prepare_speakers = mixer.Sound(prep_path)
 
     def __str__(self):
         return 'Image'
@@ -43,10 +40,10 @@ class Animation(object):
             if 'variations' in self.settings:
                 path = path.format(random.randint(1, self.settings['variations']))
             print()
-            print('Loading image:', path, end='... ')
+            print(os.path.basename(path), end=' ')
             image = Image.open(path)
             image_data = image.getdata()
-            print('done')
+            print('loaded')
             resource['width'] = image.width
             resource['height'] = image.height
 
@@ -61,26 +58,20 @@ class Animation(object):
                         relay_data = 'cycle'
                 else:
                     relay_data = self.slice_image(image_data, resource, start, end, False, True)
-            self.home.local_strip.load_relays(index, relay_data)
-            print('Relays loaded')
+            self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays'], 'home': self.home})
             for key, options in element['slices'].items():
                 if key == 'relays':
                     continue
-                print(key, "processing")
                 start = options['start']
                 end = options['end']
                 wrap = options.get('wrap', False)
                 slice = self.slice_image(image_data, resource, start, end, wrap)
                 resource['data'][key] = slice
-                self.home.strips[key].load_image(index, slice)     # copy to other strip controller
-                print(key, 'loaded')
+                self.home.remote_clients[key].load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'image_data': slice})
 
             music = element.get('music')
             if music:
-                if not os.path.exists(music):
-                    raise OSError('Music file not found:', music)
-                print('Loading music:', music)
-                # resource['sound'] = mixer.Sound(music)
+                self.home.music_client.load_data(players.PLAYER_KINDS.MUSIC, {'index': index, 'music': music})
                 resource['sound'] = True
                 self.resources_loaded.append(resource)
             else:
@@ -154,8 +145,6 @@ class Animation(object):
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
-        print('slicing image from', start, 'to', end)
-        print('image dimensions', resource['width'], 'x', resource['height'])
         image_slice = []
         if is_relays and end == 'auto':
             end = len(resource['relays'])
@@ -180,8 +169,6 @@ class Animation(object):
 
     def present(self, resource, end_by, epoch=None):
         end_by_float = end_by.timestamp()
-        self.home.clear()
-        self.home.show()
         self.home.show_relays()
 
         repeat = self.repeat
@@ -189,7 +176,6 @@ class Animation(object):
             repeat = 0
         countdown = self.settings.get('countdown', 0)
         if countdown > 3:
-            self.prepare_speakers.play()
             for i in range(countdown -2):
                 print(countdown-i)
                 time.sleep(1)
@@ -201,25 +187,19 @@ class Animation(object):
             else:
                 print('not early. late by', early, 'seconds')
         else:
-            self.home.local_strip.player.relays = resource['relays']
             epoch = time.time() + 2
-            for key in resource['data']:
-                strip = self.home.strips[key]
-                if strip.ip:
-                    print('sending play command')
-                    strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
-                    print('sent!')
-            print('\n'*4)
-            print('telling music to play index', resource['index'], 'at', epoch)
-            self.home.music_client.play(resource['index'], epoch)
-            print('\n'*4)
-            now = time.time()
-            if now < epoch:
-                time.sleep(epoch - now)
-            if resource.get('sound'):
-                # resource['sound'].play()
-                pass
-
-        self.home.local_strip.play(resource['index'], repeat, end_by_float, epoch, resource['fps'])
+            players = []
+            for remote in self.home.remote_clients.values():
+                players.append(remote.play(resource['index'], repeat, end_by_float, epoch, resource['fps']))
+            while True:
+                still_going = False
+                for player in players:
+                    try:
+                        print('\r', next(player).ljust(50), end='')
+                        still_going = True
+                    except StopIteration:
+                        pass
+                if not still_going:
+                    break
 
         print('image complete')

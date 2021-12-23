@@ -20,10 +20,6 @@ class Animation(object):
 
     def main(self, end_by):
         while datetime.datetime.now() < end_by:
-
-            self.home.clear()
-            self.home.show()
-
             for group, value in self.relay_group_values.items():
                 for relay in self.home.relay_groups[group]:
                     relay.set(value)

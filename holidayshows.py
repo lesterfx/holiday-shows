@@ -11,13 +11,13 @@ import sys
 import time
 import traceback
 
-from holidayshows.utils import calendar_entry, home, music_server, strip_remote_server, sun
+from holidayshows.utils import calendar_entry, home, remote_server, sun
 
-GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'music_server', 'relay_purposes'])
-StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
-SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
-RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
-StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'ip', 'port', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
+# GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes', 'music_server'])
+# StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
+# SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
+# RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
+# StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
 
 class Holiday_Pixels(object):
     def __init__(self):
@@ -25,12 +25,10 @@ class Holiday_Pixels(object):
         self.load_args()
         if self.args.remote:
             self.run_remote()
-        elif self.args.music_remote:
-            self.run_music_server()
         else:
             config = self.load_config()
             self.process_config(config)
-            self.init_strip()
+            self.init_home()
             try:
                 if self.args.demo:
                     self.demo(self.args.demo)
@@ -40,25 +38,18 @@ class Holiday_Pixels(object):
                 pass
             finally:
                 print('cleaning up')
-                self.strip.cleanup()
+                self.home.cleanup()
 
     def run_remote(self):
-        strip_remote_server.run_remote(StripRemotePrefs)
+        remote_server.run_remote()
 
-    def run_music_server(self):
-        music_server.run_remote()
-
-    def init_strip(self):
-        try:
-            self.strip = home.Home(self.globals)
-        except RuntimeError as err:
-            print(err)
-            return
+    def init_home(self):
+        self.home = home.Home(self.globals)
             
     def main(self):
         for event_start, event in self.iter():
             print()
-            event_end = datetime.datetime.combine(event_start.date(), self.schedule.end_time)
+            event_end = datetime.datetime.combine(event_start.date(), self.schedule['end_time'])
             print(f'{event_start} starts {event}')
             self.run(event_start, 'blank')
             self.run(event_end, *event.animation)
@@ -69,13 +60,13 @@ class Holiday_Pixels(object):
             until = datetime.datetime.now().replace(hour=hour, minute=minute, second=0, microsecond=0)
         else:
             if not self.args.minutes and not self.args.seconds:
-                self.args.minutes = 1
+                self.args.minutes = 10
             until = datetime.datetime.now() + datetime.timedelta(minutes=self.args.minutes, seconds=self.args.seconds)
         self.run(until, *animation)
 
     def run(self, until, *animation_names):
         animations = []
-        with self.strip as home:
+        with self.home as home:
             for animation in animation_names:
                 settings = self.animations.get(animation, {})
                 animation = settings.get('module', animation)
@@ -86,25 +77,18 @@ class Holiday_Pixels(object):
             while datetime.datetime.now() < until:
                 for animation in animations:
                     print(f'{until} ends {animation}')
-                    try:
-                        animation.main(until)
-                        print()
-                    except KeyboardInterrupt:
-                        raise
-                    except:
-                        print(traceback.format_exc())
-                        print('Continuing in 10 seconds...')
-                        time.sleep(10)
+                    animation.main(until)
+                    print()
 
     def get_start_time(self, date):
-        if self.schedule.start_time:
-            return datetime.datetime.combine(date, self.schedule.start_time)
+        if self.schedule['start_time']:
+            return datetime.datetime.combine(date, self.schedule['start_time'])
         else:
-            return datetime.datetime.combine(date, self.get_sunset(date)) + self.schedule.sunset_offset
+            return datetime.datetime.combine(date, self.get_sunset(date)) + self.schedule['sunset_offset']
 
     def get_sunset(self, date):
         utc_date = self.utc_time_from_local_time(date)
-        sunset = self.sun.getSunsetTime(self.schedule.location, utc_date=utc_date)
+        sunset = self.sun.getSunsetTime(self.schedule['location'], utc_date=utc_date)
         hour = sunset['hr']
         minute = sunset['min']
         hour, minute = divmod(sunset['decimal'], 1)
@@ -148,43 +132,43 @@ class Holiday_Pixels(object):
             globals_['relays'] = []
         relay_order = globals_['relay_order']
         strips = self.process_strips(globals_['strips'])
-        music_server = self.process_music_server(globals_['music_server'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
-        self.globals = GlobalPrefs(
-            relay_remotes=relay_remotes,
-            relay_order=relay_order,
-            strips=strips,
-            music_server=music_server,
-            relay_purposes = globals_['relay_purposes']
-        )
+        remotes = self.process_remotes(globals_['remotes'])
+        music_server = globals_['music_server']
+        self.globals = {
+            'relay_remotes': relay_remotes,
+            'relay_order': relay_order,
+            'strips': strips,
+            'relay_purposes': globals_['relay_purposes'],
+            'remotes': remotes,
+            'music_server': music_server
+        }
+
+    def process_remotes(self, remotes):
+        ret = {}
+        for name, config in remotes.items():
+            ret[name] = {'ip': config['ip'], 'port': config['port']}
+        return ret
 
     def process_relay_remotes(self, remotes):
-        return {name: RelayRemotePrefs(name=name, ip=remote['ip'], port=remote['port'], relays=remote['relays']) for name, remote in remotes.items()}
+        return {name: {'name': name, 'ip': remote['ip'], 'port': remote['port'], 'relays': remote['relays']} for name, remote in remotes.items()}
 
     def process_strips(self, strips):
         processed_strips = []
         for name, strip in strips.items():
-            processed_strips.append(StripRemotePrefs(
-                name=name,
-                ip=strip['ip'],
-                port=strip['port'],
-                pin=strip['pin'],
-                pixel_order=strip['pixel_order'],
-                frequency=strip['frequency'],
-                dma=strip['dma'],
-                invert=strip['invert'],
-                pin_channel=strip['pin_channel'],
-                brightness=strip['brightness'],
-                length=strip['length'],
-                black=strip.get('black', [])
-            ))
+            processed_strips.append({
+                'name': name,
+                'pin': strip['pin'],
+                'pixel_order': strip['pixel_order'],
+                'frequency': strip['frequency'],
+                'dma': strip['dma'],
+                'invert': strip['invert'],
+                'pin_channel': strip['pin_channel'],
+                'brightness': strip['brightness'],
+                'length': strip['length'],
+                'black': strip.get('black', [])
+            })
         return processed_strips
-
-    def process_music_server(self, config):
-        server = {}
-        server['ip'] = config['ip']
-        server['port'] = config['port']
-        return server
 
     def process_strip(self, strip):
         pin = int(strip['pin'])
@@ -195,16 +179,16 @@ class Holiday_Pixels(object):
         invert = bool(strip['invert'])
         pin_channel = int(strip['pin_channel'])
         relay = strip['relay']
-        return StripPrefs(
-            pin=pin,
-            pixel_order=pixel_order,
-            brightness=brightness,
-            frequency=frequency,
-            dma=dma,
-            invert=invert,
-            pin_channel=pin_channel,
-            relay=relay
-        )
+        return {
+            'pin': pin,
+            'pixel_order': pixel_order,
+            'brightness': brightness,
+            'frequency': frequency,
+            'dma': dma,
+            'invert': invert,
+            'pin_channel': pin_channel,
+            'relay': relay
+        }
 
     def process_schedule(self, schedule):
         lat, lon = schedule['location']
@@ -227,7 +211,12 @@ class Holiday_Pixels(object):
         end_time = schedule['end_time']
         hour, minute = map(int, end_time.split(':'))
         end_time = datetime.time(hour, minute)
-        self.schedule = SchedulePrefs(location, start_time, sunset_offset, end_time)
+        self.schedule = {
+            'location': location,
+            'start_time': start_time,
+            'sunset_offset': sunset_offset,
+            'end_time': end_time
+        }
 
     def process_calendar(self, calendar):
         self.calendar = set()
