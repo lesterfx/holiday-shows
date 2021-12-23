@@ -55,9 +55,9 @@ class Strip_Player():
         while (repeat and (abs_y < height * repeat)) or (not repeat and now < end_by):
             y = abs_y % height
 
-            fade_in = abs_y / fps / FADE_IN_SECONDS
+            fade_in = (now - epoch) / FADE_IN_SECONDS
             fade_out = (end_by - now) / FADE_OUT_SECONDS
-            fade = min(fade_in, fade_out)
+            fade = min(fade_in, fade_out, 1)
             if repeat == 0:
                 self.strip.blacks.scale(fade)
 
@@ -66,9 +66,11 @@ class Strip_Player():
                     for i, name in enumerate(self.relays[index]):
                         if i / len(self.relays) > fade:
                             on = False
+                            print(f'{name}', end=' ')
                         else:
                             on = (abs_y//fps) % len(self.relays) != i
                         self.home.relays[name].set(on)
+                    print()
                 else:
                     relay_row = self.relay_data[index][y]
                     for x, name in enumerate(self.relays[index]):
