@@ -28,8 +28,8 @@ class Blacks:
         expand the blacks such that at 1 it's all black, and at 0 it's all default
         '''
         x = max(min(x, 1), 0)
-        delta = int(self.longest_span * x)
-        print(' scale is', x, 'with delta', delta)
+        delta = int(self.longest_span / 2 * x)
+        # print(' scale is', x, 'with delta', delta)
         for i, old_range in enumerate(self.original_ranges):
             self.ranges[i] = range(old_range.start-delta, old_range.stop+delta)
 

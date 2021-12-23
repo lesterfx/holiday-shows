@@ -61,10 +61,13 @@ class Strip_Cache_Player():
                 self.home.show_relays()
 
             if repeat == 0:
-                if end_by - now < 60:
-                    self.strip.blacks.scale((end_by - now) / 60)
-                elif abs_y / fps < 60:
+                if abs_y / fps / 60 < 1:
+                    print(f' {abs_y} / {fps} / 60 = {abs_y / fps / 60}')
                     self.strip.blacks.scale(abs_y / fps / 60)
+                # if end_by - now < 60:
+                    # self.strip.blacks.scale((end_by - now) / 60)
+                else:
+                    self.strip.blacks.scale()
 
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
