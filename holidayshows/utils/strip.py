@@ -27,6 +27,7 @@ class Blacks:
         '''
         x = max(min(x, 1), 0)
         delta = int(self.longest_span * x)
+        print('scale is', x, 'with delta', delta)
         for i, old_range in enumerate(self.ranges):
             self.ranges[i] = range(old_range.start-delta, old_range.stop+delta)
 
