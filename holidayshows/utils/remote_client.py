@@ -51,7 +51,6 @@ class Remote_Client:
 
     def connect(self):
         if self.ip:
-            self.connected = -1
             print(f'connecting to {self.name}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
@@ -70,7 +69,7 @@ class Remote_Client:
 
     def disconnect(self):
         if self.connected:
-            self.send(function='disconnect', arguments=None, expected_response=-1)
+            self.send(function='disconnect', arguments=None, expected_response=False)
             self.socket.close()
             self.connected = False
 
@@ -92,7 +91,6 @@ class Remote_Client:
 
     def send(self, function, arguments, expected_response=None):
         if not self.connected:
-            print('self.connected is', self.connected, 'so connected before sending', function)
             self.connect()
         data = json.dumps({'function': function, 'arguments': arguments}).encode()
         print(f'{self.name}: {function}')
