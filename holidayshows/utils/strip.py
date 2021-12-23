@@ -17,6 +17,7 @@ class Blacks:
         for black_range in self.ranges:
             if previous_end:
                 self.longest_span = max(self.longest_span, black_range.start - previous_end)
+            previous_end = black_range.end
         print('longest span:', self.longest_span)
 
     def scale(self, x=0):
