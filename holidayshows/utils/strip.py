@@ -23,7 +23,7 @@ class Blacks:
             previous_stop = black_range.stop
         print('longest span:', self.longest_span)
 
-    def scale(self, x=0):
+    def scale(self, x=1):
         '''
         expand the blacks such that at 0 it's all black, and at 1 it's all default
         '''
