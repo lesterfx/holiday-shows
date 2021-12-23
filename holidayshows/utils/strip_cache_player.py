@@ -54,7 +54,7 @@ class Strip_Cache_Player():
                         self.home.relays[name].set((abs_y//fps) % len(self.relays) != x)
                 else:
                     relay_row = self.relay_data[index][y]
-                    for x, name in enumerate(self.relays):
+                    for x, name in enumerate(self.relays[index]):
                         self.home.relays[name].set(relay_row[x])
                 self.home.show_relays()
 
@@ -67,7 +67,7 @@ class Strip_Cache_Player():
             self.strip.show()
 
             while True:
-                yield y / height
+                yield 'play in progress:', y / height
                 previous_y = abs_y
                 abs_y = int((time.time() - epoch) * fps)
                 if abs_y != previous_y:

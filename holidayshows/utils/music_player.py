@@ -33,8 +33,7 @@ class Music_Player():
         if song:
             while time.time() < epoch + self.delay:
                 time.sleep(0.001)
-                print('steady...')
-                yield
+                yield 'waiting for start time'
             song.play()
             print('song playing')
         else:
