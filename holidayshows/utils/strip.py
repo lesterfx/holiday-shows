@@ -7,7 +7,34 @@ except ImportError:
         raise ImportError('rpi_ws281x not installed')
     print('rpi_ws281x not installed')
 
-class Strip(object):
+class Blacks:
+    def __init__(self, blacks_prefs):
+        self.ranges = []
+        for black in blacks_prefs:
+            self.ranges.append(range(black[0], black[1]))
+        self.ranges.sort(key=lambda x:x.start)
+        previous_end = None
+        for black_range in self.ranges:
+            if previous_end:
+                self.longest_span = max(self.longest_span, black_range.start - previous_end)
+        print('longest span:', self.longest_span)
+
+    def scale(self, x=0):
+        '''
+        expand the blacks such that at 1 it's all black, and at 0 it's all default
+        '''
+        x = max(min(x, 1), 0)
+        delta = int(self.longest_span * x)
+        for i, old_range in enumerate(self.ranges):
+            self.ranges[i] = range(old_range.start-delta, old_range.end+delta)
+
+    def __contains__(self, x):
+        for black_range in self.ranges:
+            if x in black_range:
+                return True
+        return False
+
+class Strip:
     def __init__(self, strip_prefs):
         length = strip_prefs['length']
         pin = strip_prefs['pin']
@@ -16,9 +43,7 @@ class Strip(object):
         invert = strip_prefs['invert']
         brightness = strip_prefs['brightness']
         pin_channel = strip_prefs['pin_channel']
-        self.black = []
-        for black in strip_prefs['black']:
-            self.black.append(range(black[0], black[1]))
+        self.blacks = Blacks(strip_prefs['blacks'])
 
         self.real_strip = Adafruit_NeoPixel(length, pin, frequency, dma, invert, brightness, pin_channel)
         self.real_strip.begin()
@@ -27,7 +52,7 @@ class Strip(object):
 
         self.shift = [1<<((2-pixel_order.index(x))*8) for x in 'rgb']
         self.delay = self.calculate_delay(length, frequency)
-        print('minimum time between frames:', self.delay)
+        print('time between frames:', self.delay)
         print('maximum fps:', 1/self.delay)
         self.next_available = 0
 
@@ -54,9 +79,7 @@ class Strip(object):
         )
 
     def __setitem__(self, x, rgb):
-        for black in self.black:
-            if x in black:
-                return
+        if x in self.blacks: return
         if rgb:
             value = self.map(*rgb)
         else:

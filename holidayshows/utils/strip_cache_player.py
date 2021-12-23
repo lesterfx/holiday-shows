@@ -42,10 +42,12 @@ class Strip_Cache_Player():
             print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
 
         abs_y = 0
-        while epoch and epoch > time.time():
+        now = time.time()
+        while epoch and epoch > now:
             time.sleep(0.001)
             yield 'waiting for start time'
-        while (repeat and (abs_y < height * repeat)) or (not repeat and time.time() < end_by):
+            now = time.time()
+        while (repeat and (abs_y < height * repeat)) or (not repeat and now < end_by):
             y = abs_y % height
 
             if self.relay_data[index]:
@@ -58,7 +60,11 @@ class Strip_Cache_Player():
                         self.home.relays[name].set(relay_row[x])
                 self.home.show_relays()
 
-            # TODO: grow after epoch, shrink as we approach end_by
+            if repeat == 0:
+                if end_by - now < 60:
+                    self.strip.blacks.scale((end_by - now) / 60)
+                elif abs_y / fps < 60:
+                    self.strip.blacks.scale(abs_y / fps / 60)
 
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
@@ -68,10 +74,13 @@ class Strip_Cache_Player():
 
             while True:
                 yield f'play in progress: {y / height:.0%}'
+                now = time.time()
                 previous_y = abs_y
-                abs_y = int((time.time() - epoch) * fps)
+                abs_y = int((now - epoch) * fps)
                 if abs_y != previous_y:
                     break
+
+        self.strip.blacks.scale(0)
 
         print('image complete')
         self.strip.clear(True)

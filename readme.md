@@ -16,11 +16,18 @@ Note that `sudo` should be used to allow the packages to be run by root.
     sudo python3 -m pip install --upgrade Pillow
     sudo apt install libsdl2-2.0-0
     sudo apt-get install git curl libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
+    sudo apt-get remove pulseaudio
 
 if PIL gives errors, the following worked for me:
 
     sudo apt-get install libopenjp2-7
     sudo apt-get install libtiff5
+
+Prevent built-in audio from playing, since you definitely want to use an external sound card:
+
+    sudo nano /boot/config.txt
+
+find 
 
 # hardware
 

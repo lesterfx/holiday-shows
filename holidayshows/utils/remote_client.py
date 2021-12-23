@@ -82,8 +82,9 @@ class Remote_Client:
         if self.local:
             yield from self.players.play_all(arguments)
         else:
-            self.send(function='play', arguments=arguments, expected_response=False)
-            self.disconnect()
+            if self.players_added:
+                self.send(function='play', arguments=arguments, expected_response=False)
+                self.disconnect()
     
     def get_response(self):
         if not self.local:
@@ -116,4 +117,5 @@ class Remote_Client:
         if self.local:
             self.players.add(kind, player_globals)
         else:
+            self.players_added = True
             self.send(function='add_player', arguments={'kind':int(kind), 'player_globals': player_globals})

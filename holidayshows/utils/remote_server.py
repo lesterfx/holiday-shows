@@ -73,13 +73,15 @@ class Remote_Server:
         for key in required_arguments:
             if key not in arguments:
                 raise KeyError(key)
+        arguments['epoch'] += self.time_offset
+        arguments['end_by'] += self.time_offset
         print('\n'*4)
         print('received play request:', arguments)
         print('\n'*4)
         iter = self.players.play_all(arguments)
         try:
             while True:
-                print('\r', next(iter))
+                print('\r', next(iter), end='')
         except StopIteration:
             pass
 
