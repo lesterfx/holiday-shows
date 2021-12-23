@@ -10,8 +10,10 @@ except ImportError:
 class Blacks:
     def __init__(self, blacks_prefs):
         self.ranges = []
+        self.original_ranges = []
         for black in blacks_prefs:
             self.ranges.append(range(black[0], black[1]))
+            self.original_ranges.append(range(black[0], black[1]))
         self.ranges.sort(key=lambda x:x.start)
         previous_stop = None
         self.longest_span = 0
@@ -27,8 +29,8 @@ class Blacks:
         '''
         x = max(min(x, 1), 0)
         delta = int(self.longest_span * x)
-        print('scale is', x, 'with delta', delta)
-        for i, old_range in enumerate(self.ranges):
+        print(' scale is', x, 'with delta', delta)
+        for i, old_range in enumerate(self.original_ranges):
             self.ranges[i] = range(old_range.start-delta, old_range.stop+delta)
 
     def __contains__(self, x):
