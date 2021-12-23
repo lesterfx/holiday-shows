@@ -64,11 +64,11 @@ class Strip_Player():
             if self.relay_data[index]:
                 if self.relay_data[index] == 'cycle':
                     for i, name in enumerate(self.relays[index]):
-                        if i / len(self.relays) > fade:
+                        if i / len(self.relays[index]) > fade:
                             on = False
                             print(f'{name}', end=' ')
                         else:
-                            on = (abs_y//fps) % len(self.relays) != i
+                            on = (abs_y//fps) % len(self.relays[index]) != i
                         self.home.relays[name].set(on)
                     print()
                 else:
