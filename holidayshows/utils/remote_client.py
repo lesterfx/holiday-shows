@@ -90,7 +90,7 @@ class Remote_Client:
         if not self.local:
             return self.socket.recv(1024)
 
-    def send(self, function, arguments, expected_response=False):
+    def send(self, function, arguments, expected_response=None):
         if not self.connected:
             print('self.connected is', self.connected, 'so connected before sending', function)
             self.connect()
