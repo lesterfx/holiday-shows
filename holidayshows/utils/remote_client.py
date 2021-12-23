@@ -95,7 +95,7 @@ class Remote_Client:
             else:
                 return {'response': expected_response or fallback_response}
         data = json.dumps({'function': function, 'arguments': arguments}).encode()
-        print(f'{self.name}: {data["function"]}')
+        print(f'{self.name}: {function}')
         data = struct.pack('Q', len(data)) + data
         if self.connected:
             self.socket.sendall(data)
