@@ -61,9 +61,8 @@ class Strip_Cache_Player():
                 self.home.show_relays()
 
             if repeat == 0:
-                if abs_y / fps / 60 < 1:
-                    print(f' {abs_y} / {fps} / 60 = {abs_y / fps / 60}')
-                    self.strip.blacks.scale(abs_y / fps / 60)
+                if abs_y / fps / 30 < 1:
+                    self.strip.blacks.scale(abs_y / fps / 30)
                 elif end_by - now < 60:
                     self.strip.blacks.scale((end_by - now) / 60)
                 else:
