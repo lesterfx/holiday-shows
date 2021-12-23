@@ -50,7 +50,7 @@ class Strip_Cache_Player():
 
             if self.relay_data[index]:
                 if self.relay_data[index] == 'cycle':
-                    for x, name in enumerate(self.relays):
+                    for x, name in enumerate(self.relays[index]):
                         self.home.relays[name].set((abs_y//fps) % len(self.relays) != x)
                 else:
                     relay_row = self.relay_data[index][y]
