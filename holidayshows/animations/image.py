@@ -161,7 +161,7 @@ class Animation(object):
                 else:
                     image_slice = image_slice.resize(need_size)
             progress(3)
-            image_slice = [image[:, start:end]]
+            image_slice = image[:, start:end]
             progress(4)
         return image_slice.tolist()
 
