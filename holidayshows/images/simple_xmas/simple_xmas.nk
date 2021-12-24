@@ -12,11 +12,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
                 <split size="612"/>
-                <dock id="" activePageId="Viewer.1" focus="true">
+                <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
                 <split size="430"/>
-                <dock id="" activePageId="DAG.1">
+                <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
@@ -33,7 +33,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 }
 Root {
  inputs 0
- name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/simple_xmas/simple_xmas.nk
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/simple_xmas/simple_xmas.nk
  project_directory "\[python \{nuke.script_directory()\}]/"
  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
  proxy_type scale
@@ -51,39 +51,59 @@ Constant {
  channels rgb
  format "40 40 0 0 40 40 1 xmas_tile"
  name Constant1
- selected true
  xpos 175
- ypos -112
+ ypos -156
 }
 Expression {
  expr0 "((cx + cy + 2) % 2) -1"
  expr1 "((cx + cy + 3) % 2) -1"
  name Expression1
  xpos 175
- ypos -40
+ ypos -84
 }
 Grade {
  gamma 0.27
  name Grade1
  xpos 175
- ypos -16
+ ypos -60
 }
-set N129cf400 [stack 0]
-Viewer {
- frame 1
- frame_range 1-100
- name Viewer1
- xpos -40
- ypos -9
+Expression {
+ expr0 "r ? max(int(r * 255),1) / 255 : 0"
+ expr1 "g ? max(int(g * 255),1) / 255 : 0"
+ expr2 "b ? max(int(b * 255),1) / 255 : 0"
+ name Expression2
+ xpos 175
+ ypos -36
 }
-push $N129cf400
 Write {
  file simple_xmas.png
  raw true
  file_type png
  checkHashOnRead false
- version 2
+ version 3
  name Write1
  xpos 175
  ypos 31
+}
+Read {
+ inputs 0
+ file_type png
+ file simple_xmas.png
+ format "40 40 0 0 40 40 1 xmas_tile"
+ origset true
+ version 1
+ raw true
+ auto_alpha true
+ name Read1
+ xpos 378
+ ypos -132
+}
+Viewer {
+ inputs 2
+ frame_range 1-100
+ input_number 1
+ gamma 3.25
+ name Viewer1
+ xpos -40
+ ypos -9
 }

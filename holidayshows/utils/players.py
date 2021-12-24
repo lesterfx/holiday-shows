@@ -33,4 +33,7 @@ class Players(dict):
             raise ValueError(f'Unknown player kind: {player_kind}')
 
     def load_data(self, player_kind, data):
-        self[player_kind].load_data(data)
+        try:
+            self[player_kind].load_data(data)
+        except KeyError:
+            raise ValueError(f'{player_kind} has not been added yet. Call add() first.')

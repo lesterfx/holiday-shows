@@ -4,7 +4,7 @@ Holiday shows is built to handle pixel strips and relays for use in a holiday li
 
 Higher level, it also handles scheduling of different animations throughout the year, and time of day for running the display.
 
-# installation
+# Installation
 
 Clone the repo into your environment, and run the following to install dependencies.
 
@@ -16,24 +16,24 @@ Note that `sudo` should be used to allow the packages to be run by root.
     sudo python3 -m pip install --upgrade Pillow
     sudo apt install libsdl2-2.0-0
     sudo apt-get install git curl libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 libsdl2-2.0-0
-    sudo apt-get remove pulseaudio
+    sudo pip3 install numpy
+    sudo apt-get install libatlas-base-dev
 
 if PIL gives errors, the following worked for me:
 
-    sudo apt-get install libopenjp2-7
-    sudo apt-get install libtiff5
+    sudo apt-get install libopenjp2-7 libtiff5
 
-Prevent built-in audio from playing, since you definitely want to use an external sound card:
+Additionally, if playing sound through an external sound card (*highly* recommended), follow [these instructions](https://raspberrypi.stackexchange.com/questions/80072/how-can-i-use-an-external-usb-sound-card-and-set-it-as-default) to set it up.
 
-    sudo nano /boot/config.txt
+# Running
 
-find 
+If you have a `config.json` set up, run `sudo holidayshows/holidayshows.py` on the main Raspberry Pi, and `sudo holidayshows/holidayshows.py --remote` on any secondary Raspberry Pis.
 
-# hardware
+# Hardware
 
 The main code runs on a Raspberry Pi computer, handling scheduling, dispatch, audio, and up to one pixel strip. Additional devices can be used:
 
-- Additional Raspberry Pi computers to control additional pixel strips, beyond the one that may be attached to the primary. Run with `--remote` flag.
+- Additional Raspberry Pis to control additional pixel strips, beyond the one that may be attached to the primary. Run with `--remote` flag.
 - Arduinos to switch relays, running the `UDPRelayControl` sketch.
 - [future] Arduino to control short pixel strips or predefined animations
 - [future] Arduino to display a countdown

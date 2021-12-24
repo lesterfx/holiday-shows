@@ -6,7 +6,7 @@ import random
 import time
 
 from PIL import Image
-# from pygame import mixer really
+import numpy as np
 
 from ..utils import progress_bar, players
 
@@ -42,12 +42,13 @@ class Animation(object):
             print()
             print(os.path.basename(path), end=' ')
             image = Image.open(path)
-            image_data = image.getdata()
+            # image_data = image.getdata()
             print('loaded')
             resource['width'] = image.width
             resource['height'] = image.height
 
             resource['data'] = {}
+            image_data = np.fromarray(image, dtype=np.uint8)  # do this outside the method!
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
                 try:
@@ -145,12 +146,41 @@ class Animation(object):
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
+        with progress_bar.ProgressBar(4) as progress:
+            if end == 'auto':
+                end = len(resource['relays'])
+            image_slice = image[:, start:end]
+            progress(1)
+            if is_relays:
+                image_slice = self.booleanize(image_slice)
+            progress(2)
+            need_size = (image_slice.shape[0], end - start, 3)
+            if need_size[1] > image_slice.shape[1]:
+                if wrap:
+                    image_slice = np.resize(image_slice, need_size)
+                else:
+                    image_slice = image_slice.resize(need_size)
+            progress(3)
+            image_slice = [image[:, start:end]]
+            progress(4)
+        return image_slice.tolist()
+
+    @staticmethod
+    def booleanize(image_slice):
+        if ((image_slice[:,:,0] == image_slice[:,:,1]).all() or 
+            (image_slice[:,:,0] == image_slice[:,:,2]).all() or
+            image_slice[image_slice < 255 & image_slice > 0].any()):
+            raise ValueError('Relay pixels must be black or white')
+        return image_slice[:,:,0] > 127
+
+
+    def slice_image_old(self, image, resource, start, end, wrap=False, is_relays=False):
         image_slice = []
         if is_relays and end == 'auto':
             end = len(resource['relays'])
         with progress_bar.ProgressBar(resource['height']) as progress:
             for y in range(resource['height']):
-                progress.update(y)
+                progress(y)
                 row = []
                 for x in range(start, end):
                     if x < resource['width'] or wrap:

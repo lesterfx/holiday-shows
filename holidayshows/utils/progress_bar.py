@@ -10,7 +10,7 @@ class ProgressBar:
         self.update(self.total)
         print()
 
-    def update(self, value):
+    def __call__(self, value):
         fullchars = int(value / self.total * self.width)
         emptychars = self.width - fullchars
         print(f'{"█" * fullchars}{"-" * emptychars}', end='\r')
