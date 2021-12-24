@@ -7,7 +7,7 @@ class ProgressBar:
         return self
     
     def __exit__(self, *args, **kwargs):
-        self.update(self.total)
+        self(self.total)
         print()
 
     def __call__(self, value):
