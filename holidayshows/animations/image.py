@@ -48,7 +48,8 @@ class Animation(object):
             resource['height'] = image.height
 
             resource['data'] = {}
-            image_data = np.asarray(image, dtype=np.uint8)  # do this outside the method!
+            print('image is', image.width, 'x', image.height, 'pixels')
+            image_data = np.asarray(image, dtype=np.uint8)
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
                 try:
@@ -155,9 +156,10 @@ class Animation(object):
             if is_relays:
                 image_slice = self.booleanize(image_slice)
             progress(2)
-            need_size = (image_slice.shape[0], end - start, 3)
-            if need_size[1] > image_slice.shape[1]:
-                print('need', need_size[1], 'but only have', image_slice.shape[1])
+            needed_width = end - start
+            if needed_width > image_slice.shape[1]:
+                print('need', needed_width, 'but only have', image_slice.shape[1])
+                need_size = (image_slice.shape[0], needed_width, 3)
                 if wrap:
                     image_slice = np.resize(image_slice, need_size)
                 else:
