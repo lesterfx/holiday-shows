@@ -157,6 +157,7 @@ class Animation(object):
             progress(2)
             need_size = (image_slice.shape[0], end - start, 3)
             if need_size[1] > image_slice.shape[1]:
+                print('need', need_size[1], 'but only have', image_slice.shape[1])
                 if wrap:
                     image_slice = np.resize(image_slice, need_size)
                 else:
