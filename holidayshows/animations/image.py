@@ -170,7 +170,7 @@ class Animation(object):
                 print('size is now', image_slice.shape)
             progress(3)
             image_slice = image[:, start:end]
-            print(list(image_slice[0]))
+            print(image_slice[0].tolist())
             time.sleep(5)
             progress(4)
         return image_slice.tolist()
