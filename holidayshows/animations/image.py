@@ -160,7 +160,7 @@ class Animation(object):
             if needed_width > image_slice.shape[1]:
                 need_size = (image_slice.shape[0], needed_width, 3)
                 print('need', need_size, 'but only have', image_slice.shape)
-                pad = ((0, 0), (0, image_slice.shape[1] - needed_width), (0, 0))
+                pad = ((0, 0), (0, needed_width - image_slice.shape[1]), (0, 0))
                 if wrap:
                     print('wrapping to fill')
                     image_slice = np.pad(image_slice, pad, mode='wrap')
