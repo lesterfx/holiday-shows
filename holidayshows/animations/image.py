@@ -168,6 +168,7 @@ class Animation(object):
                     mode = 'constant'
                     print('filling with mode', mode)
                     image_slice = np.pad(image_slice, resize, mode=mode, constant_values=0)
+                print('resized to', image_slice.shape)
             progress(3)
             image_slice = image[:, start:end]
             progress(4)
