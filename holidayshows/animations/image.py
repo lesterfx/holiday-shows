@@ -48,7 +48,7 @@ class Animation(object):
             resource['height'] = image.height
 
             resource['data'] = {}
-            image_data = np.fromarray(image, dtype=np.uint8)  # do this outside the method!
+            image_data = np.asarray(image, dtype=np.uint8)  # do this outside the method!
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
                 try:
