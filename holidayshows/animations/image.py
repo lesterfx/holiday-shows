@@ -150,19 +150,25 @@ class Animation(object):
             if end == 'auto':
                 end = len(resource['relays'])
             image_slice = image[:, start:end]
+            print(type(image_slice))
             progress(1)
             if is_relays:
                 image_slice = self.booleanize(image_slice)
+            print(type(image_slice))
             progress(2)
             need_size = (image_slice.shape[0], end - start, 3)
             if need_size[1] > image_slice.shape[1]:
                 if wrap:
                     image_slice = np.resize(image_slice, need_size)
+                    print(type(image_slice))
                 else:
                     image_slice = image_slice.resize(need_size)
+                    print(type(image_slice))
             progress(3)
             image_slice = image[:, start:end]
+            print(type(image_slice))
             progress(4)
+            print(type(image_slice))
         return image_slice.tolist()
 
     @staticmethod
