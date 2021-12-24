@@ -162,9 +162,11 @@ class Animation(object):
                 resize = ((0, 0), (0, needed_width-image_slice.shape[1]), (0, 0))
                 if wrap:
                     mode = 'wrap'
+                    print('filling with mode', mode)
                     image_slice = np.pad(image_slice, resize, mode=mode)
                 else:
                     mode = 'constant'
+                    print('filling with mode', mode)
                     image_slice = np.pad(image_slice, resize, mode=mode, constant_values=0)
             progress(3)
             image_slice = image[:, start:end]
