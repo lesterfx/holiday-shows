@@ -12,7 +12,6 @@ from ..utils import progress_bar, players
 
 class Animation(object):
     def __init__(self, home, globals_, settings):
-        # mixer.init()
         self.home = home
         self.globals = globals_
         self.settings = settings
@@ -48,7 +47,6 @@ class Animation(object):
             resource['height'] = image.height
 
             resource['data'] = {}
-            print('image is', image.width, 'x', image.height, 'pixels')
             image_data = np.asarray(image, dtype=np.uint8)
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
@@ -77,7 +75,6 @@ class Animation(object):
                 resource['sound'] = True
                 self.resources_loaded.append(resource)
             else:
-                print('No music')
                 self.resources_without_sound.append(resource)
 
     def main(self, end_by):
@@ -125,12 +122,7 @@ class Animation(object):
             if self.settings.get('shuffle'):
                 random.shuffle(self.resources_loaded)
             for resource in self.resources_loaded:
-                try:
-                    self.present(resource, end_by, epoch=until.timestamp())
-                finally:
-                    if 'sound' in resource:
-                        # resource['sound'].stop()
-                        pass
+                self.present(resource, end_by, epoch=until.timestamp())
                 time.sleep(3)
             time.sleep(10)
 
@@ -143,14 +135,12 @@ class Animation(object):
         }
         for group, value in relay_group_values.items():
             for relay in self.home.relay_groups[group]:
-                # print('Setting', relay, 'in relay group', group, 'to', value)
                 relay.set(value)
 
     def slice_image(self, image, resource, start, end, wrap=False, is_relays=False):
-        with progress_bar.ProgressBar(4) as progress:
+        with progress_bar.ProgressBar(3) as progress:
             if end == 'auto':
                 end = len(resource['relays'])
-            print('slicing from', start, 'to', end)
             image_slice = image[:, start:end]
             progress(1)
             if is_relays:
@@ -158,24 +148,15 @@ class Animation(object):
             progress(2)
             needed_width = end - start
             if needed_width > image_slice.shape[1]:
-                need_size = (image_slice.shape[0], needed_width, 3)
-                print('need', need_size, 'but only have', image_slice.shape)
                 pad = ((0, 0), (0, needed_width - image_slice.shape[1]), (0, 0))
                 if wrap:
-                    print('wrapping to fill')
-                    image_slice = np.pad(image_slice, pad, mode='wrap')
+                    mode = 'wrap'
+                    kwargs = {}
                 else:
-                    print('padding with black')
-                    image_slice = np.pad(image_slice, pad, mode='constant', constant_values=0)
-                print('size is now', image_slice.shape)
+                    mode = 'constant'
+                    kwargs = {'constant_values': 0}
+                image_slice = np.pad(image_slice, pad, mode=mode, **kwargs)
             progress(3)
-            # image_slice = image[:, start:end]
-            if is_relays:
-                print(image_slice[0,:].tolist())
-            else:
-                print(image_slice[0,:,0].tolist())
-            time.sleep(5)
-            progress(4)
         return image_slice.tolist()
 
     @staticmethod
