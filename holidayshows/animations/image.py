@@ -160,16 +160,16 @@ class Animation(object):
             if needed_width > image_slice.shape[1]:
                 need_size = (image_slice.shape[0], needed_width, 3)
                 print('need', need_size, 'but only have', image_slice.shape)
+                pad = ((0, 0), (0, image_slice.shape[1] - needed_width), (0, 0))
                 if wrap:
                     print('wrapping to fill')
-                    image_slice = np.resize(image_slice, need_size)
+                    image_slice = np.pad(image_slice, pad, mode='wrap')
                 else:
                     print('padding with black')
-                    resize = ((0, 0), (0, needed_width), (0, 0))
-                    image_slice = np.pad(image_slice, resize, mode='constant', constant_values=0)
+                    image_slice = np.pad(image_slice, pad, mode='constant', constant_values=0)
                 print('size is now', image_slice.shape)
             progress(3)
-            image_slice = image[:, start:end]
+            # image_slice = image[:, start:end]
             print(image_slice[0].tolist())
             time.sleep(5)
             progress(4)
