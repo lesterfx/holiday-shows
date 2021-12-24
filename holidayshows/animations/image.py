@@ -158,17 +158,14 @@ class Animation(object):
             progress(2)
             needed_width = end - start
             if needed_width > image_slice.shape[1]:
-                print('need', needed_width, 'but only have', image_slice.shape[1])
-                resize = ((0, 0), (0, needed_width-image_slice.shape[1]), (0, 0))
+                need_size = (image_slice.shape[0], needed_width, 3)
+                print('need', need_size, 'but only have', image_slice.shape)
                 if wrap:
-                    mode = 'wrap'
-                    print('filling with mode', mode)
-                    image_slice = np.pad(image_slice, resize, mode=mode)
+                    image_slice = np.resize(image_slice, need_size)
                 else:
-                    mode = 'constant'
-                    print('filling with mode', mode)
-                    image_slice = np.pad(image_slice, resize, mode=mode, constant_values=0)
-                print('resized to', image_slice.shape)
+                    resize = ((0, 0), (0, needed_width), (0, 0))
+                    image_slice = np.pad(image_slice, resize, mode='constant', constant_values=0)
+                print('size is now', image_slice.shape)
             progress(3)
             image_slice = image[:, start:end]
             progress(4)
