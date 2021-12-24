@@ -170,7 +170,7 @@ class Animation(object):
     def booleanize(image_slice):
         if ((image_slice[:,:,0] == image_slice[:,:,1]).all() and 
             (image_slice[:,:,0] == image_slice[:,:,2]).all() and
-            not (set(np.unique(image_slice)) - {0, 255}):
+            not (set(np.unique(image_slice)) - {0, 255})):
             raise ValueError('Relay pixels must be black or white')
         return image_slice[:,:,0] > 127
 
