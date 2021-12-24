@@ -159,11 +159,11 @@ class Animation(object):
             needed_width = end - start
             if needed_width > image_slice.shape[1]:
                 print('need', needed_width, 'but only have', image_slice.shape[1])
-                need_size = (image_slice.shape[0], needed_width, 3)
                 if wrap:
-                    image_slice = np.resize(image_slice, need_size)
+                    mode = 'wrap'
                 else:
-                    image_slice = image_slice.resize(need_size)
+                    mode = 'constant'
+                image_slice = np.pad(image_slice, ((0, 0), (0, needed_width-image_slice.shape[1])), mode=mode, constant_values=0)
             progress(3)
             image_slice = image[:, start:end]
             progress(4)
