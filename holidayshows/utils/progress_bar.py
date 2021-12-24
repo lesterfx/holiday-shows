@@ -6,8 +6,9 @@ class ProgressBar:
     def __enter__(self):
         return self
     
-    def __exit__(self, *args, **kwargs):
-        self(self.total)
+    def __exit__(self, *args):
+        if not any(args):
+            self(self.total)
         print()
 
     def __call__(self, value):
