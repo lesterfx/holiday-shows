@@ -2,11 +2,11 @@
     "globals": {
         "remotes": {
             "upstairs": {
-                "ip": "192.168.3.209",
+                "ip": "pumpkin",
                 "port": 2700
             },
             "downstairs": {
-                "ip": "192.168.3.201",
+                "ip": "rhubarb",
                 "port": 2700
             },
             "laptop": {
@@ -48,7 +48,7 @@
         },
         "relay_remotes": {
             "porch": {
-                "ip": "192.168.3.240",
+                "ip": "192.168.1.240",
                 "port": 2700,
                 "relays": [
                     "snowflake",
@@ -70,7 +70,7 @@
                 ]
             },
             "upstairs": {
-                "ip": "192.168.3.241",
+                "ip": "192.168.1.241",
                 "port": 2700,
                 "relays": [
                     null,
@@ -92,7 +92,7 @@
                 ]
             },
             "side_yard": {
-                "ip": "192.168.3.242",
+                "ip": "192.168.1.242",
                 "port": 2700,
                 "relays": [
                     "tree_right",

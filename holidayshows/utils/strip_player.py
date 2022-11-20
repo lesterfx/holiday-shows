@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 import time
 
-from ..utils import strip
+from ..utils import strip, image_slicer
 
 class Strip_Player():
     def __init__(self, config):
@@ -15,13 +15,32 @@ class Strip_Player():
         index = arguments['index']
         if 'relay_data' in arguments:
             self.load_relays(index, arguments['relay_data'], arguments['relay_order'], arguments['home'])
+        elif 'relay_slice' in arguments:
+            self.slice_relays(index, arguments['relay_slice'], arguments['relay_order'], arguments['home'])
+        elif 'relay_cycle' in arguments:
+            self.load_relays(index, 'cycle', arguments['relay_order'], arguments['home'])
+
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
+        elif 'slice_data' in arguments:
+            self.slice_image(index, arguments['slice_data'])
+
         else:
             raise ValueError(f'unexpected arguments {list(arguments)}')
 
     def load_image(self, index, image_data):
         self.image_data[index] = image_data
+
+    def slice_image(self, index, slice_data):
+        path, start, end, wrap = slice_data
+        print('slicing image', path, 'from', start, 'to', end, 'wrap', wrap)
+        sliced = image_slicer.ImageSlicer().slice_image(path, start, end, wrap)
+        self.image_data[index] = sliced
+
+    def slice_relays(self, index, slice_data, relay_order, home):
+        path, start, end = slice_data
+        sliced = image_slicer.ImageSlicer().slice_image(path, start, end, False, True)
+        self.load_relays(index, sliced, relay_order, home)
 
     def load_relays(self, index, relay_data, relay_order, home):
         self.relay_data[index] = relay_data
@@ -61,8 +80,8 @@ class Strip_Player():
             if repeat == 0:
                 self.strip.blacks.scale(fade)
 
-            if self.relay_data[index]:
-                if self.relay_data[index] == 'cycle':
+            if self.relay_data[index] is not None:
+                if self.relay_data[index] is 'cycle':
                     for i, name in enumerate(self.relays[index]):
                         if i / len(self.relays[index]) > fade:
                             on = False
@@ -79,7 +98,7 @@ class Strip_Player():
 
             image_row = self.image_data[index][y]
             for x, color in enumerate(image_row):
-                self.strip[x] = color
+                self.strip[x] = color.tolist()
 
             self.strip.show()
 

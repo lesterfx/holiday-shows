@@ -1,6 +1,6 @@
 import socket
 
-def my_ip():
+def my_ip() -> str:
     # https://stackoverflow.com/a/28950776/3130539
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -12,7 +12,13 @@ def my_ip():
     finally:
         s.close()
     return ip
-MY_IP = my_ip()
+
+def my_hostname() -> str:
+    return socket.gethostname()
+
+MY_IP: str = my_ip()
+MY_HOSTNAME: str = my_hostname()
+ME = {MY_IP, MY_HOSTNAME}
 
 if __name__ == '__main__':
     print(MY_IP)

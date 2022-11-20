@@ -16,7 +16,7 @@ class Remote_Client:
         self.ip = config['ip']
         self.port = config['port']
         self.local = False
-        if self.ip == my_ip.MY_IP:
+        if self.ip in my_ip.ME:
             self.ip = None
             self.local = True
             self.players = players.Players()
