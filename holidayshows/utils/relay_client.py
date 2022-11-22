@@ -30,7 +30,7 @@ class RelayClient(list):
                 raise Exception("Invalid handshake message: {}".format(msg))
             print(returnIP, 'handshake success')
             ips_remaining.remove(returnIP)
-        
+
         for i in range(len(self)):
             self.get_frames(i)
 

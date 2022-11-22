@@ -2,13 +2,15 @@ class Relay_Remote(dict):
     def __init__(self, name, config, client):
         self.client = client
         self.name = name
-        ip = config['ip']
+        ip = config['host']
         port = config['port']
         for i, relay_name in enumerate(config['relays']):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
-        if not self: return
+        if not self:
+            print(f'relay remote {name} is unused')
+            return
         self.client_index = client.append(ip, port)
         self.all(0)
 

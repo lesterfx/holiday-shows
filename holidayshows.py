@@ -13,12 +13,6 @@ import traceback
 
 from holidayshows.utils import calendar_entry, home, remote_server, sun
 
-# GlobalPrefs = namedtuple('GlobalPrefs', ['relay_remotes', 'relay_order', 'strips', 'relay_purposes', 'remotes', 'music_server'])
-# StripPrefs = namedtuple('StripPrefs', ['pin', 'pixel_order', 'brightness', 'frequency', 'dma', 'invert', 'pin_channel', 'relay'])
-# SchedulePrefs = namedtuple('SchedulePrefs', ['location', 'start_time', 'sunset_offset', 'end_time'])
-# RelayRemotePrefs = namedtuple('RelayRemotePrefs', ['name', 'ip', 'port', 'relays'])
-# StripRemotePrefs = namedtuple('StripRemotePrefs', ['name', 'pin', 'pixel_order', 'frequency', 'dma', 'invert', 'pin_channel', 'brightness', 'length', 'black'])
-
 class Holiday_Pixels(object):
     def __init__(self):
         self.sun = sun.Sun()
@@ -130,14 +124,14 @@ class Holiday_Pixels(object):
     def process_globals(self, globals_):
         if self.args.norelays:
             globals_['relays'] = []
-        relay_order = globals_['relay_order']
+        # relay_order = globals_['relay_order']
         strips = self.process_strips(globals_['strips'])
         relay_remotes = self.process_relay_remotes(globals_['relay_remotes'])
         remotes = self.process_remotes(globals_['remotes'])
         music_server = globals_['music_server']
         self.globals = {
             'relay_remotes': relay_remotes,
-            'relay_order': relay_order,
+            # 'relay_order': relay_order,
             'strips': strips,
             'relay_purposes': globals_['relay_purposes'],
             'remotes': remotes,
@@ -147,11 +141,11 @@ class Holiday_Pixels(object):
     def process_remotes(self, remotes):
         ret = {}
         for name, config in remotes.items():
-            ret[name] = {'ip': config['ip'], 'port': config['port']}
+            ret[name] = {'host': config['host'], 'port': config['port']}
         return ret
 
     def process_relay_remotes(self, remotes):
-        return {name: {'name': name, 'ip': remote['ip'], 'port': remote['port'], 'relays': remote['relays']} for name, remote in remotes.items()}
+        return {name: {'name': name, 'host': remote['host'], 'port': remote['port'], 'relays': remote['relays']} for name, remote in remotes.items()}
 
     def process_strips(self, strips):
         processed_strips = []

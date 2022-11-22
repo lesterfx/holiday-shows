@@ -42,17 +42,21 @@ class Home(object):
             self.remotes[name] = remote
             self.relays.update(remote)
         self.relay_client.handshake_all()
+        unassigned = set(self.relays)
         self.relay_groups = {}
-        for name in [
+        for group_name in [
             'off_when_blank',
             'off_for_shows',
             'animate_between_shows',
             'on_show_nights'
         ]:
-            self.relay_groups[name] = []
-            for relay_name in self.globals['relay_purposes'].get(name, []):
-                self.relay_groups[name].append(self.relays[relay_name])
-    
+            self.relay_groups[group_name] = []
+            for relay_name in self.globals['relay_purposes'].get(group_name, []):
+                self.relay_groups[group_name].append(self.relays[relay_name])
+                unassigned.remove(relay_name)
+        if unassigned:
+            raise ValueError(f'Unassigned relays: {unassigned}')
+
     def show_relays(self):
         for remote in self.remotes.values():
             labels = remote.show()

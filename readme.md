@@ -68,7 +68,7 @@ Globals stores the configuration of relays, pixel strips, and the remotes that c
 - `"port"`: Which port to connect to.
 - `"relays"`: A 0-indexed list of the names of all relays connected. Pad with `null` if a relay is unused. Names should be globally unique.
 
-`"relay_purposes"` groups relays into their logical uses. Each of the following should take a list, and all defined relays should ideally be in exactly one of these lists.
+`"relay_purposes"` groups relays into their logical uses. Each of the following should take a list, and all defined relays must be in exactly one of these lists.
 
 Name                        | Blank | Between shows | During Show       | Night with no shows   | Example                           |
 ----------------------------|-------|---------------|-------------------|-----------------------|-----------------------------------|
@@ -120,7 +120,7 @@ Lastly, the actual `"songs"` section, which is a list of individual song definit
 - `"music"`: The path to the music. Same logic as `"image"`.
 - `"fps"`: The framerate of the animation, i.e. how many pixels to scan down per second.
 - `"loop"`: Whether the animation should loop, as in a repeating pattern.
-- `"slices"`: Assign column chunks to different strips by name, or to `"relays"`. Each slice is defined in `[start-end)`, with optional `"wrap"` to loop around until end is reached. The `"relays"` group refers to the column of pixels that represents the relays, but can also be defined as `"cycle"` to have all but one on at a time, cycling once per second.
+- `"slices"`: Assign column chunks to different strips by name, or to `"relays"`. Each slice is defined in `[start-end)`, with optional `"wrap"` to loop around until end is reached. The `"relays"` group refers to the column of pixels that represents the relays, but can also be defined as `"cycle"` to have all but one on at a time, cycling once per second, or any `float` to set the cycle speed
 - `"relays"`: The list of relays, in order, by which the `"relays"` `"slice"` is assigned (as well as the order the relays should cycle).
 
 # additional files included

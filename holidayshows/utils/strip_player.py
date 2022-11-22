@@ -18,7 +18,7 @@ class Strip_Player():
         elif 'relay_slice' in arguments:
             self.slice_relays(index, arguments['relay_slice'], arguments['relay_order'], arguments['home'])
         elif 'relay_cycle' in arguments:
-            self.load_relays(index, 'cycle', arguments['relay_order'], arguments['home'])
+            self.load_relays(index, arguments['relay_cycle'], arguments['relay_order'], arguments['home'])
 
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
@@ -81,13 +81,13 @@ class Strip_Player():
                 self.strip.blacks.scale(fade)
 
             if self.relay_data[index] is not None:
-                if self.relay_data[index] is 'cycle':
+                if isinstance(self.relay_data[index], (float, int)):
                     for i, name in enumerate(self.relays[index]):
                         if i / len(self.relays[index]) > fade:
                             on = False
                             print(f'{name}', end=' ')
                         else:
-                            on = (abs_y//fps) % len(self.relays[index]) != i
+                            on = (abs_y // (fps * self.relay_data[index])) % len(self.relays[index]) != i
                         self.home.relays[name].set(on)
                     print()
                 else:

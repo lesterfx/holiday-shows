@@ -58,17 +58,14 @@ class Animation(object):
 
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
-                if options == 'cycle':
-                    relay_data = 'cycle'
-                    self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_cycle': True, 'relay_order': resource['relays'], 'home': self.home})
+                if cycle := self.parse_cycle(options):
+                    self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_cycle': cycle, 'relay_order': resource['relays'], 'home': self.home})
                 else:
                     start = options['start']
                     end = options['end']
                     if end == 'auto':
                         end = len(resource['relays'])
                     self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_slice': [path, start, end], 'relay_order': resource['relays'], 'home': self.home})
-                    # relay_data = self.slicer.slice_image(path, start, end, False, True)
-                # self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_data': relay_data, 'relay_order': resource['relays'], 'home': self.home})
 
             self.loading_times['music'] -= time.time()
             music = element.get('music')
@@ -79,6 +76,14 @@ class Animation(object):
             else:
                 self.resources_without_sound.append(resource)
             self.loading_times['music'] += time.time()
+
+    @staticmethod
+    def parse_cycle(options):
+        try:
+            return float(options) or 1
+        except (ValueError, TypeError):
+            if options == 'cycle':
+                return 1
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)

@@ -13,7 +13,7 @@ class Remote_Client:
         self.name = name
         config = config
         print('configuring client for', name)
-        self.ip = config['ip']
+        self.ip = config['host']
         self.port = config['port']
         self.local = False
         if self.ip in my_ip.ME:

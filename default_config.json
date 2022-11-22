@@ -2,15 +2,15 @@
     "globals": {
         "remotes": {
             "upstairs": {
-                "ip": "pumpkin",
+                "host": "pumpkin",
                 "port": 2700
             },
             "downstairs": {
-                "ip": "rhubarb",
+                "host": "rhubarb",
                 "port": 2700
             },
             "laptop": {
-                "ip": "192.168.1.222",
+                "host": "192.168.1.222",
                 "port": 2700
             }
         },
@@ -48,7 +48,7 @@
         },
         "relay_remotes": {
             "porch": {
-                "ip": "192.168.1.240",
+                "host": "192.168.1.240",
                 "port": 2700,
                 "relays": [
                     "snowflake",
@@ -69,8 +69,8 @@
                     "sign"
                 ]
             },
-            "upstairs": {
-                "ip": "192.168.1.241",
+            "garage": {
+                "host": "192.168.1.241",
                 "port": 2700,
                 "relays": [
                     null,
@@ -80,19 +80,19 @@
                     null,
                     null,
                     null,
+                    "lamp_front_left",
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                    "lamp_front_right",
+                    "lamp_back_left",
+                    "lamp_back_right",
+                    "lamp_middle_left",
+                    "lamp_middle_right"
                 ]
             },
             "side_yard": {
-                "ip": "192.168.1.242",
+                "host": "192.168.1.242",
                 "port": 2700,
                 "relays": [
                     "tree_right",
@@ -114,25 +114,6 @@
                 ]
             }
         },
-        "relay_order": [
-            "wreath",
-            "cane_r",
-            "cane_rc",
-            "cane_c",
-            "cane_lc",
-            "cane_l",
-            "tree_right",
-            "tree_left",
-            "pillar_right",
-            "pillar_left",
-            "snowflake",
-            "deer_r",
-            "deer_c",
-            "deer_l",
-            "presents",
-            "truck",
-            "icicles"
-        ],
         "relay_purposes": {
             "off_when_blank": [
                 "strip_upper",
@@ -159,7 +140,13 @@
                 "deer_l",
                 "presents",
                 "truck",
-                "icicles"
+                "icicles",
+                "lamp_front_left",
+                "lamp_front_right",
+                "lamp_middle_left",
+                "lamp_middle_right",
+                "lamp_back_left",
+                "lamp_back_right"
             ],
             "on_show_nights": [
                 "speakers"
@@ -292,7 +279,7 @@
                             "end": 449,
                             "wrap": true
                         },
-                        "relays": "cycle"
+                        "relays": 0.2
                     },
                     "relays": [
                         "wreath",
@@ -311,7 +298,13 @@
                         "snowflake",
                         "pillar_right",
                         "tree_left",
-                        "tree_right"
+                        "tree_right",
+                        "lamp_back_right",
+                        "lamp_middle_right",
+                        "lamp_front_right",
+                        "lamp_front_left",
+                        "lamp_middle_left",
+                        "lamp_back_left"
                     ]
                 },
                 {
