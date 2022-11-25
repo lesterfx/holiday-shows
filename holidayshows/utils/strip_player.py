@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
+from random import uniform
 import time
 
 from ..utils import strip, image_slicer
@@ -17,8 +18,8 @@ class Strip_Player():
             self.load_relays(index, arguments['relay_data'], arguments['relay_order'], arguments['home'])
         elif 'relay_slice' in arguments:
             self.slice_relays(index, arguments['relay_slice'], arguments['relay_order'], arguments['home'])
-        elif 'relay_cycle' in arguments:
-            self.load_relays(index, arguments['relay_cycle'], arguments['relay_order'], arguments['home'])
+        elif 'procedural_relays' in arguments:
+            self.load_relays(index, arguments['procedural_relays'], arguments['relay_order'], arguments['home'])
 
         elif 'image_data' in arguments:
             self.load_image(index, arguments['image_data'])
@@ -54,12 +55,20 @@ class Strip_Player():
         epoch = arguments['epoch']
         fps = arguments['fps']
 
-        height = len(self.image_data[index])
+        image_data = self.image_data[index]
+        relay_data = self.relay_data[index]
+        if relay_data is not None:
+            relays = self.relays[index]
+            if 'mode' in relay_data and relay_data['mode'] == 'random':
+                # sure is ugly copying this logic twice...
+                relay_toggle_time = {name: uniform(0, 1.5)*(fps * relay_data['timing'] * (1-relay_data['duty_cycle'])) for name in relays}
+
+        height = len(image_data)
         print('\n')
         if repeat:
-            print(f'playing at {fps} fps {repeat} times, starting at {datetime.fromtimestamp(epoch)} and ending at {datetime.fromtimestamp(epoch + height * fps)}')
+            print(f'playing {index} at {fps} fps {repeat} times, starting at {datetime.fromtimestamp(epoch)} and ending at {datetime.fromtimestamp(epoch + height * fps)}')
         else:
-            print(f'playing at {fps} fps on loop until {datetime.fromtimestamp(end_by)}, at {fps} fps')
+            print(f'playing {index} at {fps} fps on loop until {datetime.fromtimestamp(end_by)}')
         print('\n')
 
         FADE_IN_SECONDS = 30
@@ -71,48 +80,71 @@ class Strip_Player():
             yield 'waiting for start time'
             now = time.time()
         self.strip.blacks.scale()
-        while (repeat and (abs_y < height * repeat)) or (not repeat and now < end_by):
-            y = abs_y % height
+        try:
+            while (repeat and (abs_y < height * repeat)) or (not repeat and now < end_by):
+                y = abs_y % height
 
-            fade_in = (now - epoch) / FADE_IN_SECONDS
-            fade_out = (end_by - now) / FADE_OUT_SECONDS
-            fade = min(fade_in, fade_out, 1)
-            if repeat == 0:
-                self.strip.blacks.scale(fade)
+                fade_in = (now - epoch) / FADE_IN_SECONDS
+                fade_out = (end_by - now) / FADE_OUT_SECONDS
+                fade = min(fade_in, fade_out, 1)
+                if repeat == 0:
+                    self.strip.blacks.scale(fade)
 
-            if self.relay_data[index] is not None:
-                if isinstance(self.relay_data[index], (float, int)):
-                    for i, name in enumerate(self.relays[index]):
-                        if i / len(self.relays[index]) > fade:
-                            on = False
-                            print(f'{name}', end=' ')
+                if relay_data is not None:
+                    if 'mode' in relay_data:
+                        if relay_data['mode'] == 'cycle':
+                            for i, name in enumerate(relays):
+                                if i / len(relays) > fade:
+                                    on = False
+                                else:
+                                    on = (abs_y // (fps * relay_data[1])) % len(relays) != i
+                                self.home.relays[name].set(on)
+                                if on:
+                                    print(name.upper(), end=' ')
+                                else:
+                                    print(name.lower(), end=' ')
+                            print()
+                        elif relay_data['mode'] == 'random':
+                            for name in relays:
+                                if abs_y > relay_toggle_time[name]:
+                                    if self.home.relays[name].value:
+                                        if abs_y + relay_data['timing'] < end_by:
+                                            relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * (1-relay_data['duty_cycle']))
+                                        else:
+                                            relay_toggle_time[name] = end_by
+                                        self.home.relays[name].set(False)
+                                    else:
+                                        relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * relay_data['duty_cycle'])
+                                        self.home.relays[name].set(True)
                         else:
-                            on = (abs_y // (fps * self.relay_data[index])) % len(self.relays[index]) != i
-                        self.home.relays[name].set(on)
-                    print()
-                else:
-                    relay_row = self.relay_data[index][y]
-                    for x, name in enumerate(self.relays[index]):
-                        self.home.relays[name].set(relay_row[x])
-                self.home.show_relays()
+                            raise NotImplementedError()
+                    else:
+                        relay_row = relay_data[y]
+                        for x, name in enumerate(relays):
+                            self.home.relays[name].set(relay_row[x])
+                    self.home.show_relays()
 
-            image_row = self.image_data[index][y]
-            for x, color in enumerate(image_row):
-                self.strip[x] = color.tolist()
+                image_row = image_data[y]
+                for x, color in enumerate(image_row):
+                    self.strip[x] = color.tolist()
 
-            self.strip.show()
+                self.strip.show()
 
-            while True:
-                yield f'play in progress: {y / height:.0%}'
-                now = time.time()
-                previous_y = abs_y
-                abs_y = int((now - epoch) * fps)
-                if abs_y != previous_y:
-                    break
+                while True:
+                    yield f'play in progress: {y / height:.0%}'
+                    now = time.time()
+                    previous_y = abs_y
+                    abs_y = int((now - epoch) * fps)
+                    if abs_y != previous_y:
+                        break
+        finally:
+            self.cleanup()
 
+    def cleanup(self):
         self.strip.blacks.scale()
 
         print('image complete')
+        self.strip.print_fps_histogram()
         self.strip.clear(True)
 
     def stop(self):

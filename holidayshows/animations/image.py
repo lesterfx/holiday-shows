@@ -58,8 +58,8 @@ class Animation(object):
 
             if 'relays' in element['slices']:
                 options = element['slices']['relays']
-                if cycle := self.parse_cycle(options):
-                    self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'relay_cycle': cycle, 'relay_order': resource['relays'], 'home': self.home})
+                if procedural := self.parse_procedural_relays(options):
+                    self.home.local_client.load_data(players.PLAYER_KINDS.STRIP, {'index': index, 'procedural_relays': procedural, 'relay_order': resource['relays'], 'home': self.home})
                 else:
                     start = options['start']
                     end = options['end']
@@ -78,12 +78,20 @@ class Animation(object):
             self.loading_times['music'] += time.time()
 
     @staticmethod
-    def parse_cycle(options):
-        try:
-            return float(options) or 1
-        except (ValueError, TypeError):
-            if options == 'cycle':
-                return 1
+    def parse_procedural_relays(options):
+        if 'mode' in options:
+            if options['mode'] == 'cycle':
+                default = {'mode': 'cycle', 'timing': 1}
+            elif options['mode'] == 'random':
+                default = {'mode': 'random', 'timing': 10, 'duty_cycle': 0.5}
+            else:
+                raise NotImplementedError(f'mode `{options["mode"]}` not implemented')
+            for key in options:
+                if key in default:
+                    default[key] = options[key]
+                else:
+                    raise KeyError(f'extra key `{key}` found in relay options')
+            return default
 
     def main(self, end_by):
         self.repeat = self.settings.get('repeat', 1)
@@ -147,7 +155,7 @@ class Animation(object):
         relay_group_values = {
             'off_when_blank': True,
             'off_for_shows': not show_starting,
-            'animate_between_shows': show_starting,
+            'animate': show_starting,
             'on_show_nights': any_show_tonight,
         }
         for group, value in relay_group_values.items():

@@ -1,3 +1,4 @@
+from collections import defaultdict
 import time
 
 try:
@@ -62,6 +63,7 @@ class Strip:
         self.next_available = 0
 
         self.fps_timer = time.time()
+        self.fps_histogram = defaultdict(int)
         self.fps_count = 0
         self.relay = None
 
@@ -104,14 +106,25 @@ class Strip:
             time.sleep(need_to_wait)
         self.real_strip.show()
         self.next_available = time.time() + self.delay
-        # self.print_fps()
+        self.print_fps()
 
     def print_fps(self):
         now = time.time()
         if now - self.fps_timer >= 1:
-            print(f'\r{self.fps_count} fps (on: {self.on})')
+            fps = int(self.fps_count // (now - self.fps_timer))
+            self.fps_histogram[fps] += 1
+            print(f'\r{fps} fps (on: {self.on})')
             self.fps_count = 0
             self.fps_timer = now
         self.fps_count += 1
 
-
+    def print_fps_histogram(self):
+        keys = list(self.fps_histogram)
+        keys.sort()
+        print('fps histogram:')
+        max_value = max(self.fps_histogram.values())
+        max_value = max(max_value, 100)
+        for key in range(keys[0], keys[-1]+1):
+            val = self.fps_histogram[key]
+            block = '|'*int((val / max_value)*100)
+            print(f'{key:>3d} {val:>3d} {block}')

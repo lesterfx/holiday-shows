@@ -15,8 +15,7 @@ uint8_t mac[6] = {0x00,0x01,0x02,0x03,0x04,0x05};
 
 // Maps position in array to pin
 const int pinMapping[] = {
- 14, 
- 17, 2, 3,
+ 14, 17, 2, 3,
  15, 18, 1, 4,
  16, 19, 0, 5,
   6,  7, 8, 9

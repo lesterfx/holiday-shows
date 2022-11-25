@@ -83,7 +83,8 @@ class RelayClient(list):
         ip, port, state, counter = self[index]
         self.socket.sendto(state.to_bytes(3, byteorder='big'), (ip, port))
         self[index][3] += 1
-        return bin(state)[-16:].replace("0", ".").replace("1", "|")
+        binary = bin(state)
+        return binary[-16:].replace("0", ".").replace("1", "|")
 
 if __name__ == '__main__':
     import time
@@ -100,13 +101,13 @@ if __name__ == '__main__':
         print('Handshaking...')
         client.handshake_all()
         print('Success!')
-        delay = 0.25
+        delay = 1
         dropped = False
         while True:
             print(f'Testing with delay of {delay} seconds')
             for on in True, False:
                 for i in range(16*len(client)):
-                    relay, box = divmod(i, 2)
+                    box, relay = divmod(i, 16)
                     print(f'Setting box {box} relay {relay} to {on}')
                     client.set_relay(box, relay, on, True)
                     time.sleep(delay)
@@ -121,6 +122,7 @@ if __name__ == '__main__':
                 if sent > delivered: dropped = True
             if not dropped:
                 delay /= 2
+                time.sleep(1)
             else:
                 break
         print(f'Frames dropped at delay of {delay} seconds')

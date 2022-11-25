@@ -8,6 +8,7 @@ class Relay_Remote(dict):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
             self[relay_name] = relay
+            print(relay_name, 'at relay', i)
         if not self:
             print(f'relay remote {name} is unused')
             return
@@ -39,4 +40,5 @@ class Relay(object):
         self.value = int(bool(value))
 
     def show(self):
+        raise DeprecationWarning('show the relay controller instead')
         self.remote.show()

@@ -1,6 +1,6 @@
-#! /Applications/Nuke12.0v3/Nuke12.0v3.app/Contents/MacOS/libnuke-12.0.3.dylib -nx
+#! /Applications/Nuke13.2v1/Nuke13.2v1.app/Contents/MacOS/libnuke-13.2.1.dylib -nx
 #write_info Write1 file:"sarajevo/nuke/sarajevo_2021.png" format:"827 4650 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 4650" fps:"0" colorspace:"default" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
-version 12.0 v3
+version 13.2 v1
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
     <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
@@ -11,12 +11,11 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
             <split size="1129" stretch="1"/>
             <splitter orientation="2">
-                <split size="813"/>
+                <split size="615"/>
                 <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
-                    <page id="Viewer.2"/>
                 </dock>
-                <split size="229"/>
+                <split size="432"/>
                 <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
@@ -24,17 +23,24 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 </dock>
             </splitter>
             <split size="615"/>
-            <dock id="" activePageId="Properties.1">
-                <page id="Properties.1"/>
-                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
-            </dock>
+            <splitter orientation="2">
+                <split size="957"/>
+                <dock id="" activePageId="Properties.1">
+                    <page id="Properties.1"/>
+                    <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                </dock>
+                <split size="90"/>
+                <dock id="" activePageId="com.scripture.nuke.sync">
+                    <page id="com.scripture.nuke.sync"/>
+                </dock>
+            </splitter>
         </splitter>
     </window>
 </layout>
 }
 Root {
  inputs 0
- name /Users/michael/Documents/development/xmas/holiday-pixels/holidaypixels/images/sarajevo/nuke/sarajevo_2021.nk
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/sarajevo/nuke/sarajevo_2021.nk
  project_directory "\[python \{nuke.script_directory()\}]/../"
  frame 13
  last_frame 4650
@@ -44,6 +50,7 @@ Root {
  colorManagement Nuke
  workingSpaceLUT linear
  monitorLut sRGB
+ monitorOutLUT rec709
  int8Lut sRGB
  int16Lut sRGB
  logLut Cineon
@@ -121,13 +128,13 @@ Group {
   xpos 237
   ypos 185
  }
-set N5e20bc00 [stack 0]
+set N1ecf9400 [stack 0]
  Output {
   name Output1
   xpos 237
   ypos 261
  }
-push $N5e20bc00
+push $N1ecf9400
  Viewer {
   frame_range 1-841
   frame_range_lock true
@@ -139,7 +146,7 @@ end_group
 Read {
  inputs 0
  file_type exr
- file "blender/xmas 2021.exr"
+ file blender/sarajevo_2021.exr
  format "1500 4650 0 0 1500 4650 1 "
  origset true
  version 37
@@ -155,7 +162,7 @@ Reformat {
  xpos 557
  ypos -308
 }
-set N63731400 [stack 0]
+set N1ec2a000 [stack 0]
 Crop {
  box {1286 0 1491 {input.height}}
  reformat true
@@ -174,7 +181,7 @@ Reformat {
  xpos 970
  ypos 30
 }
-push $N63731400
+push $N1ec2a000
 Crop {
  box {1065 0 1270 {input.height}}
  reformat true
@@ -247,13 +254,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N5e100c00 [stack 0]
+set N6899a400 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N5e100c00
+push $N6899a400
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -269,7 +276,7 @@ Grade {
  xpos 899
  ypos 135
 }
-push $N63731400
+push $N1ec2a000
 Crop {
  box {550 0 979 {input.height}}
  reformat true
@@ -278,7 +285,7 @@ Crop {
  xpos 557
  ypos -83
 }
-set N17e41c00 [stack 0]
+set N68953000 [stack 0]
 Rectangle {
  replace true
  area {0 3862 450 4650}
@@ -286,7 +293,7 @@ Rectangle {
  xpos 605
  ypos 83
 }
-push $N17e41c00
+push $N68953000
 Grid {
  replace true
  number {{(width-size)/every} 0}
@@ -299,7 +306,7 @@ Grid {
  addUserKnob {3 every l "" +STARTLINE}
  every 12
 }
-set N17e41400 [stack 0]
+set N68952800 [stack 0]
 Roto {
  replace true
  curves {{{v x3f99999a}
@@ -412,7 +419,7 @@ Expression {
  addUserKnob {7 threshold l "" +STARTLINE}
  threshold 0.55
 }
-set N5e47d800 [stack 0]
+set N68952000 [stack 0]
 FilterErode {
  size {0 10}
  filter triangle
@@ -420,8 +427,8 @@ FilterErode {
  xpos 327
  ypos 64
 }
-push $N5e47d800
-push $N17e41400
+push $N68952000
+push $N68952800
 Merge2 {
  inputs 2
  operation mask
@@ -437,7 +444,7 @@ Grade {
  xpos 393
  ypos 104
 }
-push $N17e41c00
+push $N68953000
 Grid {
  replace true
  number {{(width-size)/every} 0}
@@ -449,7 +456,7 @@ Grid {
  addUserKnob {3 every l "" +STARTLINE}
  every 6
 }
-set N5e2d8800 [stack 0]
+set N68951000 [stack 0]
 Roto {
  replace true
  curves {{{v x3f99999a}
@@ -541,7 +548,7 @@ Expression {
  addUserKnob {7 threshold l "" +STARTLINE}
  threshold 0.55
 }
-set N5e2d8000 [stack 0]
+set N68950800 [stack 0]
 FilterErode {
  size {0 10}
  filter triangle
@@ -549,8 +556,8 @@ FilterErode {
  xpos 442
  ypos 66
 }
-push $N5e2d8000
-push $N5e2d8800
+push $N68950800
+push $N68951000
 Merge2 {
  inputs 2
  operation mask
@@ -581,14 +588,14 @@ Reformat {
  xpos 493
  ypos 160
 }
-push $N17e41c00
+push $N68953000
 Keymix {
  inputs 3
  name Keymix1
  xpos 557
  ypos 193
 }
-set N5e13b800 [stack 0]
+set N6916a800 [stack 0]
 Reformat {
  type scale
  flop true
@@ -602,7 +609,7 @@ Grade {
  xpos 557
  ypos 249
 }
-set N5e13a000 [stack 0]
+set N69169c00 [stack 0]
 Rectangle {
  replace true
  area {-402 -78 1536 617}
@@ -622,7 +629,7 @@ Rectangle {
  xpos 418
  ypos 297
 }
-push $N5e13a000
+push $N69169c00
 Grade {
  inputs 1+1
  white 0.7
@@ -630,7 +637,7 @@ Grade {
  xpos 557
  ypos 297
 }
-push $N63731400
+push $N1ec2a000
 Crop {
  box {0 0 500 {height}}
  reformat true
@@ -714,7 +721,7 @@ Group {
   ypos 144
   disable {{!parent.colorize}}
  }
-set N636f4800 [stack 0]
+set N690fa800 [stack 0]
  Multiply {
   value {{parent.last-parent.first+1}}
   name Multiply1
@@ -737,14 +744,14 @@ set N636f4800 [stack 0]
   box_fixed true
   resize distort
   center false
-  filter Impulse
+  filter impulse
   name Reformat1
   xpos 0
   ypos 232
   disable {{!parent.expand}}
  }
-set Ncc546400 [stack 0]
-push $N636f4800
+set N690f9c00 [stack 0]
+push $N690fa800
  Viewer {
   inputs 2
   frame_range 1-4650
@@ -754,7 +761,7 @@ push $N636f4800
   xpos 135
   ypos 102
  }
-push $Ncc546400
+push $N690f9c00
  Output {
   name Output1
   xpos 0
@@ -815,13 +822,13 @@ Group {
   xpos 126
   ypos -34
  }
-set Nbe65e000 [stack 0]
+set N69085000 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $Nbe65e000
+push $N69085000
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -885,13 +892,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N76491c00 [stack 0]
+set N69020800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N76491c00
+push $N69020800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -901,7 +908,7 @@ push $N76491c00
   ypos -34
  }
 end_group
-set Nb625700 [stack 0]
+set N690c8800 [stack 0]
 Write {
  file sarajevo/nuke/sarajevo_2021.png
  raw true
@@ -913,8 +920,8 @@ Write {
  xpos 899
  ypos 624
 }
-push $N5e13b800
-push $Nb625700
+push $N6916a800
+push $N690c8800
 Viewer {
  inputs 2
  frame_range 1-42
@@ -925,6 +932,7 @@ Viewer {
  samplepoints {{-0.8687499762 -0.05104166642}
    }
  input_process false
+ monitorOutOutputTransform rec709
  name Viewer1
  xpos 1118
  ypos 578

@@ -74,7 +74,7 @@ Name                        | Blank | Between shows | During Show       | Night 
 ----------------------------|-------|---------------|-------------------|-----------------------|-----------------------------------|
 `"off_when_blank"`          | off   | on            | on                | on                    | power supplies                    |
 `"off_for_shows"`           | off   | on            | off               | on                    | sign advertising the show         |
-`"animate_between_shows"`   | off   | on            | see "animations"  | on                    | note, "on" is through animation   |
+`"animate"`   | off   | on            | see "animations"  | on                    | note, "on" is through animation   |
 `"on_show_nights"`          | off   | on            | on                | off                   | speakers                          |
 
 ## schedule
@@ -120,7 +120,10 @@ Lastly, the actual `"songs"` section, which is a list of individual song definit
 - `"music"`: The path to the music. Same logic as `"image"`.
 - `"fps"`: The framerate of the animation, i.e. how many pixels to scan down per second.
 - `"loop"`: Whether the animation should loop, as in a repeating pattern.
-- `"slices"`: Assign column chunks to different strips by name, or to `"relays"`. Each slice is defined in `[start-end)`, with optional `"wrap"` to loop around until end is reached. The `"relays"` group refers to the column of pixels that represents the relays, but can also be defined as `"cycle"` to have all but one on at a time, cycling once per second, or any `float` to set the cycle speed
+- `"slices"`: Assign column chunks to different strips by name, or to `"relays"`. Each slice is defined in `[start-end)`, with optional `"wrap"` to loop around until end is reached. 
+  - The `"relays"` group refers to the column of pixels that represents the relays, but a proecdural animation can also be defined with the following `"mode"`s:
+    - `"cycle"` to have all but one on at a time, cycling every `"timing"` seconds (default `1`)
+    - `"random"` each relay turns on and off in approximately `"timing"` seconds (default `1`), and the portion of time it is on is proportional to `"duty_cycle"` (default `0.5`)
 - `"relays"`: The list of relays, in order, by which the `"relays"` `"slice"` is assigned (as well as the order the relays should cycle).
 
 # additional files included

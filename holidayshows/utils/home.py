@@ -47,7 +47,7 @@ class Home(object):
         for group_name in [
             'off_when_blank',
             'off_for_shows',
-            'animate_between_shows',
+            'animate',
             'on_show_nights'
         ]:
             self.relay_groups[group_name] = []
@@ -60,8 +60,8 @@ class Home(object):
     def show_relays(self):
         for remote in self.remotes.values():
             labels = remote.show()
-            # print(remote.name, labels, end=' ')
-        # print()
+            print(remote.name, labels, end=' ')
+        print()
 
     def __enter__(self):
         self.show_relays()
