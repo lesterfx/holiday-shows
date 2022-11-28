@@ -40,7 +40,12 @@ class Home(object):
         for name, config in self.globals['relay_remotes'].items():
             remote = relay.Relay_Remote(name, config, self.relay_client)
             self.remotes[name] = remote
+            intersection = set(remote).intersection(self.relays)
+            if intersection:
+                message = f'Duplicate relay names found: {", ".join(intersection)}'
+                raise KeyError(message)
             self.relays.update(remote)
+
         self.relay_client.handshake_all()
         unassigned = set(self.relays)
         self.relay_groups = {}
@@ -60,8 +65,8 @@ class Home(object):
     def show_relays(self):
         for remote in self.remotes.values():
             labels = remote.show()
-            print(remote.name, labels, end=' ')
-        print()
+            # print(remote.name, labels, end=' ')
+        # print()
 
     def __enter__(self):
         self.show_relays()

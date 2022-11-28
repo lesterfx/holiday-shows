@@ -106,7 +106,7 @@ class Strip:
             time.sleep(need_to_wait)
         self.real_strip.show()
         self.next_available = time.time() + self.delay
-        self.print_fps()
+        # self.print_fps()
 
     def print_fps(self):
         now = time.time()
@@ -119,6 +119,7 @@ class Strip:
         self.fps_count += 1
 
     def print_fps_histogram(self):
+        if not self.fps_histogram: return
         keys = list(self.fps_histogram)
         keys.sort()
         print('fps histogram:')

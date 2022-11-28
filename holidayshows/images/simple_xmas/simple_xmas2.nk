@@ -1,0 +1,311 @@
+#! /Applications/Nuke13.2v1/Nuke13.2v1.app/Contents/MacOS/libnuke-13.2.1.dylib -nx
+#write_info Write1 file:"/Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/simple_xmas/simple_xmas2.png" format:"512 512 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"0 512" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 13.2 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1129" stretch="1"/>
+            <splitter orientation="2">
+                <split size="646"/>
+                <dock id="" activePageId="Viewer.1" focus="true">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="401"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <splitter orientation="2">
+                <split size="957"/>
+                <dock id="" activePageId="Properties.1">
+                    <page id="Properties.1"/>
+                    <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                </dock>
+                <split size="90"/>
+                <dock id="" activePageId="com.scripture.nuke.sync">
+                    <page id="com.scripture.nuke.sync"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/simple_xmas/simple_xmas2.nk
+ frame 90
+ first_frame 0
+ last_frame 512
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Constant {
+ inputs 0
+ channels rgb
+ format "1024 1024 0 0 1024 1024 1 square_1K"
+ name Constant3
+ xpos -396
+ ypos -443
+}
+AdjBBox {
+ numpixels 512
+ name AdjBBox1
+ xpos -396
+ ypos -371
+}
+Noise {
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ cliptype bbox
+ size {200 200}
+ octaves 2
+ gamma 1
+ translate {-2000 -2000}
+ rotate -23
+ center {1024 778}
+ name Noise2
+ xpos -396
+ ypos -347
+}
+Noise {
+ output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+ cliptype bbox
+ size {{parent.Noise2.size} {parent.Noise2.size}}
+ zoffset 1
+ octaves {{parent.Noise2.octaves}}
+ lacunarity {{parent.Noise2.lacunarity}}
+ gain {{parent.Noise2.gain}}
+ gamma {{parent.Noise2.gamma}}
+ translate {-2000 -2000}
+ rotate 30
+ center {1024 778}
+ name Noise3
+ xpos -396
+ ypos -323
+}
+set N24163400 [stack 0]
+Ramp {
+ replace true
+ p0 {100 {height-overlap}}
+ p1 {100 {height}}
+ type smooth
+ name Ramp1
+ xpos -286
+ ypos -295
+ addUserKnob {20 User}
+ addUserKnob {7 overlap}
+ overlap 250
+}
+push $N24163400
+Transform {
+ translate {0 {height}}
+ center {1024 778}
+ name Transform7
+ xpos -506
+ ypos -295
+}
+push $N24163400
+Keymix {
+ inputs 3
+ name Keymix1
+ xpos -396
+ ypos -299
+}
+set N24162800 [stack 0]
+Ramp {
+ replace true
+ p0 {{"width - overlap"} 100}
+ p1 {{width} 100}
+ type smooth
+ name Ramp2
+ xpos -286
+ ypos -227
+ addUserKnob {20 User}
+ addUserKnob {7 overlap}
+ overlap 250
+}
+push $N24162800
+Transform {
+ translate {1024 0}
+ center {1024 778}
+ name Transform1
+ xpos -506
+ ypos -227
+}
+push $N24162800
+Keymix {
+ inputs 3
+ name Keymix2
+ xpos -396
+ ypos -231
+}
+set Nb9d1ac00 [stack 0]
+Transform {
+ translate {1 0}
+ center {1024 778}
+ name Transform2
+ xpos -506
+ ypos -56
+}
+push $Nb9d1ac00
+Merge2 {
+ inputs 2
+ operation difference
+ name Merge4
+ xpos -396
+ ypos -56
+}
+Grade {
+ blackpoint 0.0003
+ whitepoint 0
+ white {1 1 0 1}
+ white_clamp true
+ name Grade2
+ xpos -396
+ ypos -32
+}
+set N24161c00 [stack 0]
+Transform {
+ translate {0 -4}
+ center {1024 778}
+ name Transform4
+ xpos -511
+ ypos -11
+}
+push $N24161c00
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge5
+ xpos -396
+ ypos 14
+}
+GodRays {
+ translate {0 {-2**GodRays1.steps}}
+ to_color 0
+ steps 7
+ max true
+ name GodRays1
+ xpos -396
+ ypos 38
+}
+Grade {
+ gamma 0.5
+ name Grade1
+ xpos -396
+ ypos 70
+}
+set Ne0beec00 [stack 0]
+Reformat {
+ type scale
+ scale 0.5
+ name Reformat1
+ xpos -396
+ ypos 180
+}
+set N24081400 [stack 0]
+Transform {
+ translate {0 {-frame}}
+ center {1024 778}
+ name Transform3
+ xpos -578
+ ypos 211
+}
+Crop {
+ box {0 0 {width} 1}
+ reformat true
+ crop false
+ name Crop2
+ xpos -578
+ ypos 235
+}
+Reformat {
+ type scale
+ scale 4
+ filter impulse
+ name Reformat2
+ xpos -578
+ ypos 259
+}
+push $N24081400
+Tile {
+ rows 2
+ columns 2
+ name Tile1
+ xpos -226
+ ypos 180
+}
+push $N24081400
+Colorspace {
+ colorspace_out sRGB
+ name Colorspace1
+ xpos -396
+ ypos 217
+}
+Expression {
+ expr0 "int(r*255) / 255"
+ expr1 "int(g*255) / 255"
+ expr2 "int(b*255) / 255"
+ name Expression2
+ xpos -396
+ ypos 241
+}
+Write {
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/simple_xmas/simple_xmas2.png
+ raw true
+ file_type png
+ checkHashOnRead false
+ version 5
+ name Write1
+ xpos -396
+ ypos 286
+}
+Read {
+ inputs 0
+ file_type png
+ file /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/simple_xmas/simple_xmas2.png
+ format "512 512 0 0 512 512 1 square_512"
+ origset true
+ version 1
+ raw true
+ name Read1
+ xpos -97
+ ypos 161
+}
+Expression {
+ expr0 "r > 0"
+ expr1 "g > 0"
+ name Expression1
+ xpos -97
+ ypos 251
+}
+push $Ne0beec00
+Viewer {
+ inputs 2
+ frame 90
+ frame_range 0-512
+ colour_sample_bbox {-0.251953125 -0.48828125 -0.2509765625 -0.4873046875}
+ samplepoints {{-0.251953125 -0.48828125}
+   }
+ monitorOutOutputTransform rec709
+ name Viewer1
+ selected true
+ xpos -97
+ ypos -20
+}

@@ -7,8 +7,9 @@ class Relay_Remote(dict):
         for i, relay_name in enumerate(config['relays']):
             if relay_name is None: continue
             relay = Relay(self, relay_name, i)
+            if relay_name in self:
+                raise KeyError(f'A relay already exists with name `{relay_name}`')
             self[relay_name] = relay
-            print(relay_name, 'at relay', i)
         if not self:
             print(f'relay remote {name} is unused')
             return

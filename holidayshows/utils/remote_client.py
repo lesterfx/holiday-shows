@@ -40,12 +40,12 @@ class Remote_Client:
                 print()
                 print()
                 print()
-                print(f'{self.name}: time offset:', self.time_offset)
+                print(f'{self.name}: warning, large time offset: {self.time_offset:.04f}')
                 print()
                 print()
                 print()
-            else:
-                print(f'{self.name}: time offset:', self.time_offset)
+            # else:
+            #     print(f'{self.name}: time offset:', self.time_offset)
         else:
             self.time_offset = 0
 

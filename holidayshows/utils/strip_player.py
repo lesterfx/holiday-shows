@@ -111,6 +111,7 @@ class Strip_Player():
                                         if abs_y + relay_data['timing'] < end_by:
                                             relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * (1-relay_data['duty_cycle']))
                                         else:
+                                            print(name, 'staying off')
                                             relay_toggle_time[name] = end_by
                                         self.home.relays[name].set(False)
                                     else:
@@ -144,7 +145,7 @@ class Strip_Player():
         self.strip.blacks.scale()
 
         print('image complete')
-        self.strip.print_fps_histogram()
+        # self.strip.print_fps_histogram()
         self.strip.clear(True)
 
     def stop(self):

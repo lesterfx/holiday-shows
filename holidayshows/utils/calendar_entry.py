@@ -8,7 +8,7 @@ class CalendarEntry(object):
         self.start = datetime.strptime(entry['start'], '%B %d').date().replace(year=today.year)
         self.end = datetime.strptime(entry['end'], '%B %d').date().replace(year=today.year)
 
-        self.days = frozenset(datetime.strptime(day, '%A').weekday() for day in entry.get('days', []))
+        self.days = frozenset(entry.get('days', []))
         self.animation = frozenset(entry['animation'])
         
         self.name = entry['name']
@@ -31,8 +31,13 @@ class CalendarEntry(object):
                 day = today
             while day <= end:
                 if self.days:
-                    if day.weekday() in self.days:
+                    weekday = day.strftime('%A')
+                    if weekday in self.days:
+                        # print(f'{self.name} next show is {day}')
                         yield day
+                    # else:
+                        # print(f'{self.name} on {day}: {weekday} not in {list(self.days)}')
                 else:
+                    # print(f'{self.name} next show is {day}')
                     yield day
                 day += timedelta(1)

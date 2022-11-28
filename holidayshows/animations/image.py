@@ -158,6 +158,7 @@ class Animation(object):
             'animate': show_starting,
             'on_show_nights': any_show_tonight,
         }
+        print(relay_group_values)
         for group, value in relay_group_values.items():
             for relay in self.home.relay_groups[group]:
                 relay.set(value)
@@ -198,7 +199,8 @@ class Animation(object):
                 still_going = False
                 for player in players:
                     try:
-                        print('\r', next(player).ljust(50), end='')
+                        message = next(player)
+                        # print('\r', message.ljust(50), end='')
                         still_going = True
                     except StopIteration:
                         pass
