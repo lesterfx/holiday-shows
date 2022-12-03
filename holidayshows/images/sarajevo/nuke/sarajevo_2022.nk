@@ -14,14 +14,12 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 <split size="615"/>
                 <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
-                    <page id="Viewer.2"/>
                 </dock>
                 <split size="432"/>
                 <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
                     <page id="DopeSheet.1"/>
-                    <page id="DAG.2"/>
                 </dock>
             </splitter>
             <split size="615"/>
@@ -44,7 +42,6 @@ Root {
  inputs 0
  name /Users/michael/Documents/development/xmas/holiday-pixels/holidayshows/images/sarajevo/nuke/sarajevo_2022.nk
  project_directory "\[python \{nuke.script_directory()\}]/../"
- frame -3
  last_frame 4650
  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
  proxy_type scale
@@ -130,13 +127,13 @@ Group {
   xpos 237
   ypos 185
  }
-set N1ecf9400 [stack 0]
+set Na14d2800 [stack 0]
  Output {
   name Output1
   xpos 237
   ypos 261
  }
-push $N1ecf9400
+push $Na14d2800
  Viewer {
   frame_range 1-841
   frame_range_lock true
@@ -163,7 +160,7 @@ Reformat {
  xpos 557
  ypos -308
 }
-set N1ec2a000 [stack 0]
+set N7d5c7c00 [stack 0]
 Crop {
  box {0 0 530 {height}}
  reformat true
@@ -248,7 +245,7 @@ Group {
   addUserKnob {7 threshold l "" +STARTLINE}
   threshold {{parent.threshold}}
  }
-set N690fac00 [stack 0]
+set N7d4fb400 [stack 0]
  Grade {
   white {{parent.colors} {parent.colors} {parent.colors} {parent.colors}}
   name Grade1
@@ -285,28 +282,42 @@ set N690fac00 [stack 0]
   ypos 232
   disable {{!parent.expand}}
  }
-set N690f9c00 [stack 0]
+set Na4028400 [stack 0]
  Output {
   name Output1
   xpos 0
   ypos 256
  }
-push $N690f9c00
-push $N690fac00
+push $Na4028400
+push $N7d4fb400
  Viewer {
   inputs 2
-  frame -3
   frame_range 1-4650
   zoom_lock true
   input_process false
-  monitorOutOutputTransform rec709
   name Viewer1
   xpos 135
   ypos 102
  }
 end_group
-set N69111600 [stack 0]
-push $N1ec2a000
+set N1ab6dd00 [stack 0]
+push $N1ab6dd00
+Viewer {
+ inputs 2
+ frame 1
+ frame_range 1-42
+ frame_range_lock true
+ zoom_lock true
+ colour_sample_bbox {5.117647171 168.5882416 5.235294342 168.7058868}
+ samplepoints {{-0.8687499762 -0.05104166642}
+   }
+ input_process false
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos 1118
+ ypos 578
+}
+push $N7d5c7c00
 Crop {
  box {1286 0 1491 {input.height}}
  reformat true
@@ -325,7 +336,7 @@ Reformat {
  xpos 970
  ypos 30
 }
-push $N1ec2a000
+push $N7d5c7c00
 Crop {
  box {1065 0 1270 {input.height}}
  reformat true
@@ -398,13 +409,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N6899a400 [stack 0]
+set Naa48a000 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N6899a400
+push $Naa48a000
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -420,7 +431,7 @@ Grade {
  xpos 899
  ypos 135
 }
-push $N1ec2a000
+push $N7d5c7c00
 Crop {
  box {550 0 979 {input.height}}
  reformat true
@@ -429,7 +440,7 @@ Crop {
  xpos 557
  ypos -83
 }
-set N68953000 [stack 0]
+set Nb2cb2400 [stack 0]
 Rectangle {
  replace true
  area {0 3862 450 4650}
@@ -437,7 +448,7 @@ Rectangle {
  xpos 605
  ypos 83
 }
-push $N68953000
+push $Nb2cb2400
 Grid {
  replace true
  number {{(width-size)/every} 0}
@@ -450,7 +461,7 @@ Grid {
  addUserKnob {3 every l "" +STARTLINE}
  every 12
 }
-set N68952800 [stack 0]
+set Nb2cb1c00 [stack 0]
 Roto {
  replace true
  curves {{{v x3f99999a}
@@ -563,7 +574,7 @@ Expression {
  addUserKnob {7 threshold l "" +STARTLINE}
  threshold 0.55
 }
-set N68952000 [stack 0]
+set Nb2cb1400 [stack 0]
 FilterErode {
  size {0 10}
  filter triangle
@@ -571,8 +582,8 @@ FilterErode {
  xpos 327
  ypos 64
 }
-push $N68952000
-push $N68952800
+push $Nb2cb1400
+push $Nb2cb1c00
 Merge2 {
  inputs 2
  operation mask
@@ -588,7 +599,7 @@ Grade {
  xpos 393
  ypos 104
 }
-push $N68953000
+push $Nb2cb2400
 Grid {
  replace true
  number {{(width-size)/every} 0}
@@ -600,7 +611,7 @@ Grid {
  addUserKnob {3 every l "" +STARTLINE}
  every 6
 }
-set N68951000 [stack 0]
+set Nb2cb0400 [stack 0]
 Roto {
  replace true
  curves {{{v x3f99999a}
@@ -692,7 +703,7 @@ Expression {
  addUserKnob {7 threshold l "" +STARTLINE}
  threshold 0.55
 }
-set N68950800 [stack 0]
+set Nb089b800 [stack 0]
 FilterErode {
  size {0 10}
  filter triangle
@@ -700,8 +711,8 @@ FilterErode {
  xpos 442
  ypos 66
 }
-push $N68950800
-push $N68951000
+push $Nb089b800
+push $Nb2cb0400
 Merge2 {
  inputs 2
  operation mask
@@ -732,7 +743,7 @@ Reformat {
  xpos 493
  ypos 160
 }
-push $N68953000
+push $Nb2cb2400
 Keymix {
  inputs 3
  name Keymix1
@@ -752,7 +763,7 @@ Grade {
  xpos 557
  ypos 249
 }
-set N69169c00 [stack 0]
+set Nb0899000 [stack 0]
 Rectangle {
  replace true
  area {-402 -78 1536 617}
@@ -772,7 +783,7 @@ Rectangle {
  xpos 418
  ypos 297
 }
-push $N69169c00
+push $Nb0899000
 Grade {
  inputs 1+1
  white 0.7
@@ -780,7 +791,7 @@ Grade {
  xpos 557
  ypos 297
 }
-push $N69111600
+push $N1ab6dd00
 Group {
  inputs 2
  name stack4
@@ -835,13 +846,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N69085000 [stack 0]
+set Nd9182000 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N69085000
+push $Nd9182000
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -905,13 +916,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N69020800 [stack 0]
+set Na6319800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N69020800
+push $Na6319800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -921,30 +932,13 @@ push $N69020800
   ypos -34
  }
 end_group
-set N690c8800 [stack 0]
-Viewer {
- inputs 2
- frame -3
- frame_range 1-42
- frame_range_lock true
- zoom_lock true
- colour_sample_bbox {5.117647171 168.5882416 5.235294342 168.7058868}
- samplepoints {{-0.8687499762 -0.05104166642}
-   }
- input_process false
- monitorOutOutputTransform rec709
- name Viewer1
- xpos 1118
- ypos 578
-}
-push $N690c8800
 Write {
  file nuke/sarajevo_2022.png
  raw true
  file_type png
  use_limit true
  checkHashOnRead false
- version 46
+ version 47
  name Write1
  xpos 899
  ypos 624

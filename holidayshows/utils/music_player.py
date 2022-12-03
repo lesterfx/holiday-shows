@@ -19,7 +19,8 @@ class Music_Player():
             return
         music = os.path.expanduser(music)
         if not os.path.exists(music):
-            raise OSError(f'music file does not exist: {music}')
+            message = f'music file does not exist: {music}'
+            raise OSError(message)
         self.songs[index] = mixer.Sound(music)
 
     def play(self, arguments):

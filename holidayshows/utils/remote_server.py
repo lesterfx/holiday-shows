@@ -78,10 +78,11 @@ class Remote_Server:
         print('\n'*2)
         print('received play request:', arguments)
         print('\n'*2)
-        iter = self.players.play_all(arguments)
+        player = self.players.play_all(arguments)
         try:
             while True:
-                print('\r', str(next(iter)).ljust(50), end='')
+                message = next(player)
+                # print('\r', str(message).ljust(50), end='')
         except StopIteration:
             pass
 

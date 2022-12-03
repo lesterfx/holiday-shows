@@ -60,7 +60,7 @@
                     "deer_r",
                     "deer_c",
                     "deer_l",
-                    null,
+                    "speakers",
                     "icicles",
                     "sign_power",
                     "pillar_right",
@@ -99,7 +99,7 @@
                     "tree_left",
                     "wreath",
                     null,
-                    "speakers",
+                    null,
                     "strip_upper",
                     "strip_lower",
                     null,
@@ -160,7 +160,7 @@
         ],
         "start_time": "sunset",
         "sunset_offset": "-00:40",
-        "end_time": "21:59"
+        "end_time": "21:30"
     },
     "calendar": [
         {
@@ -350,6 +350,50 @@
                     ]
                 },
                 {
+                    "image": "images/deckthehalls/deckthehalls_2022.png",
+                    "music": "~/xmas-songs/deckthehalls.mp3",
+                    "fps": 24,
+                    "slices": {
+                        "downstairs": {
+                            "start": 24,
+                            "end": 473
+                        },
+                        "upstairs": {
+                            "start": 474,
+                            "end": 932
+                        },
+                        "relays": {
+                            "start": 0,
+                            "end": "auto"
+                        }
+                    },
+                    "relays": [
+                        "wreath",
+                        "lamp_back_left",
+                        "lamp_middle_left",
+                        "lamp_front_left",
+                        "lamp_back_right",
+                        "lamp_middle_right",
+                        "lamp_front_right",
+                        "icicles",
+                        "deer_r",
+                        "deer_c",
+                        "deer_l",
+                        "truck",
+                        "presents",
+                        "pillar_left",
+                        "cane_l",
+                        "cane_lc",
+                        "cane_c",
+                        "cane_rc",
+                        "cane_r",
+                        "snowflake",
+                        "pillar_right",
+                        "tree_left",
+                        "tree_right"
+                    ]
+                },
+                {
                     "image": "images/sugarplum/sugarplum_2022.png",
                     "music": "~/xmas-songs/sugarplum.mp3",
                     "fps": 24,
@@ -438,7 +482,7 @@
                     ]
                 }
             ],
-            "shuffle": false,
+            "shuffle": true,
             "countdown": 3,
             "minute": 1,
             "days": [

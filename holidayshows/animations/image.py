@@ -200,7 +200,7 @@ class Animation(object):
                 for player in players:
                     try:
                         message = next(player)
-                        # print('\r', message.ljust(50), end='')
+                        # print('\r', str(message).ljust(50), end='')
                         still_going = True
                     except StopIteration:
                         pass

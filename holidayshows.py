@@ -83,11 +83,13 @@ class Holiday_Pixels(object):
     def get_sunset(self, date):
         utc_date = self.utc_time_from_local_time(date)
         sunset = self.sun.getSunsetTime(self.schedule['location'], utc_date=utc_date)
+        print('sunset:', sunset)
         hour = sunset['hr']
         minute = sunset['min']
         hour, minute = divmod(sunset['decimal'], 1)
-        minute *= 60
-        time = datetime.time(hour=int(hour), minute=int(minute))
+        minute *= 3600
+        minute, second = divmod(minute, 60)
+        time = datetime.time(hour=int(hour), minute=int(minute), second=int(second))
         sunset_utc = datetime.datetime.combine(utc_date, time)
         sunset_local = self.local_time_from_utc_time(sunset_utc)
         return sunset_local.time()
