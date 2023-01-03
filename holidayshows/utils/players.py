@@ -36,4 +36,4 @@ class Players(dict):
         try:
             self[player_kind].load_data(data)
         except KeyError:
-            raise ValueError(f'{player_kind} has not been added yet. Call add() first.')
+            raise ValueError(f'{player_kind} has not been added yet. Call add() first.') from None

@@ -19,6 +19,7 @@ class Animation(object):
         return 'blank'
 
     def main(self, end_by):
+        i = 0
         while datetime.datetime.now() < end_by:
             for group, value in self.relay_group_values.items():
                 for relay in self.home.relay_groups[group]:
@@ -26,3 +27,6 @@ class Animation(object):
             self.home.show_relays()
 
             time.sleep(1)
+            i += 1
+            if not (i % 100):
+                self.home.report_dropped_frames()

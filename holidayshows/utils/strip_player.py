@@ -108,15 +108,14 @@ class Strip_Player():
                             for name in relays:
                                 if abs_y > relay_toggle_time[name]:
                                     if self.home.relays[name].value:
-                                        if abs_y + relay_data['timing'] < end_by:
-                                            relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * (1-relay_data['duty_cycle']))
-                                        else:
-                                            print(name, 'staying off')
-                                            relay_toggle_time[name] = end_by
+                                        relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * (1-relay_data['duty_cycle']))
                                         self.home.relays[name].set(False)
                                     else:
                                         relay_toggle_time[name] = abs_y + uniform(0.5, 1.5) * (fps * relay_data['timing'] * relay_data['duty_cycle'])
-                                        self.home.relays[name].set(True)
+                                        if relay_toggle_time[name] > end_by:  # will turn off AFTER the end, so not enough time to turn on
+                                            print(name, 'staying off')
+                                        else:
+                                            self.home.relays[name].set(True)
                         else:
                             raise NotImplementedError()
                     else:
@@ -147,6 +146,10 @@ class Strip_Player():
         print('image complete')
         # self.strip.print_fps_histogram()
         self.strip.clear(True)
+        if self.relays:
+            self.home.report_dropped_frames()
+            self.home.report_relay_duty_cycles()
+
 
     def stop(self):
         self.strip.clear(True)

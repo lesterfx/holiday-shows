@@ -4,11 +4,11 @@ Holiday shows is built to handle pixel strips and relays for use in a holiday li
 
 Higher level, it also handles scheduling of different animations throughout the year, and time of day for running the display.
 
-# Installation
+# Prerequesites
 
-Clone the repo into your environment, and run the following to install dependencies.
+The Raspberry Pi needs to be very close to the pixel strip, so you'll be wanting to SSH into it, rather than interfacing with it directly.
 
-Note that `sudo` should be used to allow the packages to be run by root.
+Note that `sudo` should be used to allow the packages to be run by root, which is necessary to control pixel strips over GPIO.
 
     sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel pygame
     sudo python3 -m pip install --force-reinstall adafruit-blinka
@@ -25,6 +25,12 @@ if PIL gives errors, the following worked for me:
 
 Additionally, if playing sound through an external sound card (*highly* recommended), follow [these instructions](https://raspberrypi.stackexchange.com/questions/80072/how-can-i-use-an-external-usb-sound-card-and-set-it-as-default) to set it up.
 
+# Installation
+
+Clone the repo into your environment
+
+    git clone https://github.com/lesterfx/holiday-shows.git
+
 # Running
 
 If you have a `config.json` set up, run `sudo holidayshows/holidayshows.py` on the main Raspberry Pi, and `sudo holidayshows/holidayshows.py --remote` on any secondary Raspberry Pis.
@@ -33,8 +39,9 @@ If you have a `config.json` set up, run `sudo holidayshows/holidayshows.py` on t
 
 The main code runs on a Raspberry Pi computer, handling scheduling, dispatch, audio, and up to one pixel strip. Additional devices can be used:
 
-- Additional Raspberry Pis to control additional pixel strips, beyond the one that may be attached to the primary. Run with `--remote` flag.
+- Additional Raspberry Pis to control additional pixel strips or to play music, beyond the one that may be attached to the primary. Run with `--remote` flag.
 - Arduinos to switch relays, running the `UDPRelayControl` sketch.
+- Raspberry Pis to switch relays, running with the `--relays` flag
 - [future] Arduino to control short pixel strips or predefined animations
 - [future] Arduino to display a countdown
 

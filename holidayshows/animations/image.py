@@ -24,9 +24,14 @@ class Animation(object):
         self.resources_loaded = []
         self.resources_without_sound = []
 
-        for index, element in enumerate(self.settings['songs']):
+        if 'songs' not in self.settings:
+            from pprint import pprint
+            pprint(self.settings)
+        songs = self.settings['songs']
+        for index, element in enumerate(songs):
             resource = {}
             resource['index'] = index  # in case it gets shuffled later, this is the original
+            resource['name'] = element.get('name', f'unnamed-{index}')
             resource['fps'] = element['fps']
             resource['relays'] = element['relays']
             resource['loop'] = element.get('loop', False)
@@ -130,6 +135,7 @@ class Animation(object):
                     until += datetime.timedelta(hours=1)
                 if until > end_by:
                     print('LAST SHOW ENDED. silent animation until night time:', end_by)
+                    self.home.report_dropped_frames()
                     self.activate_relays(show_starting=False, any_show_tonight=False)
                     self.present(silent_resource, end_by)
                     return
@@ -139,13 +145,25 @@ class Animation(object):
                     self.present(silent_resource, until-datetime.timedelta(seconds=5))
             else:
                 print('silent animation until night time:', end_by)
+                self.home.report_dropped_frames()
                 self.activate_relays(show_starting=False, any_show_tonight=False)
                 self.present(silent_resource, end_by)
                 return
             
             self.activate_relays(show_starting=True, any_show_tonight=True)  # before a music show
-            if self.settings.get('shuffle'):
+            order = self.settings.get('order')
+            if order == 'shuffle':
                 random.shuffle(self.resources_loaded)
+            elif isinstance(order, list):
+                if len(order):
+                    def keyer(resource):
+                        if resource['name'] in order:
+                            return order.index(resource['name'])
+                        else:
+                            return max(order)+1  # put it at the end, in the original order
+                    self.resources_loaded.sort(key=keyer)
+            else:
+                assert order is None
             for resource in self.resources_loaded:
                 self.present(resource, end_by, epoch=until.timestamp())
                 time.sleep(3)

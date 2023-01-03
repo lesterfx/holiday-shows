@@ -39,7 +39,7 @@ void initMacAddress() {
   // allows to detect an uninitialized EEPROM.
   if((mac[0]&0x03)!=2) { // Is this a locally administered address?
     // No a locally managed address, generate random address and store it.
-    #ifdef ENABLE_MAC_INIT_MESSAGES
+    #ifdef SERIAL_DEBUG
       Serial.println("GENERATE NEW MAC ADDR");
     #endif
     randomSeed(analogRead(A7));
@@ -49,19 +49,24 @@ void initMacAddress() {
 
       EEPROM.update(i,mac[i]);
 
-      #ifdef ENABLE_MAC_INIT_MESSAGES
+      #ifdef SERIAL_DEBUG
         if(mac[i]<10) {Serial.print('0');}  // Print two digets
         Serial.print(mac[i],HEX);Serial.print(":");
       #endif
     }
-    #ifdef ENABLE_MAC_INIT_MESSAGES
+    #ifdef SERIAL_DEBUG
       Serial.println();
     #endif
     flash(0, 200);
     flash(0, 200);
   } else {
-    #ifdef ENABLE_MAC_INIT_MESSAGES
+    #ifdef SERIAL_DEBUG
         Serial.println("mac grabbed from eeprom");
+        for(int i=0;i<6;i++) {
+          if(mac[i]<10) {Serial.print('0');}  // Print two digets
+          Serial.print(mac[i],HEX);Serial.print(":");
+        }
+      Serial.println();
     #endif
     flash(0, 400);
   }
@@ -85,14 +90,21 @@ void setup() {
     digitalWrite(pinMapping[i], HIGH);
   }
   
-  initMacAddress();
-
   #ifdef SERIAL_DEBUG
     Serial.begin(9600);
     Serial.println("Begin");
    #endif
 
+  initMacAddress();
+
+  #ifdef SERIAL_DEBUG
+    Serial.println("About to begin ethernet");
+   #endif
   Ethernet.begin(mac);
+  #ifdef SERIAL_DEBUG
+    Serial.println("Ethernet Begin");
+   #endif
+
  //  Check for Ethernet hardware present
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
     #ifdef SERIAL_DEBUG
@@ -107,7 +119,12 @@ void setup() {
       Serial.println("Ethernet cable is not connected.");
     #endif
   }
+
   Udp.begin(2700);
+
+  #ifdef SERIAL_DEBUG
+    Serial.println("setup() complete");
+  #endif
 }
 
 void loop() {

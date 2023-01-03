@@ -103,5 +103,5 @@ class Remote_Server:
 
 def run_remote():
     print('Running Remote')
-    HOST, PORT = my_ip.MY_IP, 2700
+    HOST, PORT = my_ip.MY_IP, 2701
     Remote_Server(HOST, PORT)

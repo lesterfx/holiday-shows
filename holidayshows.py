@@ -11,14 +11,16 @@ import sys
 import time
 import traceback
 
-from holidayshows.utils import calendar_entry, home, remote_server, sun
+from holidayshows.utils import calendar_entry, home, remote_server, relay_server, sun
 
 class Holiday_Pixels(object):
     def __init__(self):
         self.sun = sun.Sun()
         self.load_args()
         if self.args.remote:
-            self.run_remote()
+            self.run_pixel_server()
+        elif self.args.relays:
+            self.run_relay_server()
         else:
             config = self.load_config()
             self.process_config(config)
@@ -34,8 +36,11 @@ class Holiday_Pixels(object):
                 print('cleaning up')
                 self.home.cleanup()
 
-    def run_remote(self):
+    def run_pixel_server(self):
         remote_server.run_remote()
+
+    def run_relay_server(self):
+        relay_server.RelayServer()
 
     def init_home(self):
         self.home = home.Home(self.globals)
@@ -71,6 +76,7 @@ class Holiday_Pixels(object):
             while datetime.datetime.now() < until:
                 for animation in animations:
                     print(f'{until} ends {animation}')
+                    home.report_dropped_frames()
                     animation.main(until)
                     print()
 
@@ -147,7 +153,7 @@ class Holiday_Pixels(object):
         return ret
 
     def process_relay_remotes(self, remotes):
-        return {name: {'name': name, 'host': remote['host'], 'port': remote['port'], 'relays': remote['relays']} for name, remote in remotes.items()}
+        return {name: {'name': name, 'invert': remote.get('invert', False), 'host': remote['host'], 'relays': remote['relays']} for name, remote in remotes.items()}
 
     def process_strips(self, strips):
         processed_strips = []
@@ -238,7 +244,7 @@ class Holiday_Pixels(object):
         parser.add_argument('--norelays', action='store_true', help="Don't turn on relays")
         parser.add_argument('--settings', help="JSON style settings dictionary of temporary overrides")
         parser.add_argument('--remote', action='store_true', help="Run a remote pixel server. All other options are ignored.")
-        parser.add_argument('--music-remote', action='store_true', help="Run a remote music player. All other options are ignored.")
+        parser.add_argument('--relays', action='store_true', help="Run a relay box server. All other options are ignored.")
         self.args = parser.parse_args()
         print(self.args)
 

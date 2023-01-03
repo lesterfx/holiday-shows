@@ -3,19 +3,19 @@
 version 13.2 v1
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="25" w="1792" h="1067" maximized="1" screen="0">
+    <window x="1792" y="40" w="1920" h="1080" fullscreen="1" screen="1">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="1129" stretch="1"/>
+            <split size="1257" stretch="1"/>
             <splitter orientation="2">
-                <split size="615"/>
+                <split size="623"/>
                 <dock id="" activePageId="Viewer.1" focus="true">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="432"/>
+                <split size="437"/>
                 <dock id="" activePageId="DAG.1">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
@@ -24,12 +24,12 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </splitter>
             <split size="615"/>
             <splitter orientation="2">
-                <split size="957"/>
+                <split size="968"/>
                 <dock id="" activePageId="Properties.1">
                     <page id="Properties.1"/>
                     <page id="uk.co.thefoundry.backgroundrenderview.1"/>
                 </dock>
-                <split size="90"/>
+                <split size="92"/>
                 <dock id="" activePageId="com.scripture.nuke.sync">
                     <page id="com.scripture.nuke.sync"/>
                 </dock>
@@ -128,13 +128,13 @@ Group {
   xpos 237
   ypos 185
  }
-set Naa48a400 [stack 0]
+set N1c3c9400 [stack 0]
  Output {
   name Output1
   xpos 237
   ypos 261
  }
-push $Naa48a400
+push $N1c3c9400
  Viewer {
   frame_range 1-841
   frame_range_lock true
@@ -169,7 +169,140 @@ Reformat {
  xpos 557
  ypos -308
 }
-set N7d4f8400 [stack 0]
+set N1c309c00 [stack 0]
+Crop {
+ box {1286 0 1491 {input.height}}
+ reformat true
+ crop false
+ name Crop2
+ xpos 970
+ ypos 6
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat2
+ xpos 970
+ ypos 30
+}
+push $N1c309c00
+Crop {
+ box {1065 0 1270 {input.height}}
+ reformat true
+ crop false
+ name Crop1
+ xpos 847
+ ypos 8
+}
+Reformat {
+ type "to box"
+ box_width 160
+ box_height {{height}}
+ box_fixed true
+ resize distort
+ name Reformat1
+ xpos 847
+ ypos 32
+}
+Group {
+ inputs 2
+ name stack3
+ xpos 899
+ ypos 111
+ addUserKnob {20 User}
+ addUserKnob {3 space}
+ space 18
+}
+ Input {
+  inputs 0
+  name right
+  xpos 181
+  ypos -169
+  number 1
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop3
+  xpos 181
+  ypos -145
+ }
+ Position {
+  translate {{left.width+space} 0}
+  name Position1
+  selected true
+  xpos 181
+  ypos -121
+ }
+ Input {
+  inputs 0
+  name left
+  xpos 54
+  ypos -169
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop2
+  xpos 54
+  ypos -145
+ }
+ Crop {
+  box {0 0 {width+space+right.width} {input.height}}
+  reformat true
+  name Crop1
+  xpos 54
+  ypos -108
+ }
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos 126
+  ypos -34
+ }
+set N65071c00 [stack 0]
+ Output {
+  name Output1
+  xpos 126
+  ypos 37
+ }
+push $N65071c00
+ Viewer {
+  frame_range 1-1536
+  colour_sample_bbox {-1 10 0 11}
+  input_process false
+  name Viewer1
+  xpos 327
+  ypos -34
+ }
+end_group
+push $N1c309c00
+Crop {
+ box {550 0 979 {input.height}}
+ reformat true
+ crop false
+ name Crop11
+ xpos 557
+ ypos -83
+}
+Reformat {
+ type scale
+ flop true
+ name Reformat4
+ xpos 557
+ ypos -59
+}
+Rectangle {
+ area {-14.80000305 961.7999878 21.75 982.7501221}
+ color 0
+ name Rectangle1
+ selected true
+ xpos 557
+ ypos -35
+}
+set N649bd000 [stack 0]
+push $N1c309c00
 Crop {
  box {0 0 516 {height}}
  reformat true
@@ -178,11 +311,9 @@ Crop {
  xpos -18
  ypos -57
 }
-set N7d576000 [stack 0]
-push $N7d576000
+set N1c309400 [stack 0]
 Group {
  name relays
- selected true
  xpos -18
  ypos 337
  addUserKnob {20 User}
@@ -256,7 +387,7 @@ Group {
   ypos 144
   disable {{!parent.colorize}}
  }
-set N7d5c7800 [stack 0]
+set N65133400 [stack 0]
  Multiply {
   value {{parent.last-parent.first+1}}
   name Multiply1
@@ -272,7 +403,7 @@ set N7d5c7800 [stack 0]
   xpos 0
   ypos 200
  }
-set N1aaaa400 [stack 0]
+set N65132c00 [stack 0]
  Reformat {
   type "to box"
   box_width {{parent.input.width}}
@@ -291,8 +422,8 @@ set N1aaaa400 [stack 0]
   xpos 0
   ypos 256
  }
-push $N7d5c7800
-push $N1aaaa400
+push $N65133400
+push $N65132c00
  Viewer {
   inputs 2
   frame_range 1-4650
@@ -304,147 +435,6 @@ push $N1aaaa400
   ypos 178
  }
 end_group
-set N1ab6c100 [stack 0]
-Viewer {
- inputs 2
- frame_range 1-42
- frame_range_lock true
- channels rgb
- zoom_lock true
- colour_sample_bbox {-0.5652173758 3.565217495 -0.4782608747 3.652173996}
- samplepoints {{-0.1840120703 2.250377178}
-   }
- input_process false
- monitorOutOutputTransform rec709
- name Viewer1
- xpos 1118
- ypos 578
-}
-push $N7d4f8400
-Crop {
- box {1286 0 1491 {input.height}}
- reformat true
- crop false
- name Crop2
- xpos 970
- ypos 6
-}
-Reformat {
- type "to box"
- box_width 160
- box_height {{height}}
- box_fixed true
- resize distort
- name Reformat2
- xpos 970
- ypos 30
-}
-push $N7d4f8400
-Crop {
- box {1065 0 1270 {input.height}}
- reformat true
- crop false
- name Crop1
- xpos 847
- ypos 8
-}
-Reformat {
- type "to box"
- box_width 160
- box_height {{height}}
- box_fixed true
- resize distort
- name Reformat1
- xpos 847
- ypos 32
-}
-Group {
- inputs 2
- name stack3
- xpos 899
- ypos 111
- addUserKnob {20 User}
- addUserKnob {3 space}
- space 18
-}
- Input {
-  inputs 0
-  name right
-  xpos 181
-  ypos -169
-  number 1
- }
- Crop {
-  box {0 0 {width} {height}}
-  name Crop3
-  xpos 181
-  ypos -145
- }
- Position {
-  translate {{left.width+space} 0}
-  name Position1
-  selected true
-  xpos 181
-  ypos -121
- }
- Input {
-  inputs 0
-  name left
-  xpos 54
-  ypos -169
- }
- Crop {
-  box {0 0 {width} {height}}
-  name Crop2
-  xpos 54
-  ypos -145
- }
- Crop {
-  box {0 0 {width+space+right.width} {input.height}}
-  reformat true
-  name Crop1
-  xpos 54
-  ypos -108
- }
- Merge2 {
-  inputs 2
-  name Merge6
-  xpos 126
-  ypos -34
- }
-set N7d42a400 [stack 0]
- Output {
-  name Output1
-  xpos 126
-  ypos 37
- }
-push $N7d42a400
- Viewer {
-  frame_range 1-1536
-  colour_sample_bbox {-1 10 0 11}
-  input_process false
-  name Viewer1
-  xpos 327
-  ypos -34
- }
-end_group
-push $N7d4f8400
-Crop {
- box {550 0 979 {input.height}}
- reformat true
- crop false
- name Crop11
- xpos 557
- ypos -83
-}
-Reformat {
- type scale
- flop true
- name Reformat4
- xpos 557
- ypos -59
-}
-push $N1ab6c100
 Group {
  inputs 2
  name stack4
@@ -499,13 +489,13 @@ Group {
   xpos 126
   ypos -34
  }
-set N7d361400 [stack 0]
+set N648fc800 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $N7d361400
+push $N648fc800
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -569,13 +559,13 @@ Group {
   xpos 126
   ypos -34
  }
-set Nb2ba3c00 [stack 0]
+set N64a27c00 [stack 0]
  Output {
   name Output1
   xpos 126
   ypos 37
  }
-push $Nb2ba3c00
+push $N64a27c00
  Viewer {
   frame_range 1-1536
   colour_sample_bbox {-1 10 0 11}
@@ -595,4 +585,22 @@ Write {
  name Write1
  xpos 899
  ypos 624
+}
+push $N1c309400
+push $N649bd000
+Viewer {
+ inputs 2
+ frame_range 1-42
+ frame_range_lock true
+ channels rgb
+ gamma 4
+ zoom_lock true
+ colour_sample_bbox {-0.5652173758 3.565217495 -0.4782608747 3.652173996}
+ samplepoints {{-0.1840120703 2.250377178}
+   }
+ input_process false
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos 1118
+ ypos 578
 }

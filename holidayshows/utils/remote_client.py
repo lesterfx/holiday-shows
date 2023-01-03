@@ -25,7 +25,7 @@ class Remote_Client:
 
     def __del__(self):
         self.disconnect()
-    
+
     def synchronize(self):
         '''
         sends time to remote and gets time back. offset is stored on remote, but printed here too
@@ -51,7 +51,7 @@ class Remote_Client:
 
     def connect(self):
         if self.ip:
-            print(f'connecting to {self.name}:{self.port}')
+            print(f'connecting to {self.name} at {self.ip}:{self.port}')
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.socket.connect((self.ip, self.port))
@@ -101,10 +101,12 @@ class Remote_Client:
             time.sleep(0.1)
             if expected_response == False:
                 return
-            response = self.socket.recv(1024)
-            response = json.loads(response.decode())
+            response = self.socket.recv(1024).decode()
+            if not response:
+                raise ValueError(f'no response from {self.name}. possible error on remote')
+            response = json.loads(response)
             if expected_response is not None and response != expected_response:
-                raise ValueError(f'music server ({self.name}) expected {expected_response} got {response}')
+                raise ValueError(f'server ({self.name}) expected {expected_response} got {response}')
             return response
 
     def load_data(self, kind, data):
